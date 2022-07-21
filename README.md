@@ -1,6 +1,6 @@
 # The Hacker-Blog theme
 
-## Usage
+## USO
 
 1. la extructura es la siguiente:
 
