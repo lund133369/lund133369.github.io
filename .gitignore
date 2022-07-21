@@ -2,3 +2,4 @@ _site
 .sass-cache
 flag.txt
 .jekyll-cache/
+README_original.md

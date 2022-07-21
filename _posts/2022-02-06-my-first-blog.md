@@ -1,5 +1,5 @@
 ---
-title: my first blog
+title: my first blog2
 published: true
 ---
 
