@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About
+title: CTF
 ---
 
 CTF Meta Red 2022
