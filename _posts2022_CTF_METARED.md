@@ -1,5 +1,5 @@
 ---
-title: Yet Another Sample Page
+title: CTF MetaRed 2022
 published: true
 ---
 
