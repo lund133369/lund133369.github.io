@@ -4,17 +4,17 @@ title: s4vinotes
 ---
 
 <section>
-  {% if site.posts[0] %}
+  {% if site.posts2[0] %}
 
     {% capture currentyear %}{{ 'now' | date: "%Y" }}{% endcapture %}
-    {% capture firstpostyear %}{{ site.posts[0].date | date: '%Y' }}{% endcapture %}
+    {% capture firstpostyear %}{{ site.posts2[0].date | date: '%Y' }}{% endcapture %}
     {% if currentyear == firstpostyear %}
-        <h3>This year's posts</h3>
+        <h3>This years posts , posts de este año </h3>
     {% else %}  
         <h3>{{ firstpostyear }}</h3>
     {% endif %}
 
-    {%for post in site.posts %}
+    {%for post in site.posts2 %}
       {% unless post.next %}
         <ul>
       {% else %}
