@@ -101,8 +101,9 @@ curl -X GET -s "http://10.10.10.83/" -I
 ```
 
 ```{r, echo = FALSE, fig.cap="curl xdebug", out.width="90%"}
-    ![Curl_xdebug](S4viNotes2/images/curl-xdebug.png)
+    
 ```
+![Curl_xdebug](/assets/images/curl-xdebug.png)
 
 Algo interessante en la respuesta es el Xdebug 2.5.5. Xdebug es una extension de PHP para hacer debug con haremientas
 depuracion tradicionales, desde el editor, tal como se hace en lenguajes de programacion clasicos. Mas informaciones sobre
@@ -274,8 +275,9 @@ aircrack-ng captured-cap
 ```
 
 ```{r, echo = FALSE, fig.cap="aircrack-ng sobre airgeddon capture", out.width="90%"}
-    ![aircrack-airgeddon](S4viNotes2/images/aircrack-airgeddon.png)
+    
 ```
+![aircrack-airgeddon](/assets/images/aircrack-airgeddon.png)
 
 Se ve un ESSID que se llama `To_cl0se_to_th3_Sun` que parece turbio, y un handshake que significa que alguien a esperado que una victima se connecte
 o reconecte tras un ataque de deautentificacion y a recuperado el hash de autentificacion.
@@ -449,4 +451,4 @@ Ya es sufficiente aqui porque ya se puede ver quel usuario esta en el grupo Dock
         root
         ```
 
-![aircrack-airgeddon](S4viNotes2/images/aircrack-airgeddon.png)
+![aircrack-airgeddon](/assets/images/aircrack-airgeddon.png)
