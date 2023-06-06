@@ -99,11 +99,8 @@ No hay respuesta valida lo que quiere decir que el dominio no es valido
 ```bash
 curl -X GET -s "http://10.10.10.83/" -I
 ```
-
-```{r, echo = FALSE, fig.cap="curl xdebug", out.width="90%"}
-    
-```
 ![Curl_xdebug](/assets/images/curl-xdebug.png)
+
 
 Algo interessante en la respuesta es el Xdebug 2.5.5. Xdebug es una extension de PHP para hacer debug con haremientas
 depuracion tradicionales, desde el editor, tal como se hace en lenguajes de programacion clasicos. Mas informaciones sobre
@@ -273,10 +270,6 @@ Sabiendo que Airgeddon es una utilidad de auditoria wifi intentamos ver lo que c
 ```bash
 aircrack-ng captured-cap
 ```
-
-```{r, echo = FALSE, fig.cap="aircrack-ng sobre airgeddon capture", out.width="90%"}
-    
-```
 ![aircrack-airgeddon](/assets/images/aircrack-airgeddon.png)
 
 Se ve un ESSID que se llama `To_cl0se_to_th3_Sun` que parece turbio, y un handshake que significa que alguien a esperado que una victima se connecte
@@ -371,11 +364,8 @@ Como **dig** nos responde, ya podemos ir enumerando cosas
 
     ```bash
     dig @10.10.10.83 ctfolympus.htb axfr
-    ```
 
-    ```{r, echo = FALSE, fig.cap="dig ctfolympus.htb", out.width="90%"}
-        ![dig-ctfolympus](S4viNotes2/images/dig-ctfolympus.png)
-    ```
+![dig-ctfolympus](S4viNotes2/images/dig-ctfolympus.png)
 
 Se puede ver que hay un usuario y una contraseña potencial en un TXT con una lista de puertos.
 La idea aqui seria de hacer un **Port Knocking**
