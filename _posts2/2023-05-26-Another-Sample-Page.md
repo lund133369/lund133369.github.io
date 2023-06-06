@@ -365,7 +365,7 @@ Como **dig** nos responde, ya podemos ir enumerando cosas
     ```bash
     dig @10.10.10.83 ctfolympus.htb axfr
 
-![dig-ctfolympus](/assests/images/dig-ctfolympus.png)
+![dig-ctfolympus](/assets/images/dig-ctfolympus.png)
 
 Se puede ver que hay un usuario y una contraseña potencial en un TXT con una lista de puertos.
 La idea aqui seria de hacer un **Port Knocking**
