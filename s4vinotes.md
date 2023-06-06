@@ -26,9 +26,8 @@ title: s4vinotes
           <ul>
         {% endif %}
       {% endunless %}
-        <li><time>{{ post.date | date:"%d %b" }} - </time>
-          <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">
-            {{ post.title }}
+        <li>
+          <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">{{ post.title }}
           </a>
         </li>
     {% endfor %}
