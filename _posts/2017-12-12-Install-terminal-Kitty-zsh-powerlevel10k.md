@@ -14,4 +14,6 @@ published: true
 	user@pc:~$ zsh
 	```
 </pre>
-<button class="boton-copiar" data-clipboard-target=".code-container">Copiar</button>
+<button class="boton-copiar" data-clipboard-target=".code-container"> 
+<i class="fa fa-clone"></i>
+</button>
