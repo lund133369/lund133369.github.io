@@ -1,7 +1,7 @@
 ---
 title: Fast install terminal kitty-zsh-POWERLVL10k
 published: true
-
+---
 
 - script para tener listo la kitty-zsh-powerlvl10k
 	```console
