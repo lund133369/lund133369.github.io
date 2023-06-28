@@ -31,52 +31,72 @@ Agamos lo siguiente , nos vamos a la siguiente pagina para descargar esta herram
 
 ------------------------------------
 ![1.2.PNG](../assets/posts1/1.2.PNG)
+
 ------------------------------------
 seleccionamos lo que esta dentro de circulo rojo y descargamos , luego segun cada uno , pedira o no descargar en una carpeta,
 identificamos la carpeta y luego vemos el archivo ProcessExplorer.zip , damos anticlick y lo descomprimimos.
+
 ----------------------------------------
 ![1.3.PNG](../assets/posts1/Captura.PNG)
+
 --------------------------------
 ![2.PNG](../assets/posts1/2.PNG)
+
 --------------------------------
 ahora ejecutamos el arcivo llamado procexp64.exe 
+
 --------------------------------
 ![3.PNG](../assets/posts1/3.PNG)
+
 --------------------------------
 este te mostrara una aviso el cual aceptamos
+
 --------------------------------
 ![4.PNG](../assets/posts1/4.PNG)
+
 --------------------------------
 luego nos aparecera el programa , varia segun el computador pero si vemos tiene los siguientes informacion
+
 --------------------------------
 ![5.PNG](../assets/posts1/5.PNG)
+
 --------------------------------
 lo que nos importa es ir al apartado de "options-VirusTotal.com"
+
 --------------------------------
 ![6.PNG](../assets/posts1/6.PNG)
+
 --------------------------------
 ahora vemos que nos esta mostrando un apartado llamado VirusTotal (LADO DERECHO)
+
 --------------------------------
 ![7.PNG](../assets/posts1/7.PNG)
+
 --------------------------------
 , el cual tiene un formato NUMERO/74 , el numero indica la cantidad de antivirus que an reportado que el archivo 
 es un posible virus, en mi caso te todos los archivos execto uno me marco 0/74 , lo cual me indica que todos los antivirus indican 
 que no tengo virus en mi computador , pero si en tu caso alguno de estos de salio (15 o más)/74 , significa que posiblemente 
 tengas un virus actualmente en tu computador y que posiblemente te esten robando informacion,cuentas bancarias,redes sociales,etc.
+
 ------------------------------------------------
 	MEDIDAS A TOMAR(SOLUCIONES)
 ------------------------------------------------
+
 -NO DESCARGES PROGRAMAS PIRATAS.
 
 -Eliminaremos el virus: 
 
 damos click derecho al archivo y vamos a properties 
+
 --------------------------------
 ![8.PNG](../assets/posts1/8.PNG)
+
 --------------------------------
 , luego copiamos lo que esta debajo del path ,
+
 --------------------------------
 ![9.PNG](../assets/posts1/9.PNG)
+
 --------------------------------
 vamos a mi pc copiamos aqui pero borramos la ultima parte el cual corresponde al nombre del archivo y asi solo nos quedaria 
 la ubicacion del virus, dependiendo de la carpeta puede haber 1 o muchos archivos aqui dentro lo importante es 
@@ -84,12 +104,16 @@ buscar el nombre del archivo el cual es esta parte que borramos,
 
 ----------------------------------
 ![12.PNG](../assets/posts1/12.PNG)
+
 ----------------------------------
 ![10.PNG](../assets/posts1/10.PNG)
+
 ----------------------------------
 ![11.PNG](../assets/posts1/11.PNG)
+
 ----------------------------------
 ![13.PNG](../assets/posts1/13.PNG)
+
 ----------------------------------
 
 	!!IMPORTANTE!!
@@ -99,12 +123,16 @@ buscar el nombre del archivo el cual es esta parte que borramos,
 luego esperamos un momento aqui y regresamos a la ventana del Process Explorer 
 buscamos otra vez el archivo detectado como virus
 damos anticlick y ahora vamos a buscar la opcion que diga "KILL PROCESS" y damos click
+
 ----------------------------------
 ![14.PNG](../assets/posts1/14.PNG)
+
 ----------------------------------
 luego volvemos a la carpeta donde esta el archivo y lo eliminamos tambien
+
 ----------------------------------
 ![15.PNG](../assets/posts1/15.PNG)
+
 ----------------------------------
 y con esto ya estaria.
 
