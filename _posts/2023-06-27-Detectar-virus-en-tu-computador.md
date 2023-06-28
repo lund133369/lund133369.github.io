@@ -9,13 +9,13 @@ published: true
 En este post esta enfocado en enseñar de forma facil como realizar una revision de tu computador de forma facil 
 , gratuita y segura todo los archivos y procesos que estan en tu computador.
 
-SILABUS:
+###SILABUS:
 	-Provehedor de seguridad,casa de antivirus: son aquellas empresas dedicadas a crear y actualizar antivirus.
 	-VirusTotal: empresa dedicada a juntar los mejores casas de antivirus para poder verificar la seguridad de Archivos.
 	-Process Explorer:Herramienta gratuita desarrollada por "Microsoft Sysinternals", el cual muestra 
 	de forma mas minuciosa los procesos y archivos que tienes en un computador.  
 	
-Comencemos!!
+##Comencemos!!
 Si uno quiere puede usar la pagina de virus total , solo es necesario arrastrar 
 el o los archivos e incluso url de archivos para poder ver la seguridad de estos.
 	"https://www.virustotal.com/gui/home/upload"
@@ -78,15 +78,15 @@ es un posible virus, en mi caso te todos los archivos execto uno me marco 0/74 ,
 que no tengo virus en mi computador , pero si en tu caso alguno de estos de salio (15 o más)/74 , significa que posiblemente 
 tengas un virus actualmente en tu computador y que posiblemente te esten robando informacion,cuentas bancarias,redes sociales,etc.
 
-------------------------------------------------
-	MEDIDAS A TOMAR(SOLUCIONES)
-------------------------------------------------
+#------------------------------------------------
+#	MEDIDAS A TOMAR(SOLUCIONES)
+#------------------------------------------------
 
--NO DESCARGES PROGRAMAS PIRATAS.
+##NO DESCARGES PROGRAMAS PIRATAS.
 
--Eliminaremos el virus: 
+##Eliminaremos el virus: 
 
-damos click derecho al archivo y vamos a properties 
+###damos click derecho al archivo y vamos a properties 
 
 --------------------------------
 ![8.PNG](../assets/posts1/8.PNG)
