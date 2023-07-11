@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Buff.md
+title: HTB_Buff
 date: 2023/07/10
 ---
 

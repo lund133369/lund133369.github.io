@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Blocky.md
+title: HTB_Blocky
 date: 2023/07/10
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Love.md
+title: HTB_Love
 date: 2023/07/10
 ---
 

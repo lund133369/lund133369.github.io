@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Jarvis.md
+title: HTB_Jarvis
 date: 2023/07/10
 ---
 

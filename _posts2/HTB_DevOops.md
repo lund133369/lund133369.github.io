@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_DevOops.md
+title: HTB_DevOops
 date: 2023/07/10
 ---
 

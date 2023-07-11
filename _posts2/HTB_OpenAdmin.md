@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_OpenAdmin.md
+title: HTB_OpenAdmin
 date: 2023/07/10
 ---
 

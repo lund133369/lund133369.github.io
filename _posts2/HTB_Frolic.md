@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Frolic.md
+title: HTB_Frolic
 date: 2023/07/10
 ---
 

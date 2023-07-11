@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Conceal.md
+title: HTB_Conceal
 date: 2023/07/10
 ---
 

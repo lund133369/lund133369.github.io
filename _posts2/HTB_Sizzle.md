@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Sizzle.md
+title: HTB_Sizzle
 date: 2023/07/10
 ---
 

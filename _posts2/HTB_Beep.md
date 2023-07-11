@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Beep.md
+title: HTB_Beep
 date: 2023/07/10
 ---
 

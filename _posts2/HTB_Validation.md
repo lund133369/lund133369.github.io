@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Validation.md
+title: HTB_Validation
 date: 2023/07/10
 ---
 

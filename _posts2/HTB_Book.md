@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Book.md
+title: HTB_Book
 date: 2023/07/10
 ---
 

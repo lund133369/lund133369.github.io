@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Sauna.md
+title: HTB_Sauna
 date: 2023/07/10
 ---
 

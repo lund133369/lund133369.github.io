@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Scavenger.md
+title: HTB_Scavenger
 date: 2023/07/10
 ---
 

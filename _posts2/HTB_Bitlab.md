@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Bitlab.md
+title: HTB_Bitlab
 date: 2023/07/10
 ---
 

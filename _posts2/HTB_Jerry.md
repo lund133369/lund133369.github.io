@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Jerry.md
+title: HTB_Jerry
 date: 2023/07/10
 ---
 

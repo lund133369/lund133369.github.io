@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Cronos.md
+title: HTB_Cronos
 date: 2023/07/10
 ---
 

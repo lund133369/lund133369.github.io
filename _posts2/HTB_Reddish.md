@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Reddish.md
+title: HTB_Reddish
 date: 2023/07/10
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_SwagShop.md
+title: HTB_SwagShop
 date: 2023/07/10
 ---
 

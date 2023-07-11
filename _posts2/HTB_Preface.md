@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Preface.md
+title: HTB_Preface
 date: 2023/07/10
 ---
 

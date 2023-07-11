@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Blackfield.md
+title: HTB_Blackfield
 date: 2023/07/10
 ---
 

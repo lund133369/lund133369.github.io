@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Armageddon.md
+title: HTB_Armageddon
 date: 2023/07/10
 ---
 

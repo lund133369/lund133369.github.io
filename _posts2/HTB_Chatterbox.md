@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Chatterbox.md
+title: HTB_Chatterbox
 date: 2023/07/10
 ---
 

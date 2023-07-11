@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_TheNotebook.md
+title: HTB_TheNotebook
 date: 2023/07/10
 ---
 

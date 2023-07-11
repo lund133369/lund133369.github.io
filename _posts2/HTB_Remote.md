@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Remote.md
+title: HTB_Remote
 date: 2023/07/10
 ---
 

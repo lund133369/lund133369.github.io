@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Cascade.md
+title: HTB_Cascade
 date: 2023/07/10
 ---
 

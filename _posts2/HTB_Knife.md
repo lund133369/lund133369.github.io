@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Knife.md
+title: HTB_Knife
 date: 2023/07/10
 ---
 

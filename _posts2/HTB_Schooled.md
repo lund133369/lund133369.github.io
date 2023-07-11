@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Schooled.md
+title: HTB_Schooled
 date: 2023/07/10
 ---
 

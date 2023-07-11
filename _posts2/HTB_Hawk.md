@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Hawk.md
+title: HTB_Hawk
 date: 2023/07/10
 ---
 

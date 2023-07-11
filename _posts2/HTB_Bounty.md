@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Bounty.md
+title: HTB_Bounty
 date: 2023/07/10
 ---
 

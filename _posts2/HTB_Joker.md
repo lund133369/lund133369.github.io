@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Joker.md
+title: HTB_Joker
 date: 2023/07/10
 ---
 

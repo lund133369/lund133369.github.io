@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_LaCasaDePapel.md
+title: HTB_LaCasaDePapel
 date: 2023/07/10
 ---
 

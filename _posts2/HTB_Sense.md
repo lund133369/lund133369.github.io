@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Sense.md
+title: HTB_Sense
 date: 2023/07/10
 ---
 

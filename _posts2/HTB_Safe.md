@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Safe.md
+title: HTB_Safe
 date: 2023/07/10
 ---
 

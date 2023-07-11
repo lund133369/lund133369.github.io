@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Shocker.md
+title: HTB_Shocker
 date: 2023/07/10
 ---
 

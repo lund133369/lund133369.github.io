@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Falafel.md
+title: HTB_Falafel
 date: 2023/07/10
 ---
 

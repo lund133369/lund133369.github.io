@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Control.md
+title: HTB_Control
 date: 2023/07/10
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_FriendZone.md
+title: HTB_FriendZone
 date: 2023/07/10
 ---
 

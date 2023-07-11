@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Doctor.md
+title: HTB_Doctor
 date: 2023/07/10
 ---
 

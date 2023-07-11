@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_BankRobber.md
+title: HTB_BankRobber
 date: 2023/07/10
 ---
 

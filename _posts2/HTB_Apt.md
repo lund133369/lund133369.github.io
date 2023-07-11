@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Apt.md
+title: HTB_Apt
 date: 2023/07/10
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Worker.md
+title: HTB_Worker
 date: 2023/07/10
 ---
 

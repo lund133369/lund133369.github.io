@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Traverxec.md
+title: HTB_Traverxec
 date: 2023/07/10
 ---
 

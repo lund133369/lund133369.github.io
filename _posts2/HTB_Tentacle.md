@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Tentacle.md
+title: HTB_Tentacle
 date: 2023/07/10
 ---
 

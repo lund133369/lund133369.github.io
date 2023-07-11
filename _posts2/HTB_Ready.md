@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Ready.md
+title: HTB_Ready
 date: 2023/07/10
 ---
 

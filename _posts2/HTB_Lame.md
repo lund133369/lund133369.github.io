@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Lame.md
+title: HTB_Lame
 date: 2023/07/10
 ---
 

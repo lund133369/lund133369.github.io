@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Nineveh.md
+title: HTB_Nineveh
 date: 2023/07/10
 ---
 

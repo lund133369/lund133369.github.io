@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Forest.md
+title: HTB_Forest
 date: 2023/07/10
 ---
 

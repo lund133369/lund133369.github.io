@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Mischief.md
+title: HTB_Mischief
 date: 2023/07/10
 ---
 

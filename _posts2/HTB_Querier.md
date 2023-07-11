@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Querier.md
+title: HTB_Querier
 date: 2023/07/10
 ---
 

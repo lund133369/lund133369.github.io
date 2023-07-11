@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Sink.md
+title: HTB_Sink
 date: 2023/07/10
 ---
 

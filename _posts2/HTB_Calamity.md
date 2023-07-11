@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Calamity.md
+title: HTB_Calamity
 date: 2023/07/10
 ---
 

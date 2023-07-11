@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_October.md
+title: HTB_October
 date: 2023/07/10
 ---
 

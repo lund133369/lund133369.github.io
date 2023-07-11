@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Kotarak.md
+title: HTB_Kotarak
 date: 2023/07/10
 ---
 

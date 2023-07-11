@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_SneakyMailer.md
+title: HTB_SneakyMailer
 date: 2023/07/10
 ---
 

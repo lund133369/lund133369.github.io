@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Silo.md
+title: HTB_Silo
 date: 2023/07/10
 ---
 

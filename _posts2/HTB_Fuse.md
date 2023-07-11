@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Fuse.md
+title: HTB_Fuse
 date: 2023/07/10
 ---
 

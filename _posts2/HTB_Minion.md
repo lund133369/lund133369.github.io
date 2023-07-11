@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Minion.md
+title: HTB_Minion
 date: 2023/07/10
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Omni.md
+title: HTB_Omni
 date: 2023/07/10
 ---
 

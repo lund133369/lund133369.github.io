@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTB_Mango.md
+title: HTB_Mango
 date: 2023/07/10
 ---
 
