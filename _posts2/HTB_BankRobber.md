@@ -133,10 +133,8 @@ La idea aqui seria robar la cookie de session del administrador.
 
 1. Checkeamos nuestra propria cookie de session con Burpsuite
 
-    ```{r, echo = FALSE, fig.cap="get cookie with Burpsuite", out.width="90%"}
-        knitr::include_graphics("images/BankRobber-mycookie.png")
-    ```
 
+![BakRobber-mycookie](../assets/images/BankRobber-mycookie.png) 
 1. Como la cookie esta URL encodeada le damos a Ctrl+Shift+U y copiamos la cookie
 1. Analyzamos la cookie
 

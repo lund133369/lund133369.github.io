@@ -287,10 +287,8 @@ Aqui vemos que la direccion `0xffffd140` apunta al principio del Buffer (la entr
 que si el **eip** apunta a la direccion `0xfffd140` sumada por 32 bytes (que serian las 28 A mas los 4 bytes del **eip**),
 podriamos ejecutar el shellcode que queremos.
 
-```{r, echo = FALSE, fig.cap="Buffer shell code position", out.width="90%"}
-    knitr::include_graphics("images/Jail-Buffer-shellcode-pos.png")
-```
 
+![Jail-Buffer-shellcode-os](../assets/images/Jail-Buffer-shellcode-pos.png) 
 Para esto nos creamos un script en python
 
 ```python
@@ -455,10 +453,8 @@ directorios, sobre todo el directorio var que se nos aparece como estando del gr
 
 ```{r, echo = FALSE, fig.cap="groups nfs share folders", out.width="90%"}
     knitr::include_graphics("images/Jail-lla.png")
-```
-
-Esto suele pasar porque nuestro grupo docker en nuestra maquina de atacante tiene el mismo id que el usuario franck de la maquina victima. Esto significa que
 hay una colision entre los dos grupos y que como usuario del grupo docker en nuestra maquina de atacante, podemos crear ficheros como el usuario franck de la
+![Jail-lla](../assets/images/Jail-lla.png) 
 maquina victima
 
 > [ ! ] NOTAS: Si no existe docker en nuestra maquina de atacante, tendriamos que ver el numero 1000 y tendriamos que crear un grupo con este id para operar

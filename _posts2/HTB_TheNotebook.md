@@ -107,18 +107,14 @@ Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atac
 1. En burpsuite le damos al `Ctrl+i` para enviarlo al intruder
 1. Configuramos el attacker **Sniper** dando la posicion a la palabra password
 
-    ```{r, echo = FALSE, fig.cap="notebook sniper config", out.width="90%"}
-    knitr::include_graphics("images/notebook-sniper-config.png")
-    ```
 
+![otebook-sier-cofi](../assets/images/notebook-sniper-config.png) 
 1. Cargamos el diccionario creado a la payload list y le quitamos el Payload encoding
 
     ```{r, echo = FALSE, fig.cap="notebook sniper payload list", out.width="90%"}
     knitr::include_graphics("images/notebook-sniper-list.png")
-    ```
 
-1. En Options creamos un regexp para saber cuando la contraseña es valida
-
+![otebook-sier-list](../assets/images/notebook-sniper-list.png) 
     - en Grep - Extract damos a ADD
     - le damos a Fetch response
 
@@ -126,10 +122,8 @@ Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atac
         knitr::include_graphics("images/notebook-fetch-response.png")
         ```
 
-1. Le damos a start attack
 
-No encontramos nada.
-
+![otebook-fetch-resose](../assets/images/notebook-fetch-response.png) 
 ### Register un nuevo usuario {-}
 
 Como no a sido posible reventar la mamona con un password brute force, utilizamos la web para ver si encontramos una vulnerabilidad.
@@ -159,10 +153,8 @@ la url donde encuentra esta Key por una creado por nosotros.
 
 1. Nos entablamos un servidor web para que pueda cojer la key
 
-    ```bash
-    python3 -m http.server 7070
-    ```
 
+![jwt-hijacki](../assets/images/jwt-hijacking.png) 
 1. Copiamos el JWT token en firefox
 
     ```{r, echo = FALSE, fig.cap="jwt firefox hijack", out.width="90%"}
@@ -173,10 +165,8 @@ Ya lanzando la web otra vez y vemos que un Admin Panel a salido y en el cual se 
 
 ### Analizamos las notas {-}
 
-Analizando las notas se puede ver :
-
-- Usuario admin
 - Usuario Noah
+![jwt-firefox](../assets/images/jwt-firefox.png) 
 - Ejecucion de fichero php
 
 ### Uploadeamos un s4vishell.php {-}

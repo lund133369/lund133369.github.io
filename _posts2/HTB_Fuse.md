@@ -268,10 +268,8 @@ Aqui S4vitar nos recomienda trabajar desde una maquina Windows con Visual studio
 1. eliminamos el primer include que nos da un error *#include "stdafx.h* y que no es necessario
 1. en visual studio cambiamos el Debug a Realease y le ponemos x64
 
-    ```{r, echo = FALSE, fig.cap="Build LoadDriver", out.width="90%"}
-        knitr::include_graphics("images/Fuse-VS2019.png")
-    ```
 1. en el menu le damos a Build -> Rebuild solution
+![Fuse-VS2019](../assets/images/Fuse-VS2019.png) 
 
 Esto nos cree un fichero LoadDriver.exe que copiamos en una carpeta compiledbinaries.
 

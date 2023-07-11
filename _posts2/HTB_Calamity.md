@@ -185,10 +185,8 @@ El comando `ls -l /home/xalvas` nos muestra ficheros. En el fichero `intrusions`
 cat /home/xalvas/intrusions
 ```
 
-```{r, echo = FALSE, fig.cap="fichero intrusions", out.width="90%"}
-    knitr::include_graphics("images/calamity-intrusions.png")
-```
 
+![calamity-itrusios](../assets/images/calamity-intrusions.png) 
 Vemos que el comando `nc` esta BlackListeado y que logea el Proccess Kill en este fichero. El problema de esto es que se puede
 que los comandos BlackListeados se controlan con los nombres mismo (no permite `nc, python, bash`). Pero que pasa si copiamos el 
 binario bash y que le ponemos un nombre diferente.

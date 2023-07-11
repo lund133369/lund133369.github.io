@@ -225,18 +225,14 @@ impacket-secretsdump -ntds ntds -system SYSTEM LOCAL
 
 Aqui copiamos los diferentes hashes en un fichero llamado hash
 
-```{r, echo = FALSE, fig.cap="hashes ntds", out.width="90%"}
-    knitr::include_graphics("images/Kotrarak-hashes.png")
-```
 
+![Kotrarak-hashes](../assets/images/Kotrarak-hashes.png) 
 cat hash | awk '{print $4}' FS=":" y copiamos los hashes en la pagina [crack station](https://crackstation.net/)
 
 ```{r, echo = FALSE, fig.cap="hashes crackstation", out.width="90%"}
     knitr::include_graphics("images/Kotarak-crackstation.png")
-```
 
-intentamos las contraseñas para pasar al usuario atanas
-
+![Kotarak-crackstatio](../assets/images/Kotarak-crackstation.png) 
 ```bash
 su atanas
 Password: f16tomcat!

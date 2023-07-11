@@ -138,10 +138,8 @@ de la base de datos.
 Vemos la base de datos de wordpress y le cambiamos la contraseña al usuario NOTCH. Lo unico seria seleccionnar la Funcion
 MD5 al lado de la contraseña.
 
-```{r, echo = FALSE, fig.cap="Cambio de contraseña para el usuario notch", out.width="90%"}
-    knitr::include_graphics("images/phpmyadmin-notch.png")
-```
 
+![hmyadmi-otch](../assets/images/phpmyadmin-notch.png) 
 Intentamos conectar al wordpress con el usuario NOTCH y su nueva contraseña y pa dentro.
 
 

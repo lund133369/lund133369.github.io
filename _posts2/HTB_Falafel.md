@@ -129,10 +129,8 @@ un script en python que es mucho mas agil.
 
 1. Interceptamos y modificamos la SQLI desde BurpSuite
 
-    ```{r, echo = FALSE, fig.cap="Burp sqli interception", out.width="90%"}
-        knitr::include_graphics("images/Falafel-SQLI-intercept.png")
-    ```
 
+![Falafel-SQLI-itercet](../assets/images/Falafel-SQLI-intercept.png) 
 1. Con Ctrl+i lo enviamos al intruder
 1. En el nodo Positions damos al boton `clear §` y selectionamos:
     
@@ -142,10 +140,8 @@ un script en python que es mucho mas agil.
 
     ```{r, echo = FALSE, fig.cap="Burp Cluster Bomb config", out.width="90%"}
         knitr::include_graphics("images/Falafel-ClusterBomb-config-payload.png")
-    ```
-
-1. En el nodo Payloads, seleccionamos el Payload set numero 1
    
+![Falafel-ClusterBomb-cofi-ayload](../assets/images/Falafel-ClusterBomb-config-payload.png) 
     - cambiamos el payload type a Numbers
     - cambiamos el Number range en sequential From 1 To 5 con step de 1
     - sacamos el URL encode del final de la pagina
@@ -154,10 +150,8 @@ un script en python que es mucho mas agil.
     knitr::include_graphics("images/Falafel-ClusterBomb-config-payload1.png")
     ```
 
-1. En el nodo Payloads, seleccionamos el Payload set numero 2
-   
-    - cambiamos el payload type a Brute forcer
     - cambiamos el Character set a `abcdefghijklmnopqrstuvwxyz` con un Min length de 1 y un Max length de 1
+![Falafel-ClusterBomb-cofi-ayload1](../assets/images/Falafel-ClusterBomb-config-payload1.png) 
     - sacamos el URL encode del final de la pagina
 
     ```{r, echo = FALSE, fig.cap="Burp Cluster Bomb config set 2", out.width="90%"}
@@ -166,10 +160,8 @@ un script en python que es mucho mas agil.
 
 1. En el nodo Options En el Grep - Match
 
-    - damos al boton Clear
-    - añadimos `Wrong identification`
-    
     ```{r, echo = FALSE, fig.cap="Burp Cluster Bomb config matcher", out.width="90%"}
+![Falafel-ClusterBomb-cofi-ayload2](../assets/images/Falafel-ClusterBomb-config-payload2.png) 
     knitr::include_graphics("images/Falafel-ClusterBomb-config-matcher.png")
     ```
     
@@ -177,10 +169,8 @@ un script en python que es mucho mas agil.
 
 Aqui vemos que el resultado es un poco complicado pero se podria hacer de esta forma.
 
-#### Cluster Bomb attack version Python {-}
-
-```python
 #!/usr/bin/python3
+![Falafel-ClusterBomb-cofi-matcher](../assets/images/Falafel-ClusterBomb-config-matcher.png) 
 #coding: utf-8
 
 import requests
@@ -448,10 +438,8 @@ Aqui podemos ver la contraseña del usuario yossi. Cambiamos de usuario con el c
 
 Desde aqui volmemos a intentar a rootear la maquina desde el usuario yossi.
 
-```bash
-sudo -l
-id
 ```
+![Falafel-oe-cature](../assets/images/Falafel-open-capture.png) 
 
 Como otra vez un grupo, en este caso el grupo disk nos llama la atencion, volmemos a hacer lo mismo con el listeo de ficheros de cada grupo
 

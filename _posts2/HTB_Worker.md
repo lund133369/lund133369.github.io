@@ -102,10 +102,8 @@ arrancar session. Es un Azure DevOps.
 
 Si navigamos en la web podemos ver multiples repositorios.
 
-```{r, echo = FALSE, fig.cap="Azure DevOps repositories", out.width="90%"}
-    knitr::include_graphics("images/Worker-repos.png")
-```
 
+![Worker-reos](../assets/images/Worker-repos.png) 
 Lo que nos llama la atencion aqui es el echo que hay un repositorio llamado dimension, y como existe un dominio `dimension.worker.htb`, pensamos que
 los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio `alpha.worker.htb` en el `/ect/hosts` y que miramos con
 el firefox a esta url vemos el proyecto. 
@@ -129,10 +127,8 @@ Si navigamos en la web podemos ver multiples repositorios.
 
 ```{r, echo = FALSE, fig.cap="Azure DevOps repositories", out.width="90%"}
     knitr::include_graphics("images/Worker-repos.png")
-```
-
-Lo que nos llama la atencion aqui es el echo que hay un repositorio llamado dimension, y como existe un dominio `dimension.worker.htb`, pensamos que
 los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio `alpha.worker.htb` en el `/ect/hosts` y que miramos con
+![Worker-reos](../assets/images/Worker-repos.png) 
 el firefox a esta url vemos el proyecto. 
 
 Si analysamos mas el proyecto, vemos que no podemos alterar el proyecto en la rama Master, y vemos que hay Pipelines que se lanzan automaticamente. Analysando 
@@ -652,59 +648,46 @@ grupo permite enviar commandos como **nt authority system**.
     knitr::include_graphics("images/Worker-grupos-agentes.png")
     ```
 
-1. Creamos una nueva canalizacion
-
-    ```{r, echo = FALSE, fig.cap="Azure DevOps nueva canalizacion", out.width="80%"}
     knitr::include_graphics("images/Worker-nueva-canalizacion.png")
+![Worker-ruos-aetes](../assets/images/Worker-grupos-agentes.png) 
     ```
 
 1. Codigo en Azure repo
 
-    ```{r, echo = FALSE, fig.cap="Azure DevOps nueva canalizacion", out.width="80%"}
-    knitr::include_graphics("images/Worker-azur-repo.png")
-    ```
 
+![Worker-ueva-caalizacio](../assets/images/Worker-nueva-canalizacion.png) 
 1. Seleccionamos el proyecto existente
 1. Configuramos la canalizacion con Canalizacion inicial
 
     ```{r, echo = FALSE, fig.cap="Azure DevOps canalizacion inicial", out.width="80%"}
-    knitr::include_graphics("images/Worker-Canalizacion-inicial.png")
-    ```
 
+![Worker-azur-reo](../assets/images/Worker-azur-repo.png) 
 1. Creamos el script pipeline para hacer un whoami
 
     ```{r, echo = FALSE, fig.cap="Azure DevOps pipeline whoami", out.width="80%"}
     knitr::include_graphics("images/Worker-whoami-pipeline.png")
     ```
-
-1. Guardamos en una nueva rama y ejecutamos
-
     ```{r, echo = FALSE, fig.cap="Azure DevOps guardar pipeline", out.width="80%"}
+![Worker-Caalizacio-iicial](../assets/images/Worker-Canalizacion-inicial.png) 
     knitr::include_graphics("images/Worker-guardar-ejecutar.png")
     ```
 
 1. Miramos el resultado 
 
-    ```{r, echo = FALSE, fig.cap="Azure DevOps whoami", out.width="80%"}
-    knitr::include_graphics("images/Worker-mulit-line-script.png")
-    ```
 
+![Worker-whoami-ielie](../assets/images/Worker-whoami-pipeline.png) 
 Aqui comprobamos que script esta lanzado por `nt authority\system`
 
 1. Uploadeamos un netcat a la maquina victima
     
-    ```bash
-    locate nc.exe
-    cp /usr/share/sqlninja/apps/nc.exe .
     ```
+![Worker-uardar-ejecutar](../assets/images/Worker-guardar-ejecutar.png) 
 
 1. Desde evil-winrm, uploadeamos el fichero
 
     ```bash
-    cd C:\Windows\Temp
-    mkdir Privesc
-    cd  Privesc
     upload nc.exe
+![Worker-mulit-lie-scrit](../assets/images/Worker-mulit-line-script.png) 
     ```
 
 1. Nos ponemos en escucha por el puerto 443

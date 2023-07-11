@@ -91,10 +91,8 @@ pkill charon
 ike-scan -M 10.10.10.116 | tee output
 ```
 
-```{r, echo = FALSE, fig.cap="ike scan output", out.width="90%"}
-    knitr::include_graphics("images/Conceal-ike-scan.png")
-```
 
+![Coceal-ike-sca](../assets/images/Conceal-ike-scan.png) 
 Aqui ya vemos todas las informaciones necessarias para podernos crear unos ficheros de configuracion para connectarnos por VPN.
 
 ### Creamos los ficheros de configuracion para la VPN {-}
@@ -108,10 +106,8 @@ Si buscamos por internet como se configura el fichero ipsec.secrets y encontramo
 
 ```{r, echo = FALSE, fig.cap="info ipsec.secrets", out.width="90%"}
     knitr::include_graphics("images/Conceal-ipsec-secrets-web.png")
-```
 
-Añadimos lo siguiente en nuestro fichero `/etc/ipsec.secrets`
-
+![Coceal-isec-secrets-web](../assets/images/Conceal-ipsec-secrets-web.png) 
 ```bash
 %any : PSK "Dudecake1!"
 ```

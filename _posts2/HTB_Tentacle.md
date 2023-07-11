@@ -130,10 +130,8 @@ http    10.10.10.224    3128
 esto resulta en lo siguiente.
 
 
-```{r, echo = FALSE, fig.cap="normal proxychains", out.width="90%"}
-    knitr::include_graphics("images/Tentacle-normal-proxychains-conf.png")
-```
 
+![Tetacle-ormal-roxychais-cof](../assets/images/Tentacle-normal-proxychains-conf.png) 
 Pasamos por internet para con el Squid Proxy scanear el 10.197.243.77. Pensamos que es un **Internal Squid Proxy** porque el dominio es 
 `proxy.realcorp.htb`. Hemos podido comprobar que esta tecnica no funcciona.
 
@@ -145,10 +143,8 @@ pero de manera local para poder scanear el **Internal Squid Proxy**.
 
 ```{r, echo = FALSE, fig.cap="isp proxychains", out.width="90%"}
     knitr::include_graphics("images/Tentacle-isp-proxychains-conf.png")
-```
 
-La configuracion del proxychains.conf seria la siguiente.
-
+![Tetacle-is-roxychais-cof](../assets/images/Tentacle-isp-proxychains-conf.png) 
 ```bash
 http    10.10.10.224    3128
 http    127.0.0.1   3128
@@ -179,10 +175,8 @@ Como no vemos nigun puerto interesante vamos a intentar con la misma tecnica sca
     knitr::include_graphics("images/Tentacle-otherserv-proxychains-conf.png")
 ```
 
-Cambiamos el script de bash
-
-
 ```bash
+![Tetacle-otherserv-roxychais-cof](../assets/images/Tentacle-otherserv-proxychains-conf.png) 
 #!/bin/bash
 
 for prot in $(seq 1 65535); do
@@ -206,10 +200,8 @@ Si lanzamos el commando `proxychains nmap -sT -Pn -v -n 10.197.243.31 -p22` pode
 
 Aqui podemos ver que el puerto esta abierto pero lo mas interesante es el *Strict chain* y vemos que pasamos por la 
 10.10.10.224:3128 hacia el 127.0.0.1:3128 de esta misma maquina para despues pasar por la 10.197.243.77:3128 que es el 
-Internal Squid Proxy para finalmente connectarnos a la 10.197.243.31:22.
 
-Ya podemos lanzar el script en bash nuevamente y vemos que el puerto 80 esta abierto lo que significa que hay una web interna.
-
+![Tetacle-roxychais-chai](../assets/images/Tentacle-proxychains-chain.png) 
 ### Analysis de la web interna con proxychains {-}
 
 podemos connectarnos a la web con el commando siguiente.
@@ -240,10 +232,8 @@ Aqui vemos un nuevo rango de ip `10.241.251.0 255.255.255.0` que no teniamos ant
 este uso. Tenemos que pasar nuevamente por un script en bash.
 
 ```bash
-#!/bin/bash
-
-for port in 21 22 25 80 88 443 445 8080 8081; do
         for i in $(seq 1 254); do
+![Tetacle-wad-dat](../assets/images/Tentacle-wpad-dat.png) 
             proxychains -q timeout 1 bash -c "echo '' > /dev/tcp/10.241.251.$i/$port" 2>/dev/null && echo "[+] $port - OPEN on host $i" &
         done; wait
 done; 

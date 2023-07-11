@@ -174,10 +174,8 @@ gdb ovrflw
 > r $(python -c 'print "A"*500')
 ```
 
-```{r, echo = FALSE, fig.cap="EBP EIP overwrite", out.width="90%"}
-    knitr::include_graphics("images/October-EBP-EIP-overwrite.png")
-```
 
+![October-EBP-EIP-overwrite](../assets/images/October-EBP-EIP-overwrite.png) 
 Aqui vemos que el registrop EBP y EIP han sido sobre escribido. 
 
 #### Buscando el tamaño antes de sobre escribir el EIP {-}
@@ -224,10 +222,8 @@ Aqui ya vemos que el EIP vale `0x42424242` que son 4 B en hexadecimal
 
 ```{r, echo = FALSE, fig.cap="ESP Entries", out.width="90%"}
     knitr::include_graphics("images/October-esp_entries.png")
-```
-
-La idea seria de appuntar el EIP a la direccion `0xbf8d5310` y cambiar los C por codigo malicioso pero si miramos
 las proteccionnes del programa con 
+![October-es_etries](../assets/images/October-esp_entries.png) 
 
 ```bash
 > checksec

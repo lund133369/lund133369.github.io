@@ -173,18 +173,14 @@ Para ejecutar comandos o mejor dicho, para ganar accesso al sistema desde un adm
 
 1. En modules, habilitar el componente PHP Filter
 
-    ```{r, echo = FALSE, fig.cap="Drupal - habilitar PHP Filter", out.width="90%"}
-    knitr::include_graphics("images/drupal-phpfilter.png")
-    ```
 
+![drual-hfilter](../assets/images/drupal-phpfilter.png) 
 1. Crear un nuevo contenido
 
     ```{r, echo = FALSE, fig.cap="Drupal - Nuevo articulo", out.width="90%"}
     knitr::include_graphics("images/drupal-new-article.png")
-    ```
 
-1. Ponernos en escucha en el puerto 443
-
+![drual-ew-article](../assets/images/drupal-new-article.png) 
     ```bash
     nc -nlvp 443
     ```

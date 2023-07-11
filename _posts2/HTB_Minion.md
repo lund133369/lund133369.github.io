@@ -468,12 +468,9 @@ nmap -sS --min-rate 5000 --open -vvv -n -Pn -p- 10.10.10.57
 
 vemos que tenemos todo expuesto y como hay el puerto 3389 que es el puerto **RDP** ya nos podemos conectar con Remmina por ejemplo.
 
-```{r, echo = FALSE, fig.cap="minion remmina connection", out.width="90%"}
-knitr::include_graphics("images/minion-remina.png")
-```
 
+![miio-remia](../assets/images/minion-remina.png) 
 Y ya estamos en la maquina como administrator
 
 ```{r, echo = FALSE, fig.cap="minion remmina pwned", out.width="90%"}
 knitr::include_graphics("images/minion-pwned.png")
-```

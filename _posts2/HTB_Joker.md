@@ -48,10 +48,8 @@ Browseando la web con el url `http://10.10.10.21:3128` no da un error que es nor
 Utilizamos el **FoxyProxy** para añadir las credenciales del Proxy. Como no tenemos el usuario y la contraseña, dejamos estos datos
 vacios.
 
-```{r, echo = FALSE, fig.cap="foxyproxy con squid proxy", out.width="90%"}
-    knitr::include_graphics("images/squid-foxy-no-creds.png")
-```
 
+![squid-foxy-o-creds](../assets/images/squid-foxy-no-creds.png) 
 #### Uso de curl con proxy {-}
 
 La idea aqui es utilizar la herramienta **curl** con en argumento `--proxy` para ver si el puerto 80 esta abierto.
@@ -132,24 +130,18 @@ por un proxy, vamos a utilizar **Burp** para conectar el fuzzer con el proxy.
 
         ```{r, echo = FALSE, fig.cap="BurpSuite: create proxy server", out.width="90%"}
             knitr::include_graphics("images/burp-create-proxy-server.png")
-        ```
 
-1. Añadir el puerto 80 para utilizar **curl** y **wfuzz**
-
+![bur-create-roxy-server](../assets/images/burp-create-proxy-server.png) 
     ```{r, echo = FALSE, fig.cap="BurpSuite: create proxy server 1", out.width="90%"}
         knitr::include_graphics("images/burp-add-port-80-1.png")
     ```
 
-    ```{r, echo = FALSE, fig.cap="BurpSuite: create proxy server 2", out.width="90%"}
-        knitr::include_graphics("images/burp-add-port-80-2.png")
-    ```
 
+![bur-add-ort-80-1](../assets/images/burp-add-port-80-1.png) 
 1. Testeamos con **curl**
 
-    ```bash
-    curl -s http://127.0.0.1 | html2text
-    ```
 
+![bur-add-ort-80-2](../assets/images/burp-add-port-80-2.png) 
 Ya no nos pone el mensaje de error `Conexion reusada`, quiere decir que el server proxy que hemos creado con
 BurpSuite funciona. Ya podemos aplicar fuzzing.
 

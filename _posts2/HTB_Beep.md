@@ -241,10 +241,8 @@ Un shellshock attack pasa por burlar el user-agent de la peticion. Para esto uti
 
 1. Una vez interceptada la peticion a la url de login.cgi, cambiamos la cabezera del User-Agent de la siguiente forma:
 
-    ```{r, echo = FALSE, fig.cap="Beep shellshock", out.width="90%"}
-        knitr::include_graphics("images/Beep-shellshock-reverse-shell.png")
-    ```
 
+![Bee-shellshock-reverse-shell](../assets/images/Beep-shellshock-reverse-shell.png) 
 1. Nos ponemos en escucha por el puerto 443
 
     ```bash

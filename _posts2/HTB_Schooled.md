@@ -153,10 +153,8 @@ Le damos a Update profile y vemos que una popup se pone visible. Como vemos que 
 
 Esperamos un poco y vemos que una peticion a sido lanzada y vemos una cookie de session 
 
-```{r, echo = FALSE, fig.cap="MoodleNet XSS", out.width="90%"}
-    knitr::include_graphics("images/Schooled-moodlenet-xss.png")
-```
 
+![Schooled-moodleet-xss](../assets/images/Schooled-moodlenet-xss.png) 
 Cambiamos la cookie desde firefox y recargamos la pagina. Ya vemos que nos hemos convertido en Manuel Philips.
 Buscando por internet con busquedas de typo `moodle professor role rce github`, vemos que existe un CVE 2020-14321.
 

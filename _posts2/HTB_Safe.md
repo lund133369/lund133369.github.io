@@ -123,10 +123,8 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 Aqui gdb nos saca un error y vemos que el `$rsp` esta sobre escito con lettras **A**
 
-```{r, echo = FALSE, fig.cap="rsp overwritted", out.width="90%"}
-    knitr::include_graphics("images/Safe-rsp-A.png")
-```
 
+![Safe-rs-A](../assets/images/Safe-rsp-A.png) 
 Aqui seguimos la Guia normal de un BOF.
 
 1. Buscamos cuantos A son necessarios antes de sobre escribir el **rsp**
@@ -248,10 +246,8 @@ Lo comprobamos de la siguiente manera.
 
         ```{r, echo = FALSE, fig.cap="system function listing breakpoint", out.width="90%"}
             knitr::include_graphics("images/Safe-system-breakpoint.png")
-        ```
 
-    - añadimos esta direccion como breakpoint
-
+![Safe-system-breakoit](../assets/images/Safe-system-breakpoint.png) 
         ```bash
         gef➤  b * 0x40116e
         gef➤  c
@@ -284,10 +280,8 @@ vemos que hay una funccion que se llama test y que contiene las ejecuciones sigu
     knitr::include_graphics("images/Safe-test-fct-inspection.png")
 ```
 
-Aqui podemos ver que en esta funccion copia el contenido del **RSP** en el **RDI**. Esto nos cae de lujo porque con las 120 A, hemos ganado el control del **RSP**.
-Esto quiere decir que si logramos desde el `rsp` lanzar la funccion *test()*, cuando termine esta funccion, nos copiara lo que hay en el `rsp` en le `rdi`. Si conseguimos
-hacerlo, y que llamamos a la funccion system, nos lanzara el comando `system()` con el valor del `rdi` La difficultad de esta tecnica reside en manejar el flujo del
 programa como nosotros queremos.
+![Safe-test-fct-isectio](../assets/images/Safe-test-fct-inspection.png) 
 Si miramos la funccion test, vemos que justo despues de la copia del `rsp` al `rdi`, hay un comando **JMP** que significa Jump al registro **R13** donde a dentro, existe
 una direccion (por el momento desconocida).
 Aqui la idea seria cambiar lo que hay en el registro `R13` para injectarle la direccion de la function `system()`.
@@ -304,10 +298,8 @@ gef➤  ropper --search "pop r13"
 
 Aqui vemos que tenemos un Gadget `pop r13; pop r14; pop r15;` y tenemos la direccion **401206**. Esto quiere decir que podemos meter la direction de **system()** en
 `r13` y por lo de `r14` y `r15`, pondremos un byte nullo.
-
-Para esto uzaremos el exploit.
-
 ```python
+![Safe-adet-r13](../assets/images/Safe-gadget-r13.png) 
 #!/usr/bin/python3
 
 from pwn import *

@@ -293,10 +293,8 @@ En la maquina windows, instalamos el `dotPeek` que es una heramienta que nos per
 Vemos aqui una Key y utiliza la dll CascCrypto para encryptar y desencryptar cosas. Analyzamos la dll y vemos que utiliza un **Modo CBC** para 
 encryptar y desencryptar. Vemos un **IV** y con [cyberChef](https://gchq.github.io/CyberChef/) desencryptamos la contraseña.
 
-```{r, echo = FALSE, fig.cap="CBC decrypt with cyberchef", out.width="90%"}
-    knitr::include_graphics("images/Cascade-cbc-decrypt.png")
-```
 
+![Cascade-cbc-decryt](../assets/images/Cascade-cbc-decrypt.png) 
 Ya tenemos contraseña y validamos con crackmapexec.
 
 ```bash

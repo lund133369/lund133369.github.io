@@ -74,10 +74,8 @@ Hay un redirect a `sneakycorp.htb`
 nano /etc/hosts
 ```
 
-```{r, echo = FALSE, fig.cap="hosts sneakycorp.htb", out.width="90%"}
-    knitr::include_graphics("images/hosts-sneakycorp.png")
-```
 
+![hosts-seakycor](../assets/images/hosts-sneakycorp.png) 
 #### Checkear la web del puerto 8080 {-}
 
 Abrimos la web y vemos cosas:
@@ -246,10 +244,8 @@ nano /etc/hosts
 
 ```{r, echo = FALSE, fig.cap="hosts dev.sneakycorp.htb", out.width="90%"}
     knitr::include_graphics("images/hosts-dev-sneakycorp.png")
-```
 
-### Browsear el nuevo dominio {-}
-
+![hosts-dev-seakycor](../assets/images/hosts-dev-sneakycorp.png) 
 Como aqui ya tenemos un nuevo dominio browseamos la web en `dev.sneakycorp.htb/s4vishell.php` y ahora si encontramos nuestra webshell.
 
 - whoami con `dev.sneakycorp.htb/s4vishell.php?cmd=whoami`

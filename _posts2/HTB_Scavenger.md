@@ -75,10 +75,8 @@ Hablan de virtualhosting
 ```bash
 nano /etc/hosts
 ```
-```{r, echo = FALSE, fig.cap="hosts supersechosting", out.width="90%"}
-    knitr::include_graphics("images/scavenger-hosts1.png")
-```
 
+![scaveer-hosts1](../assets/images/scavenger-hosts1.png) 
 Intentamos conectarnos otra vez a la web pero ahora con el url `http://supersechosting.htb` y tenemos el mismo resultado.
 
 
@@ -124,10 +122,8 @@ Los añadimos al `/etc/hosts`
 
 ```{r, echo = FALSE, fig.cap="hosts despues del domain transfer attack", out.width="90%"}
     knitr::include_graphics("images/scavenger-hosts2.png")
-```
 
-Lo miramos con firefox y el host `www.supersechosting.htb` nos muestra algo pero sigue siendo muy poca cosa.
-
+![scaveer-hosts2](../assets/images/scavenger-hosts2.png) 
 #### Whois {-}
 
 Como el puerto 43 esta abierto. podemos intentar conectar con la maquina para entablar peticiones whois.
@@ -275,10 +271,8 @@ Ya podemos añadir estos dominios en el `/etc/hosts`.
     knitr::include_graphics("images/scavenger-hosts3.png")
 ```
 
-Aqui ya intentamos conectar a estos nuevos dominios con Firefox pero sigue siendo lo mismo. Intentamos hacer nuevamente ataques 
-de zonas con estos nuevos dominios
-
 ### Ataque de transferencia de zona Part 2 {-}
+![scaveer-hosts3](../assets/images/scavenger-hosts3.png) 
 
 ```bash
 dig @10.10.10.155 justanotherblog.htb axfr
@@ -466,10 +460,8 @@ pdf
 
 Vemos esta parte interesante y probamos una vez mas con:
 
-```bash
-echo "g3tPr1v" > /dev/ttyR0; whoami
-
 root
+![radare2rootko](../assets/images/radare2rootko.png) 
 ```
 
 Ya estamos root y podemos ver la flag.

