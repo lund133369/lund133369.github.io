@@ -32,3 +32,4 @@ No puedo mostrar la resolucion completa ya que es un challegens activo.
 
 ![congra.PNG](../assets/posts2/congra.png)
 
+<img src="https://www.hackthebox.com/achievement/challenge/816133/98" alt="imagenxd">
