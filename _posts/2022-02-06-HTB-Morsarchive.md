@@ -24,7 +24,9 @@ No puedo mostrar la resolucion completa ya que es un challegens activo.
 ![python2.PNG](../assets/posts2/script_python2.jpg)
 
 ## [](#header-2)Script_bash
-![bash.PNG](../assets/posts2/script_bash.sh)
+![bash.PNG](../assets/posts2/script_bash.png)
 
 ##TENER EN CUENTA QUE ESTE SCRIPT TE LO DESCOMPRIME HASTA EL COMPRIMIDO 0 , LUEGO DE ELLO DE FORMA MANUAL TENDRAS QUE DESCOMPRIMIR
 ##Y DIRIGIRTE A LA CARPETA LLAMADA FLAG DONDE LO GUARDES Y AHI SE ENCONTRARA UN ARCHIVO LLAMADA: HTB{***************}
+
+![python1.PNG](../assets/posts2/congra.png)
