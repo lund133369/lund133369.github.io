@@ -22,7 +22,9 @@ el o los archivos e incluso url de archivos para poder ver la seguridad de estos
 
 --------------------------------------
 ![1.1.PNG](../assets/posts1/1.1.PNG)
+
 --------------------------------------
+
 pero esto seria muy engoroso ya que tendrias que estar arrastando todos los archivos y mira tu 
 cuando terminariamos, y pero hay una manera de poder automatizar esto y es utilizando el Process Explorer 
 tengamos en cuenta que esta herramienta es de microsoft y "NO DE TERCEROS".
