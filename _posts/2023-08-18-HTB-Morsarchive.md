@@ -30,5 +30,7 @@ No puedo mostrar la resolucion completa ya que es un challegens activo.
 ##Y DIRIGIRTE A LA CARPETA LLAMADA FLAG DONDE LO GUARDES Y AHI SE ENCONTRARA UN ARCHIVO LLAMADA: HTB{***************}
 
 <center>
+
 ![python1.PNG](../assets/posts2/congra.png)
+
 </center>
