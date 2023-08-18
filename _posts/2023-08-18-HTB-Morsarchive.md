@@ -11,7 +11,7 @@ Resolucion de challenges-Morsarchive
 
 ***	Ahora para que te pueda funcionar mi script debes de tener una estructura de archivos como:
 
-	![estructura.PNG](../assets/posts2/Estructura_carpeta.png)
+![estructura.PNG](../assets/posts2/Estructura_carpeta.png)
 
 El ejercicio trata de archivos comprimidos redundandetemente 999 veces y las contraseñas se almacenan en una
 imagen llamado pwd.png el cual tiene en sus pixeles pintados en codigo morse el cual se tienes que traspazar a 
