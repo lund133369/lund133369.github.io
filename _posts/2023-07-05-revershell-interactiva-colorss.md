@@ -13,7 +13,7 @@ published: true
 	user@pc:~$ ^Z # ctrl + z
 	user@pc:~$ stty raw -echo; fg
 	user@pc:~$ reset xterm
-	user@pc:~$ export TERM=xterm-256color
+	user@pc:~$ export TERM=xterm-256color #indicamos una terminal con colores
 	user@pc:~$ export SHELL=bash
 	user@pc:~$ stty size #vemos tamaño de la terminal , filas-columnas , ejecuta el mismo comando en una ventana nueva .
 	user@pc:~$ stty rows <rownb> columns <colnb> # luego de haber revisado el tamaño de tu propia terminal.
