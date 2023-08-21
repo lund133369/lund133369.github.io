@@ -1,5 +1,5 @@
 ---
-title: Fast install terminal kitty-zsh-POWERLVL10k
+title: Revershell Interativa-colores
 published: true
 ---
 
