@@ -1,5 +1,11 @@
 # The Hacker-Blog theme
 
+---
+
+**AGREDECIMIENTOS A https://github.com/mlopez66/S4viNotes POR LA INFOMACION COMPARTIDA **
+
+---
+
 ## USO
 
 1. la extructura es la siguiente:
@@ -10,7 +16,7 @@
 	22en _layout/* estan los HTMLs que aparecera en la pagina web , se pueden modificar.
 2. actualizacion:
 	se agrego un nuevo apartado para poder agregar los la parte delos s4vinotes , ya que esto
-	ya no se encutra en internet y solo existe el repositorio, en este caso se extrajo la 
+	ya no se encutra en internet y solo existe el repositorio, en este caso se extrajo la
 	informacion de : https://github.com/mlopez66/S4viNotes donde:
 	-Se descargo el repositorio y se extrajo  a travez de un script los archivos divididos en uno 
 	solo segun su nombre de carpeta
