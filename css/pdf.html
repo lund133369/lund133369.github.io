@@ -139,7 +139,7 @@ async function convertirAPdf() {
     const typedArray = new Uint8Array(this.result);
     const pdfDocument = await pdfjsLib.getDocument({ data: typedArray }).promise;
     const page = await pdfDocument.getPage(1); // Obtén la primera página del PDF (página 1)
-    const scale = 10.0; // Escala para renderizar
+    const scale = 7.0; // Escala para renderizar
     const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');
