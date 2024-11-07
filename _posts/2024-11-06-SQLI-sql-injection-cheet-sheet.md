@@ -9,7 +9,7 @@ SCRIPTS QUE SIRVEN DE GUIA PARA LOS DIFERENTES TIPOS DE SQLI DE TIPOS
 
 - CONDITIONAL REPONSE
 
-[sqli_base_reponse.py](../assets/posts1/sqli_base_reponse.py)
+[sqli_base_response.py](../assets/posts1/sqli_base_response.py)
 
 ```python
 #!/usr/bin/python3
