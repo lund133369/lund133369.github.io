@@ -18,12 +18,25 @@ const entry = await getEntry("savinotes", slug);
 if (!entry) {
   throw new Error(`Entrada no encontrada para el slug: ${slug}`);
 }
+
+console.log('Entry collection:', entry.collection);
+console.log('Entry data:', entry.data);
+console.log('Entry file:', entry.filePath);
+console.log('Entry id:', entry.id);
+console.log('Entry slug:', entry.slug);
+console.log('Entry render:', entry.rendered);
+console.log('Entry render html:', entry.rendered?.html);
+
+
+
+
+
 ---
 
 <SavinoteLayout title={entry.data.title}>
   <article>
     <h1>{entry.data.title}</h1>
     <time>{entry.data.date?.toDateString?.() ?? "Sin fecha"}</time>
-    <div class="content" set:html={entry.body} />
+    <div class="content" set:html={entry.rendered?.html} />
   </article>
 </SavinoteLayout>
