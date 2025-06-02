@@ -1,0 +1,18 @@
+---
+import { getCollection } from "astro:content";
+
+const savinotes = await getCollection("savinotes");
+---
+
+<h1>Notas savinotes</h1>
+<ul>
+  {savinotes.map((note) => {
+    // note.slug puede ser undefined, usa note.id que es el nombre del archivo con ruta relativa
+    const slug = note.data.slug ?? note.slug ?? note.id.split('/').pop().replace('.md', '');
+    return (
+      <li>
+        <a href={`/savinotes/${slug}/`}>{note.data.title}</a>
+      </li>
+    );
+  })}
+</ul>

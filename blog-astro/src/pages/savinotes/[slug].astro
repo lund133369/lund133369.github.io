@@ -1,0 +1,29 @@
+---
+// src/pages/savinotes/[slug].astro
+import SavinoteLayout from "../../layouts/SavinoteLayout.astro";
+import { getCollection, getEntry } from "astro:content";
+
+// Esta función genera rutas estáticas para todos los MDs
+export async function getStaticPaths() {
+  const entries = await getCollection("savinotes");
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id }, // ✅ usamos el id como slug
+  }));
+}
+
+const { slug } = Astro.params;
+const entry = await getEntry("savinotes", slug);
+
+if (!entry) {
+  throw new Error(`Entrada no encontrada para el slug: ${slug}`);
+}
+---
+
+<SavinoteLayout title={entry.data.title}>
+  <article>
+    <h1>{entry.data.title}</h1>
+    <time>{entry.data.date?.toDateString?.() ?? "Sin fecha"}</time>
+    <div class="content" set:html={entry.body} />
+  </article>
+</SavinoteLayout>
