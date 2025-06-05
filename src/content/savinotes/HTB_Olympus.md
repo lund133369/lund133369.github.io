@@ -133,7 +133,11 @@ Que hace el exploit?
 - usa el comando eval 
 - deposita en una ruta del servidor un fichero con su contenido en base64
 - ejecuta el fichero con php
-- la peticion esta enviada por el methodo GET con `'Cookie' => 'XDEBUG_SESSION=+rand_text_alphanumeric(10)'`
+- la peticion esta enviada por el methodo GET con 
+```bash
+ 'Cookie' => 'XDEBUG_SESSION=+rand_text_alphanumeric(10)' 
+```
+
 
 ### Pruebas del exploit {-}
 
@@ -250,7 +254,11 @@ airgeddon
 ### Airgeddon.cap crack with Aircrack-ng {-}
 
 Airgeddon es una suite de utilidades para hacer auditorias wifi. Entrando en el repertorio airgeddon del usuario zeus encontramos
-otro repertorio llamado captured. Filtrando el contenido del directorio aigedon por ficheros `find \-type f` encontramos un fichero 
+otro repertorio llamado captured. Filtrando el contenido del directorio aigedon por ficheros 
+```bash
+ find \-type f 
+```
+ encontramos un fichero 
 **captured.cap** 
 
 Vamos a transferir el fichero captured.cap a nuestro equipo de atacante
@@ -274,7 +282,11 @@ aircrack-ng captured-cap
 ```
 ![aircrack-airgeddon](/assets/images/aircrack-airgeddon.png)
 
-Se ve un ESSID que se llama `To_cl0se_to_th3_Sun` que parece turbio, y un handshake que significa que alguien a esperado que una victima se connecte
+Se ve un ESSID que se llama 
+```bash
+ To_cl0se_to_th3_Sun 
+```
+ que parece turbio, y un handshake que significa que alguien a esperado que una victima se connecte
 o reconecte tras un ataque de deautentificacion y a recuperado el hash de autentificacion.
 
 Analizando la captura con **tshark** se ve que a sido un ataque de deautentificacion
@@ -340,7 +352,11 @@ Intentamos con el nombre turbio de esta red inalambrica como contraseña.
 
 Hay un fichero que contiene un nombre de dominio valido **ctfolympus.htb**
 
-Intentamos poner el nombre del dominio en el `/etc/hosts` pero la web sigue siendo la misma.
+Intentamos poner el nombre del dominio en el 
+```bash
+ /etc/hosts 
+```
+ pero la web sigue siendo la misma.
 
 Sabiendo que el puerto 53 esta abierto y teniendo ahora un nombre de dominio valido, podemos
 hacer un ataque de transferencia de zona con **dig**
@@ -383,7 +399,11 @@ iptables se puede exponer o bloquear un puerto.
 nmap -p3456,8234,62431,22 --open -T5 -v -n 10.10.10.83 -r
 ```
 
-> [!] NOTAS: El argumento `-r` es para decir a NMAP de scanear los puertos en este mismo orden
+> [!] NOTAS: El argumento 
+```bash
+ -r 
+```
+ es para decir a NMAP de scanear los puertos en este mismo orden
 
 Lanzando el comando multiples veces, NMAP nos reporta ahora que el puerto 22 esta ya abierto.
 Lo que se puede hacer es, de seguida despues del **Port Knocking** con nmap, lanzar un comando
@@ -395,7 +415,11 @@ nmap -p3456,8234,62431,22 --open -T5 -v -n 10.10.10.83 -r && ssh prometheus@10.1
 
 Perfecto se nos pregunta por una contraseña **Y PA DENTRO**
 
-En este momento ya se puede ver la flag `user.txt` y Podemos pasar a la fase de escalacion de privilegios.
+En este momento ya se puede ver la flag 
+```bash
+ user.txt 
+```
+ y Podemos pasar a la fase de escalacion de privilegios.
 ## Escalacion de privilegios {-}
 
 ### Enumeracion del usuario en la maquina victima {-}

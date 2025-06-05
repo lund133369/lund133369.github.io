@@ -83,7 +83,11 @@ Lanzamos un web scan con nmap.
 nmap --script http-enum -p80 10.10.10.37 -oN webScan
 ```
 
-Ya nos detecta un `/phpmyadmin/` y ficheros de wordpress
+Ya nos detecta un 
+```bash
+ /phpmyadmin/ 
+```
+ y ficheros de wordpress
 
 #### Chequear la web del puerto 80 {-}
 
@@ -93,10 +97,18 @@ Con firefox navegamos en la web para ver lo que es.
 - Vemos que la web esta under construction
 - Si pinchamos el post vemos que es el usuario NOTCH que lo a echo
 
-Como es un wordpress intentamos ir al `http://10.10.10.37/wp-login.php` y miramos si hay el usuario NOTCH. 
+Como es un wordpress intentamos ir al 
+```bash
+ http://10.10.10.37/wp-login.php 
+```
+ y miramos si hay el usuario NOTCH. 
 Efectivamente el usuario NOTCH existe. 
 
-Vamos a por el `http://10.10.10.37/phpmyadmin/` y buscamos previamente en google si encontramos credenciales por
+Vamos a por el 
+```bash
+ http://10.10.10.37/phpmyadmin/ 
+```
+ y buscamos previamente en google si encontramos credenciales por
 defecto pero no funcionan.
 
 Tenemos que ir buscando mas rutas.
@@ -107,10 +119,22 @@ Tenemos que ir buscando mas rutas.
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.37/WFUZZ
 ```
 
-Encontramos un ruta plugins que no suele ser normal porque en wordpress los plugins suelen estar en `/wp-content/plugins` y no
-en `/plugins` directamente
+Encontramos un ruta plugins que no suele ser normal porque en wordpress los plugins suelen estar en 
+```bash
+ /wp-content/plugins 
+```
+ y no
+en 
+```bash
+ /plugins 
+```
+ directamente
 
-Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atacante.
+Aqui encontramos dos ficheros 
+```bash
+ .jar 
+```
+. Los descargamos en nuestra maquina de atacante.
 
 
 
@@ -119,14 +143,26 @@ Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atac
 
 ### Analizamos los ficheros {-}
 
-Los ficheros `.jar` son ficheros comprimidos que se pueden descomprimir con la herramienta `unzip`
+Los ficheros 
+```bash
+ .jar 
+```
+ son ficheros comprimidos que se pueden descomprimir con la herramienta 
+```bash
+ unzip 
+```
+
 
 ```bash
 unzip BlockyCore.jar
 unzip griefprevention-1.11.2-3.1.1.298.jar
 ```
 
-Ya tenemos ficheros `.class` que podemos analizar con **strings** o mejor con **javap**
+Ya tenemos ficheros 
+```bash
+ .class 
+```
+ que podemos analizar con **strings** o mejor con **javap**
 
 ```bash
 javap -c Blockycore.class
@@ -134,7 +170,11 @@ javap -c Blockycore.class
 
 Aqui ya podemos ver cosas como un usuario root y una contraseña para un sqlUser.
 
-Aqui vamos a la url `http://10.10.10.37/phpmyadmin/` y probamos. Ya podemos entrar en el panel de configuracion
+Aqui vamos a la url 
+```bash
+ http://10.10.10.37/phpmyadmin/ 
+```
+ y probamos. Ya podemos entrar en el panel de configuracion
 de la base de datos.
 
 Vemos la base de datos de wordpress y le cambiamos la contraseña al usuario NOTCH. Lo unico seria seleccionnar la Funcion
@@ -149,7 +189,11 @@ Intentamos conectar al wordpress con el usuario NOTCH y su nueva contraseña y p
 
 Cada vez que se puede entrar en el panel de administracion de wordpress siempre hacemos lo mismo.
 
-Pinchamos en `Appearance > Editor` y retocamos el fichero 404 Template.
+Pinchamos en 
+```bash
+ Appearance > Editor 
+```
+ y retocamos el fichero 404 Template.
 
 > [ ! ] Nota: Si este fichero no existe, justo encima, se puede **Select theme to edit** y buscar otro tema.
 
@@ -171,7 +215,11 @@ Editamos el fichero 404 Template con una reverse shell en php
 ?>
 ```
 
-ya podemos ir al url `http://10.10.10.37/?p=404.php` y pa dentro
+ya podemos ir al url 
+```bash
+ http://10.10.10.37/?p=404.php 
+```
+ y pa dentro
 
 ### Tratamiento de la TTY {-}
 
@@ -197,7 +245,11 @@ Miramos si hay reutilisacion de contraseñas
 su notch 
 ```
 
-Y con la contraseña encontrada en el ficher `BlockyCore.class` funciona. Y ya podemos ver la flag.## Escalada de privilegios {-}
+Y con la contraseña encontrada en el ficher 
+```bash
+ BlockyCore.class 
+```
+ funciona. Y ya podemos ver la flag.## Escalada de privilegios {-}
 
 ### Rootear la maquina {-}
 

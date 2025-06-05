@@ -95,9 +95,21 @@ Nada muy interesante aqui
 openssl s_client -connect 10.10.10.239:443
 ```
 
-vemos una direccion de correo `roy@love.htb` lo que quiere decir que tenemos un usuario y un dominio. 
-Tambien vemos un dominio `staging.love.htb`, quiere decir que es posible que se aplique virtual hosting.
-Lo añadimos al `/etc/hosts` de la maquina de atacante.
+vemos una direccion de correo 
+```bash
+ roy@love.htb 
+```
+ lo que quiere decir que tenemos un usuario y un dominio. 
+Tambien vemos un dominio 
+```bash
+ staging.love.htb 
+```
+, quiere decir que es posible que se aplique virtual hosting.
+Lo añadimos al 
+```bash
+ /etc/hosts 
+```
+ de la maquina de atacante.
 
 
 
@@ -144,7 +156,15 @@ Fuzzeamos el puerto 80
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.239/FUZZ
 ```
 
-Encontramos una ruta `/admin`. En la pagina admin vemos otro panel de inicio de session que no es la misma que la del `index.php`
+Encontramos una ruta 
+```bash
+ /admin 
+```
+. En la pagina admin vemos otro panel de inicio de session que no es la misma que la del 
+```bash
+ index.php 
+```
+
 
 #### Chequeando la pagina admin {-}
 
@@ -178,7 +198,11 @@ Creamos un servicio http con python
 python3 -m http.server 80
 ```
 
-En la web ponemos la url de nuestro equipo `http://10.10.14.8/` y vemos que la web es vulnerable a una **Injeccion HTML**.
+En la web ponemos la url de nuestro equipo 
+```bash
+ http://10.10.14.8/ 
+```
+ y vemos que la web es vulnerable a una **Injeccion HTML**.
 Intentamos con una pagina php
 
 ```bash
@@ -189,11 +213,23 @@ vi index.php
 ?>
 ```
 
-Si ahora en la web le ponemos `http://10.10.14.8/index.php` no pasa nada quiere decir que esta en un contexto sanitizado.
-Bueno aqui pensamos en un **SSRF** y intentamos cosas como `http://localhost/`. Esto nos muestra el panel de session que ya hemos analizado,
+Si ahora en la web le ponemos 
+```bash
+ http://10.10.14.8/index.php 
+```
+ no pasa nada quiere decir que esta en un contexto sanitizado.
+Bueno aqui pensamos en un **SSRF** y intentamos cosas como 
+```bash
+ http://localhost/ 
+```
+. Esto nos muestra el panel de session que ya hemos analizado,
 y probamos a ver si los puertos que tenian el mensaje **Forbidden** se pueden ahora burlar. 
 
-Intentamos el puerto 5000, `http://localhost:5000/` y effectivamente se puede ver la pagina. A demas vemos aqui las credenciales del usuario **admin**.
+Intentamos el puerto 5000, 
+```bash
+ http://localhost:5000/ 
+```
+ y effectivamente se puede ver la pagina. A demas vemos aqui las credenciales del usuario **admin**.
 
 Nos conectamos ahora con el usuario admin en el panel de administracion y pa dentro.
 
@@ -273,7 +309,11 @@ mkdir EEEE
 cd EEEE
 ```
 
-Descargamos el `winpeasx64.exe` desde [https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe](https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe).
+Descargamos el 
+```bash
+ winpeasx64.exe 
+```
+ desde [https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe](https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe).
 
 ```bash
 cd content

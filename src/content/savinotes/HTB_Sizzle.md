@@ -112,7 +112,15 @@ No podemos subir archivos.
 openssl s_client -connect 10.10.10.103:443
 ```
 
-Aqui vemos el dominio `sizzle.htb.local` y lo metemos en el `/etc/hosts`
+Aqui vemos el dominio 
+```bash
+ sizzle.htb.local 
+```
+ y lo metemos en el 
+```bash
+ /etc/hosts 
+```
+
 
 ### Analysis del dominio {-}
 
@@ -120,7 +128,15 @@ Aqui vemos el dominio `sizzle.htb.local` y lo metemos en el `/etc/hosts`
 dig @10.10.10.103 sizzle.htb.local ns
 ```
 
-Encontramos otro dominio, el `hostmaster.htb.local` que añadimos en el `/etc/hosts`. Miramos si es vulnerable a ataque de transferencia de zona.
+Encontramos otro dominio, el 
+```bash
+ hostmaster.htb.local 
+```
+ que añadimos en el 
+```bash
+ /etc/hosts 
+```
+. Miramos si es vulnerable a ataque de transferencia de zona.
 
 ```bash
 dig @10.10.10.103 sizzle.htb.local axfr
@@ -148,7 +164,15 @@ smbmap -H 10.10.10.103 -u 'null'
 ```
 
 Vemos que estamos en frente de una maquina Windows 10 de 64 bit pro que se llama **SIZZLE** en el dominio **htb.local**.
-Vemos que hay recursos compartidos a nivel de red con los recursos `IPC$` y `Department Shares` con derechos de lectura.
+Vemos que hay recursos compartidos a nivel de red con los recursos 
+```bash
+ IPC$ 
+```
+ y 
+```bash
+ Department Shares 
+```
+ con derechos de lectura.
 Seguimos analyzando con **smbclient**
 
 ```bash
@@ -194,7 +218,11 @@ Vemos que se puede escribir en el directorio Public. Creamos un fichero malicios
 
 ### SCF fichero malicioso para smb {-}
 
-Buscando por internet con las palabras `smb malicious file`, encontramos una possiblidad de injectar un fichero malicioso de typo SCF. Esta vulnerabilidad
+Buscando por internet con las palabras 
+```bash
+ smb malicious file 
+```
+, encontramos una possiblidad de injectar un fichero malicioso de typo SCF. Esta vulnerabilidad
 consiste injectar una peticion a la maquina de atacante a partir del momento que alguien vea el icono del fichero creado.
 
 1. Creamos un recurso compartido a nivel de red
@@ -288,7 +316,11 @@ Hemos podido dumpear las informaciones del ldap en ficheros web.
 service apache2 start
 ```
 
-y analizamos las informaciones desde firefox en la url `http://localhost`.
+y analizamos las informaciones desde firefox en la url 
+```bash
+ http://localhost 
+```
+.
 
 Las informaciones interesantes aqui son el echo que el usuario mrlky es kerberoasteable, y que el usuario amanda puede conectarse por WinRM.
 
@@ -304,7 +336,11 @@ pip install bloodhound
 bloodhound-python -d htb.local -u amanda -p Ashare1972 -gc sizzle.htb.local -c all -ns 10.10.10.103
 ```
 
-Ahora que tenemos los ficheros `.json` creamos un zip para entrarlo en el bloodhound
+Ahora que tenemos los ficheros 
+```bash
+ .json 
+```
+ creamos un zip para entrarlo en el bloodhound
 
 ```bash
 ls -la *.json
@@ -359,11 +395,19 @@ find \-name \*IIS\*
 wfuzz -c -t 200 --hc=404 -w /usr/share/seclists/Discovery/web-Content/IIS.fuzz.txt http://10.10.10.103/FUZZ
 ```
 
-Aqui vemos un directorio `/certsrv`. Si entramos con firefox, hay un panel de inicio de session y si le ponemos las credenciales de amanda, podemos entrar.
+Aqui vemos un directorio 
+```bash
+ /certsrv 
+```
+. Si entramos con firefox, hay un panel de inicio de session y si le ponemos las credenciales de amanda, podemos entrar.
 
 Vemos un **Microsoft Active Directory Certificate Services**. Es un servicio que nos permite crear certificados para un usuario.
 
-1. En la web le damos a `Request Certificate -> advanced certificate request`, vemos que tenemos que enviar un certificado base64-encoded CMC o PKCS
+1. En la web le damos a 
+```bash
+ Request Certificate -> advanced certificate request 
+```
+, vemos que tenemos que enviar un certificado base64-encoded CMC o PKCS
 1. Creamos un certificado (Private Key) en la maquina de atacante
 
     ```bash
@@ -424,9 +468,17 @@ john --wordlist=/usr/share/wordlists/rockyou.txt mrkly_hash
 Aqui ya tenemos la contraseña del usuario. Aqui no vamos a poder connectarnos a la maquina victima con este usuario porque
 tenemos que crear un nuevo certificado.
 
-Entramos con firefox a la routa `/certsrv` con las credenciales del usuario MRKLY.
+Entramos con firefox a la routa 
+```bash
+ /certsrv 
+```
+ con las credenciales del usuario MRKLY.
 
-1. En la web le damos a `Request Certificate -> advanced certificate request`
+1. En la web le damos a 
+```bash
+ Request Certificate -> advanced certificate request 
+```
+
 1. Creamos un certificado (Private Key) en la maquina de atacante
 
     ```bash

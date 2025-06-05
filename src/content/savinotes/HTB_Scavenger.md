@@ -79,7 +79,11 @@ nano /etc/hosts
 ```
 
 ![scaveer-hosts1](/assets/images/scavenger-hosts1.png) 
-Intentamos conectarnos otra vez a la web pero ahora con el url `http://supersechosting.htb` y tenemos el mismo resultado.
+Intentamos conectarnos otra vez a la web pero ahora con el url 
+```bash
+ http://supersechosting.htb 
+```
+ y tenemos el mismo resultado.
 
 
 
@@ -120,7 +124,11 @@ Aqui vemos que es vulnerable y vemos unos dominios
     - mail1.supersechosting.htb
     - ns1.supersechosting.htb
 
-Los añadimos al `/etc/hosts`
+Los añadimos al 
+```bash
+ /etc/hosts 
+```
+
 
 ```{r, echo = FALSE, fig.cap="hosts despues del domain transfer attack", out.width="90%"}
     knitr::include_graphics("images/scavenger-hosts2.png")
@@ -150,7 +158,11 @@ nc 10.10.10.155 43
 
 ### SQL Injection por Whois {-}
 
-Como el mensaje nos da `the right syntax to use near "''")` ya vemos como podemos montarnos el ataque.
+Como el mensaje nos da 
+```bash
+ the right syntax to use near "''") 
+```
+ ya vemos como podemos montarnos el ataque.
 
 ```bash
 nc 10.10.10.155 43
@@ -267,7 +279,11 @@ Vemos aqui que injectaremos por la data 1.
     Aqui tambien se podria hacer un limit 0,1 1,1 etc...
 
 
-Ya podemos añadir estos dominios en el `/etc/hosts`.
+Ya podemos añadir estos dominios en el 
+```bash
+ /etc/hosts 
+```
+.
 
 ```{r, echo = FALSE, fig.cap="hosts despues del sqli", out.width="90%"}
     knitr::include_graphics("images/scavenger-hosts3.png")
@@ -282,7 +298,15 @@ dig @10.10.10.155 pwnhats.htb axfr
 dig @10.10.10.155 rentahacker.htb axfr
 ```
 
-El ultimo dominio nos muestra un dominio turbio `sec03.rentahacker.htb`. Lo añadimos nuevamente en el `/etc/hosts` y por firefox
+El ultimo dominio nos muestra un dominio turbio 
+```bash
+ sec03.rentahacker.htb 
+```
+. Lo añadimos nuevamente en el 
+```bash
+ /etc/hosts 
+```
+ y por firefox
 nos conectamos. Por fin algo nuevo.
 
 Esta pagina nos hace pensar que gente ya a hackeado la pagina por otros *Haxxors*. Si es el caso, fuzzeamos la pagina.
@@ -306,7 +330,11 @@ del comando usado para ejecutar los comandos. Lo buscamos con **WFUZZ** diciendo
 wfuzz -c -t 200 --hc=404 --hw=0 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://sec03.rentahacker.htb/shell.php?FUZZ=whoami
 ```
 
-encontramos el comando `hidden`
+encontramos el comando 
+```bash
+ hidden 
+```
+
 
 
 
@@ -334,7 +362,11 @@ Como aqui vemos que nada functionna, pensamos que hay reglas que son definidas e
 
 ### Creamos una FakeShell {-}
 
-En el directorio exploits creamos un fichero `fakeShell.sh` que contiene
+En el directorio exploits creamos un fichero 
+```bash
+ fakeShell.sh 
+```
+ que contiene
 
 ```bash
 #!/bin/bash
@@ -356,7 +388,11 @@ while true; do
 done
 ```
 
-Ya lo podemos lanzar con el comando `rlwrap ./fakeShell.sh`
+Ya lo podemos lanzar con el comando 
+```bash
+ rlwrap ./fakeShell.sh 
+```
+
 
 > [ ! ] Notas: Las explicaciones del script se pueden ver en el video live en el minuto 1:15:38
 
@@ -375,11 +411,19 @@ cat /home/ib01c03/www/wp-config.php
 ```
 
 Vemos un fichero comprimido de wordpress. Buscamos el fichero de configuracion de wordpress que suele tener credenciales en
-texto claro. Una vez encontrado lo miramos con `cat`. Encontramos usuario y contraseña para el servicio mysql. Aqui no hay nada interesante.
+texto claro. Una vez encontrado lo miramos con 
+```bash
+ cat 
+```
+. Encontramos usuario y contraseña para el servicio mysql. Aqui no hay nada interesante.
 
 ### Chequeamos ficheros del servicio SMTP {-}
 
-Los ficheros de email suelen ser guardados en el `/var/spool/mail`. Aqui vemos dos ficheros y une tiene credenciales para el **FTP** en texto claro.
+Los ficheros de email suelen ser guardados en el 
+```bash
+ /var/spool/mail 
+```
+. Aqui vemos dos ficheros y une tiene credenciales para el **FTP** en texto claro.
 
 ### Conexion por ftp {-}
 
@@ -397,7 +441,19 @@ prompt off
 mget *
 ```
 
-Hay ficheros interesantes como `notes.txt` o `ib01c01.access.log` que nos dan pistas pero nosotros vamos a por el fichero `ib01c01_incident.pcap`
+Hay ficheros interesantes como 
+```bash
+ notes.txt 
+```
+ o 
+```bash
+ ib01c01.access.log 
+```
+ que nos dan pistas pero nosotros vamos a por el fichero 
+```bash
+ ib01c01_incident.pcap 
+```
+
 
 ### Investigamos el fichero pcap con TShark {-}
 
@@ -408,7 +464,11 @@ tshark -r ib01c01_incident.pcap -Y "http.request.method==POST" -Tjson 2>/dev/nul
 tshark -r ib01c01_incident.pcap -Y "http.request.method==POST" -Tfields -e tcp.payload 2>/dev/null | xxd -ps -r
 ```
 
-Analizando aqui encontramos passwords que son codeadas en url-encode. Tratamos de conectar con el usuario de estos ficheros `ib01c01` con la 
+Analizando aqui encontramos passwords que son codeadas en url-encode. Tratamos de conectar con el usuario de estos ficheros 
+```bash
+ ib01c01 
+```
+ con la 
 nueva contraseña y pa dentro. Ya podemos ver el fichero **user.txt**
 
 ### Continuacion de la investigacion con Wireshark {-}
@@ -437,8 +497,16 @@ echo "g0tR0ot" > /dev/ttyR0; id
 ```
 
 Pero no functionna. Pensamos aqui que los atacantes que han instalado el rootkit cambiaron la contraseña.
-Segun la web, la contraseña se encuentra en un fichero `root.ko` y mirandolo bien hay un directorio que se
-llama `...` (Que cabron)
+Segun la web, la contraseña se encuentra en un fichero 
+```bash
+ root.ko 
+```
+ y mirandolo bien hay un directorio que se
+llama 
+```bash
+ ... 
+```
+ (Que cabron)
 
 ```bash
 cd ...

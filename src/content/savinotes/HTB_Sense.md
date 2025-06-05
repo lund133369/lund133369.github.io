@@ -57,7 +57,11 @@ nmap -sC -sV -p80,443 10.10.10.60 -oN targeted
 
 #### Checkear la web {-}
 
-Si entramos en la url `https://10.10.10.60`, vemos un panel de authentificacion de pfsense.
+Si entramos en la url 
+```bash
+ https://10.10.10.60 
+```
+, vemos un panel de authentificacion de pfsense.
 Teniendo esto en cuenta, miramos por internet si existen credenciales por defecto para este servicio.
 
 Encontramos admin:pfsense pero no funcciona. Vamos a fuzzear la web

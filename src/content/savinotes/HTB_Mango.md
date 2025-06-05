@@ -55,7 +55,11 @@ El scaneo de nmap nos muestra 2 dominios
 - mango.htb
 - staging-order.mango.htb
 
-los añadimos al `/etc/hosts`
+los añadimos al 
+```bash
+ /etc/hosts 
+```
+
 
 ### Analyzando la web {-}
 
@@ -74,12 +78,28 @@ Es un Apache 2.4.29 en un Ubuntu. El puerto 80 nos muestra un 403 Forbiden pero 
 openssl s_client -connect 10.10.10.162:443
 ```
 
-Nuevamente vemos el dominio `staging-order.mango.htb`
+Nuevamente vemos el dominio 
+```bash
+ staging-order.mango.htb 
+```
+
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.162`, Vemos que no tenemos acceso. Si vamos con **https**, vemos una web stylo Google.
-Ocure lo mismos con el dominio `mango.htb` pero con el dominio `staging-order.maquina.htb` por **http**, vemos un panel de inicio de 
+Si entramos en la url 
+```bash
+ http://10.10.10.162 
+```
+, Vemos que no tenemos acceso. Si vamos con **https**, vemos una web stylo Google.
+Ocure lo mismos con el dominio 
+```bash
+ mango.htb 
+```
+ pero con el dominio 
+```bash
+ staging-order.maquina.htb 
+```
+ por **http**, vemos un panel de inicio de 
 session.
 
 Aqui probamos cosas uzando el burpsuite.
@@ -249,7 +269,15 @@ Password: h3mXK8RhU~f{]f5H
 ```
 
 Hemos ganado accesso al systema como el usuario **mango**.
-Vemos que la flag esta en el directorio `/home/admin` tenemos que pasar al usuario admin con el comando `su admin`.
+Vemos que la flag esta en el directorio 
+```bash
+ /home/admin 
+```
+ tenemos que pasar al usuario admin con el comando 
+```bash
+ su admin 
+```
+.
 
 ### Autopwn completo para el usuario mango {-}
 
@@ -333,7 +361,11 @@ find \-perm -4000 2>/dev/null
 ls -la ./usr/lib/jvm/java-11-openjdk-amd64/bin/jjs
 ```
 
-Aqui vemos que tenemos privilegios SUID sobre el binario `jjs` de java. Buscamos en [gtfobins](https://gtfobins.github.io/gtfobins/jjs/#suid)
+Aqui vemos que tenemos privilegios SUID sobre el binario 
+```bash
+ jjs 
+```
+ de java. Buscamos en [gtfobins](https://gtfobins.github.io/gtfobins/jjs/#suid)
 como escalar el privilegio con jjs. 
 
 ```bash

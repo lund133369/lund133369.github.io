@@ -63,7 +63,11 @@ nmap --script http-enub -p8080 10.10.10.95 -oN webScan
 
 #### Checkear la web {-}
 
-Vemos la pagina por defecto de Tomcat. Vamos en la url `http://10.10.10.95:8080/manager/html`, Intentamos credenciales por defecto:
+Vemos la pagina por defecto de Tomcat. Vamos en la url 
+```bash
+ http://10.10.10.95:8080/manager/html 
+```
+, Intentamos credenciales por defecto:
 
 - admin:admin
 - tomcat:tomcat
@@ -84,4 +88,8 @@ Nos ponemos en escucha por el puerto 443
 rlwrap nc -nlvp 443
 ```
 
-Subimos el war a la web de manager y ya ganamos accesso a la maquina victima. A demas ya estamos como `nt authority\system`
+Subimos el war a la web de manager y ya ganamos accesso a la maquina victima. A demas ya estamos como 
+```bash
+ nt authority\system 
+```
+

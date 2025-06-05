@@ -84,7 +84,11 @@ Compartimos un servidor web con python
 python3 http.server 80
 ```
 
-Si desde la web lanzamos un `http://10.10.14.6` vemos nuestra pagina web. Intentamos crear una pagina php pero no funcciona. 
+Si desde la web lanzamos un 
+```bash
+ http://10.10.14.6 
+```
+ vemos nuestra pagina web. Intentamos crear una pagina php pero no funcciona. 
 
 ## Vulnerability Assessment {-}
 
@@ -92,7 +96,11 @@ Si desde la web lanzamos un `http://10.10.14.6` vemos nuestra pagina web. Intent
 
 Intentamos con etiquetas html y script... vemos que el servicio es vulnerable a html injection y XSS pero no podemos hacer muchas cosas con esto.
 
-Vamos a ver si es vulnerable a un **SSRF** (Server Side Request Forgery). Si le ponemos `localhost:22` la pagina nos reporta la cabezera des servicio
+Vamos a ver si es vulnerable a un **SSRF** (Server Side Request Forgery). Si le ponemos 
+```bash
+ localhost:22 
+```
+ la pagina nos reporta la cabezera des servicio
 ssh. Vamos aqui a utilizar WFUZZ para enumerar los puertos internos que estan abiertos.
 
 #### Uzando WFUZZ para enumerar los puertos internos abiertors {-}
@@ -117,7 +125,11 @@ Aqui vemos muchos puertos addicionales que no nos reporto el scanning de NMAP co
 - 3306 (mysql)
 
 Verificamos estos puertos con la web y encontramos cosas muy interesante como un panel de administracion en el puerto 320 y un listador
-de ficheros en el puerto 888. Encontramos un fichero backup y lo miramos desde la web `http://10.10.10.55:60000/url.php?path=http://localhost:888/?doc=backup`
+de ficheros en el puerto 888. Encontramos un fichero backup y lo miramos desde la web 
+```bash
+ http://10.10.10.55:60000/url.php?path=http://localhost:888/?doc=backup 
+```
+
 y mirando el codigo fuente encontramos informaciones muy interesante en el XML. Vemos un usuario admin y su contraseña.
 
 Como vemos que el fichero XML es un fichero de configuracion tomcat miramos si las credenciales son validas en el servicio del puerto 8080
@@ -125,9 +137,17 @@ Como vemos que el fichero XML es un fichero de configuracion tomcat miramos si l
 
 ### Conneccion en el panel de administracion de Tomcat {-}
 
-Como todos los servicios tomcat, el panel de administracion se encuentra en la routa `/manager/html`
+Como todos los servicios tomcat, el panel de administracion se encuentra en la routa 
+```bash
+ /manager/html 
+```
 
-lo miramos en la url `http://10.10.10.55:8080/manager/html`
+
+lo miramos en la url 
+```bash
+ http://10.10.10.55:8080/manager/html 
+```
+
 
 Una vez ganado el accesso al panel de administracion de tomcat, ya savemos que podemos subir un **war**
 malicioso.
@@ -170,7 +190,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Dandole a `cd /home` vemos que hay dos usuarios tomcat y atanas
+Dandole a 
+```bash
+ cd /home 
+```
+ vemos que hay dos usuarios tomcat y atanas
 
 ```bash
 find \-name user.txt 2>/dev/null | xargs cat
@@ -190,7 +214,11 @@ ls -la
 file *
 ```
 
-Aqui vemos que hay dos ficheros y con el commando `file` vemos que hay un fichero data y un MS Windows registry file NT/2000.
+Aqui vemos que hay dos ficheros y con el commando 
+```bash
+ file 
+```
+ vemos que hay un fichero data y un MS Windows registry file NT/2000.
 Nos traemos estos dos ficheros a nuestro equipo de atacante.
 
 1. en la maquina de atacante
@@ -397,4 +425,8 @@ Seguimos por pasos la explicacion del exploit
 en la maquina de atacante nos ponemos en escucha por el puerto 443 y esperamos que nos entable esta Coneccion.
 
 
-`whoami` -> root ;)
+
+```bash
+ whoami 
+```
+ -> root ;)

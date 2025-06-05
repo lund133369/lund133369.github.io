@@ -71,7 +71,11 @@ smbmap -H 10.10.10.182 -u 'null'
 ```
 
 Vemos que estamos frente de una maquina Windows 6.1 que se llama **CASC-DC1** en el dominio **cascade.local** con un certificado firmado.
-Añadimos el dominio al `/etc/hosts`.
+Añadimos el dominio al 
+```bash
+ /etc/hosts 
+```
+.
 Aqui, no podemos ver los recursos compartidos a nivel de red con un null session.
 
 ### Buscando ususarios con rpcclient y rpcenum {-}
@@ -174,7 +178,11 @@ podemos ver recursos como:
 - print$
 - SYSVOL
 
-Creamos una montura contra el directorio `Data`
+Creamos una montura contra el directorio 
+```bash
+ Data 
+```
+
 
 ```bash
 mkdir /mnt/smbmounted
@@ -183,7 +191,11 @@ cd /mnt/smbmounted
 tree
 ```
 
-Vemos un fichero `Meeting_Notes_June_2018.html` y lo analyzamos desde un servidor web
+Vemos un fichero 
+```bash
+ Meeting_Notes_June_2018.html 
+```
+ y lo analyzamos desde un servidor web
 
 ```bash
 cd /var/www/html
@@ -194,7 +206,11 @@ service apache2 start
 Y lo miramos desde firefox en localhost. Y vemos un email escrito por Steve (s.smith) que nos dice que hay una cuenta temporar 
 llamada TempAdmin que a sido creada para manejar migraciones y que esta cuenta tiene la misma contraseña que el usuario admin.
 
-Mirando los otros ficheros, vemos un `VNC Install.reg`.
+Mirando los otros ficheros, vemos un 
+```bash
+ VNC Install.reg 
+```
+.
 
 ```bash
 file VNC\ Install.reg
@@ -255,7 +271,15 @@ net user
 net localgroup "Audit Share"
 ```
 
-Aqui vemos quel usuario es parte de un grupo `Audit Share` y que le da el privilegio de ver un recurso compartido a nivel de red llamado `\\Casc-DC1\Audit$`.
+Aqui vemos quel usuario es parte de un grupo 
+```bash
+ Audit Share 
+```
+ y que le da el privilegio de ver un recurso compartido a nivel de red llamado 
+```bash
+ \\Casc-DC1\Audit$ 
+```
+.
 
 ```bash
 smbmap -H 10.10.10.182 's.smith' -p 'sT33ve2'
@@ -268,7 +292,11 @@ recurse ON
 mget *
 ```
 
-Aqui hemos descargado todo los ficheros del recurso compartido. Hay un fichero `Audit.db`, lo analyzamos con sqlite
+Aqui hemos descargado todo los ficheros del recurso compartido. Hay un fichero 
+```bash
+ Audit.db 
+```
+, lo analyzamos con sqlite
 
 ```bash
 cd DB
@@ -279,7 +307,11 @@ select * from DeletedUserAudit;
 select * from Ldap;
 ```
 
-Vemos una contraseña encryptada en base64 del usuario `ArkSvc`.
+Vemos una contraseña encryptada en base64 del usuario 
+```bash
+ ArkSvc 
+```
+.
 
 ```bash
 echo "8QO5l5Kj9MdErXx6Q6AG0w==" | base64 -d; echo
@@ -291,7 +323,11 @@ Nuevamente vemos que es una contraseña encryptada. Tenemos que buscar con que a
 
 Como hay differentes ficheros windows, transferimos los ficheros a una maquina windows.
 
-En la maquina windows, instalamos el `dotPeek` que es una heramienta que nos permite analyzar codigo dotNet a bajo nivel.
+En la maquina windows, instalamos el 
+```bash
+ dotPeek 
+```
+ que es una heramienta que nos permite analyzar codigo dotNet a bajo nivel.
 Vemos aqui una Key y utiliza la dll CascCrypto para encryptar y desencryptar cosas. Analyzamos la dll y vemos que utiliza un **Modo CBC** para 
 encryptar y desencryptar. Vemos un **IV** y con [cyberChef](https://gchq.github.io/CyberChef/) desencryptamos la contraseña.
 

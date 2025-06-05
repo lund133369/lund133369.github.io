@@ -79,7 +79,11 @@ smbmap -H 10.10.10.100 -u 'null'
 ```
 
 Vemos que estamos frente de una maquina Windows 6.1 x64 que se llama **DC** en el dominio **active.htb** con un certificado firmado.
-Añadimos el dominio al `/etc/hosts`.
+Añadimos el dominio al 
+```bash
+ /etc/hosts 
+```
+.
 Tambien vemos que podemos ver los recursos compartidos a nivel de red con un null session y que el recurso **Replication** esta en **READ ONLY**.
 Listamos el directorio con **smbmap**
 
@@ -94,7 +98,11 @@ Aqui vemos
 - Policies
 - scripts
 
-Esto nos hace pensar a una replica de **SYSVOL**. Aqui buscamos si esta el `groups.xml`
+Esto nos hace pensar a una replica de **SYSVOL**. Aqui buscamos si esta el 
+```bash
+ groups.xml 
+```
+
 
 ```bash
 smbmap -H 10.10.10.100 -r Replication/active.htb/Policies
@@ -108,7 +116,11 @@ smbmap -H 10.10.10.100 -r Replication/active.htb/Policies/{31B2F340-016D-11D2-94
 
 ### Groups.xml {-}
 
-Hemos encontrado el fichero `groups.xml`, lo descargamos
+Hemos encontrado el fichero 
+```bash
+ groups.xml 
+```
+, lo descargamos
 
 ```bash
 smbmap -H 10.10.10.100 --download Replication/active.htb/Policies/{31B2F340-016D-11D2-945F-00C04F894F9}/MACHINE/Preferences/Groups/Groups.xml

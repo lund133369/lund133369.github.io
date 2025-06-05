@@ -81,7 +81,11 @@ Hay una pagina que nos dice *Don't Bug Me!* y nada mas. Como la maquina se llama
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.56/FUZZ/
 ```
 
-Encontramos una routa muy interesante que es el `cgi-bin` que es la routa donde si la bash es vulnerable podemos hacer un ataque shellshock.
+Encontramos una routa muy interesante que es el 
+```bash
+ cgi-bin 
+```
+ que es la routa donde si la bash es vulnerable podemos hacer un ataque shellshock.
 
 ## Vulnerability Assessment {-}
 
@@ -104,7 +108,11 @@ Encontramos una routa muy interesante que es el `cgi-bin` que es la routa donde 
     wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -w extension.txt http://10.10.10.56/cgi-bin/FUZZ.FUZ2Z
     ```
 
-Como aqui hemos encontrado un fichero `user.sh` lanzamos un curl para ver lo que es.
+Como aqui hemos encontrado un fichero 
+```bash
+ user.sh 
+```
+ lanzamos un curl para ver lo que es.
 
 ```bash
 curl -s -X GET "http://10.10.10.56/cgi-bin/user.sh"
@@ -152,7 +160,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Dandole a `whoami` vemos que ya estamos shelly y que podemos leer la flag.## Privilege Escalation {-}
+Dandole a 
+```bash
+ whoami 
+```
+ vemos que ya estamos shelly y que podemos leer la flag.## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
 
@@ -210,7 +222,11 @@ Seguimos los passos del exploit
     ./lxd_privesc.sh -f alpine-v3-14-i686-20210728_2134.tar.gz
     ```
 
-1. vemos un error `error: This must be run as root`. Modificamos el fichero lxd_privesc.sh
+1. vemos un error 
+```bash
+ error: This must be run as root 
+```
+. Modificamos el fichero lxd_privesc.sh
 
     ```bash
     nano lxd_privesc.sh
@@ -222,7 +238,11 @@ Seguimos los passos del exploit
     # lxc image import $filename --alias alpine && lxd init --auto
     ```
 
-1. Ya estamos root pero en el contenedor. Modificamos la `/bin/bash` de la maquina
+1. Ya estamos root pero en el contenedor. Modificamos la 
+```bash
+ /bin/bash 
+```
+ de la maquina
 
     - en el contenedor
 

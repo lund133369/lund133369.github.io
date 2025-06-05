@@ -59,19 +59,39 @@ nmap -sC -sV -p22,80,8089 10.10.10.209 -oN targeted
 whatweb http://10.10.10.209
 ```
 
-Es un Apache 2.4.41 en un Ubuntu. Vemos un email `info@doctors.htb` Podria ser un usuario y un dominio. Añadimos el dominio al `/etc/hosts`
+Es un Apache 2.4.41 en un Ubuntu. Vemos un email 
+```bash
+ info@doctors.htb 
+```
+ Podria ser un usuario y un dominio. Añadimos el dominio al 
+```bash
+ /etc/hosts 
+```
+
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.209`, vemos una pagina de un cabinete de doctor. Navigamos un poco en la web pero no hay nada interesante.
-Si entramos en la web por el dominio `http://doctors.htb` vemos una nueva pagina. Se esta aplicando virtual hosting. Esta pagina es un login.
+Si entramos en la url 
+```bash
+ http://10.10.10.209 
+```
+, vemos una pagina de un cabinete de doctor. Navigamos un poco en la web pero no hay nada interesante.
+Si entramos en la web por el dominio 
+```bash
+ http://doctors.htb 
+```
+ vemos una nueva pagina. Se esta aplicando virtual hosting. Esta pagina es un login.
 El wappalizer nos dice que es un Flask en python.
 
 Aqui de seguida pensamos en un **Template Injection**.
 
 De primeras creamos un nuevo usuario en el panel de registro. 
 Vemos que nuestra cuenta a sido creada con un limite de tiempo de 20 minutos. Nos loggeamos y vemos un boton con un numero 1.
-Si pinchamos, vemos en la url `http://doctors.htb/home?page=1`. Miramos si se puede aplicar un LFI
+Si pinchamos, vemos en la url 
+```bash
+ http://doctors.htb/home?page=1 
+```
+. Miramos si se puede aplicar un LFI
 
 ```bash
 http://doctors.htb/home/page=/etc/passwd
@@ -104,10 +124,18 @@ Title: {{9*9}}
 Content: {{2*3}}
 ```
 
-Vemos que en esta parte no nos lo interpreta. Si miramos el codigo fuente, vemos que hay un link que esta en la url `http://doctors.htb/archive` y que esta
+Vemos que en esta parte no nos lo interpreta. Si miramos el codigo fuente, vemos que hay un link que esta en la url 
+```bash
+ http://doctors.htb/archive 
+```
+ y que esta
 en beta testing.
 
-Si vamos a la url en question, hay una pagina blanca pero si otra vez, miramos el codigo fuente, en este caso de la pagina `/archive`, podemos ver que hay 
+Si vamos a la url en question, hay una pagina blanca pero si otra vez, miramos el codigo fuente, en este caso de la pagina 
+```bash
+ /archive 
+```
+, podemos ver que hay 
 un numero **81**. Quiere decir que en el directorio **archive** esta interpretando el **SSTI** de los mensajes.
 
 El caso del SSTI nos permite injectar comandos a nivel de systema usando el systema de templating. Si vamos a la carpeta **Server Side Template Injection** de
@@ -130,7 +158,11 @@ de Jinja2 **Exploit the SSTI by calling Popen without guessing the offset**
     Content: TEST
     ```
 
-1. Recargamos la url `http://doctors.htb/archive`
+1. Recargamos la url 
+```bash
+ http://doctors.htb/archive 
+```
+
 
 Boom... estamos en la maquina victima.
 
@@ -169,7 +201,11 @@ cd /root
 id
 ```
 
-Aqui podemos ver que hay usuarios splunk y shaun y que estamos en el grupo `adm`. Podriamos visualisar los logs
+Aqui podemos ver que hay usuarios splunk y shaun y que estamos en el grupo 
+```bash
+ adm 
+```
+. Podriamos visualisar los logs
 
 ```bash
 cd /var/log
@@ -177,7 +213,11 @@ grep -r -i "pass"
 grep -r -i "pass" 2>/dev/null
 ```
 
-Vemos en el **apache2/backup** que hay una peticion POST para resetear una contraseña `Guitar123`
+Vemos en el **apache2/backup** que hay una peticion POST para resetear una contraseña 
+```bash
+ Guitar123 
+```
+
 
 ```bash
 su shaun
@@ -198,7 +238,11 @@ cd /opt
 ```
 
 Aqui vemos un directory splunkforward. Nos hace pensar que teniamos un puerto 8089 abierto con un splunkd.
-Si vamos a esta url `https://10.10.10.209:8089` vemos un servicio splunkd.
+Si vamos a esta url 
+```bash
+ https://10.10.10.209:8089 
+```
+ vemos un servicio splunkd.
 
 Aqui podemos tirar de un exploit en el github de [cnotin](https://github.com/cnotin/SplunkWhisperer2) que permite hacer un
 Local o un Remote privilege escalation. En este caso utilizaremos el Remoto.

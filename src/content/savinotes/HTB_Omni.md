@@ -64,7 +64,11 @@ Es un Windows Device Portal con un HTTPapi y un WWW-Athentication.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.204:8080`, Vemos un panel basic authentication.
+Si entramos en la url 
+```bash
+ http://10.10.10.204:8080 
+```
+, Vemos un panel basic authentication.
 
 
 #### Checkeando la cavezera con curl {-}
@@ -74,8 +78,16 @@ curl -s -X GET "http://10.10.10.204:8080"
 curl -s -X GET "http://10.10.10.204:8080" -I
 ```
 
-Vemos en la cabezera que el basic-auth es sobre un `Windows Device Portal`
-Buscamos si existe una vulnerabilidad asociada en google poniendo `Windows Device Portal github exploit` y encontramos
+Vemos en la cabezera que el basic-auth es sobre un 
+```bash
+ Windows Device Portal 
+```
+
+Buscamos si existe una vulnerabilidad asociada en google poniendo 
+```bash
+ Windows Device Portal github exploit 
+```
+ y encontramos
 una pagina interesante de [SirepRAT](https://github.com/SafeBreach-Labs/SirepRAT) que nos permitiria ejecutar RCE.
 ## Vulnerability Assessment {-}
 
@@ -173,7 +185,11 @@ echo %USERNAME%
 Omni
 ```
 
-Como no hay directorio de usuarios en la maquina buscamos recursivamente por un fichero llamado `user.txt`
+Como no hay directorio de usuarios en la maquina buscamos recursivamente por un fichero llamado 
+```bash
+ user.txt 
+```
+
 
 ```bash
 dir /r /s user.txt
@@ -181,8 +197,20 @@ cd C:\Data\Users\app
 type user.txt
 ```
 
-Aqui vemos quel fichero esta de typo `System.Management.Automation.PSCredential` que significa que esta cifrado. Intentamos leerlo con
-el comando `(Import-CliXml -Path user.txt)` pero no nos deja. Miramos los derechos de este fichero con `icacls user.txt` y vemos quel usuario
+Aqui vemos quel fichero esta de typo 
+```bash
+ System.Management.Automation.PSCredential 
+```
+ que significa que esta cifrado. Intentamos leerlo con
+el comando 
+```bash
+ (Import-CliXml -Path user.txt) 
+```
+ pero no nos deja. Miramos los derechos de este fichero con 
+```bash
+ icacls user.txt 
+```
+ y vemos quel usuario
 app tiene los derechos full para este fichero. Esto significa que nos tenemos que convertir en el usuario **app**. 
 
 
@@ -190,9 +218,17 @@ app tiene los derechos full para este fichero. Esto significa que nos tenemos qu
 
 
 Lo raro aqui es que si hacemos 
-un `net user`, no vemos que existe el usuario **omni** y esto es turbio porque tambien podria decir que somos un usuario privilegiado.
+un 
+```bash
+ net user 
+```
+, no vemos que existe el usuario **omni** y esto es turbio porque tambien podria decir que somos un usuario privilegiado.
 
-Si creamos una carpeta en `C:\Data\Users` vemos que podemos crearla sin problema. Intentamos ver si podemos recuperar cosas como **sam**.
+Si creamos una carpeta en 
+```bash
+ C:\Data\Users 
+```
+ vemos que podemos crearla sin problema. Intentamos ver si podemos recuperar cosas como **sam**.
 
 ```bash
 cd C:\Data\Users
@@ -236,10 +272,18 @@ Aqui hemos podido crackear el hash del usuario **app**
 
 #### Creando una reverseshell desde Windows Device Portal {-}
 
-Nos connectamos al portal de la web a la url `http://10.10.10.204:8080`. Aqui buscamos manera de ejecutar comandos como en Cualquier gestor
+Nos connectamos al portal de la web a la url 
+```bash
+ http://10.10.10.204:8080 
+```
+. Aqui buscamos manera de ejecutar comandos como en Cualquier gestor
 de contenido o panel de administracion. Y encontramos en el menu Processes un link llamado **Run command**.
 
-Probamos con `echo %USERNAME%` y ejecuta el comando como el usuario app. Creamos un reverseshell.
+Probamos con 
+```bash
+ echo %USERNAME% 
+```
+ y ejecuta el comando como el usuario app. Creamos un reverseshell.
 
 1. Nos ponemos en escuchar por el puerto 443
 

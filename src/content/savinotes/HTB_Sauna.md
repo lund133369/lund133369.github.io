@@ -77,7 +77,11 @@ smbmap -H 10.10.10.175 -u 'null'
 ```
 
 Vemos que estamos frente de una maquina Windows 10 que se llama **SAUNA** en el dominio **EGOTISTICAL-BANK.LOCAL** con un certificado firmado.
-Añadimos el dominio al `/etc/hosts`.
+Añadimos el dominio al 
+```bash
+ /etc/hosts 
+```
+.
 Tambien vemos que no podemos ver los recursos compartidos a nivel de red con un null session.
 
 ### Buscando ususarios con rpcclient y rpcenum {-}
@@ -113,7 +117,15 @@ Es un IIS 10.0
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.175`, Vemos una pagina Egotistical Bank. Navegando por el `about.html` vemos usuarios potenciales. Vamos a recuperarlos
+Si entramos en la url 
+```bash
+ http://10.10.10.175 
+```
+, Vemos una pagina Egotistical Bank. Navegando por el 
+```bash
+ about.html 
+```
+ vemos usuarios potenciales. Vamos a recuperarlos
 con bash
 
 ```bash
@@ -122,7 +134,27 @@ curl -s -X GET "http://10.10.10.175/about.html" | grep "p class=\"mt-2"
 curl -s -X GET "http://10.10.10.175/about.html" | grep "p class=\"mt-2" | grep "Fergus Smith" -A 100 | html2text > users
 ```
 
-Modificamos el fichero users para crear nombres de usuarios como `fsmith`,`f.smith`,`frank.smith`, `smithf`, `smith.frank` o otros y intentamos un asproasting attack.
+Modificamos el fichero users para crear nombres de usuarios como 
+```bash
+ fsmith 
+```
+,
+```bash
+ f.smith 
+```
+,
+```bash
+ frank.smith 
+```
+, 
+```bash
+ smithf 
+```
+, 
+```bash
+ smith.frank 
+```
+ o otros y intentamos un asproasting attack.
 ## Vulnerability Assessment {-}
 
 ### Asproasting {-}
@@ -131,7 +163,15 @@ Modificamos el fichero users para crear nombres de usuarios como `fsmith`,`f.smi
 GetNPUsers.py egotistical-bank.local/ -no-pass -usersfile users
 ```
 
-Aqui vemos un hash para el usuario `fsmith`. Lo copiamos en un fichero `fsmith_hash` y intentamos romperlo con john.
+Aqui vemos un hash para el usuario 
+```bash
+ fsmith 
+```
+. Lo copiamos en un fichero 
+```bash
+ fsmith_hash 
+```
+ y intentamos romperlo con john.
 
 ### Crackeando el hash con John {-}
 
@@ -247,7 +287,15 @@ No tenemos ningun privilegio interessante, tenemos que reconocer el systema.
     ```
 
 Una vez el zip en la maquina de atacante, lo cargamos al BloodHound. Cargado vamos a la pestaña Analysis y 
-miramos por `Find Shortest Paths to Domain Admins` pero no vemos gran cosa. Miramos el `Find Principals with DCSync Rights`
+miramos por 
+```bash
+ Find Shortest Paths to Domain Admins 
+```
+ pero no vemos gran cosa. Miramos el 
+```bash
+ Find Principals with DCSync Rights 
+```
+
 y vemos que el usuario **svc_loanmgr** tiene privilegios *GetChanges* y *GetChangesAll* sobre el dominio **EGOTISTICAL-BANK.LOCAL**.
 Esto significa que podemos hacer un DCSync attack con este usuario.
 

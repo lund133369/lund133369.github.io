@@ -77,7 +77,11 @@ smbclient -L 10.10.10.193 -N
 
 Vemos que estamos en frente de una maquina Windows Server 2016 Standard de 64 bit pro que se llama **FUSE** en el dominio **fabricorp.local**.
 No vemos ningun recursos compartidos a nivel de red.
-Añadimos el dominio a nuestro `/etc/hosts`.
+Añadimos el dominio a nuestro 
+```bash
+ /etc/hosts 
+```
+.
 
 ### Buscando ususarios con rpcclient y rpcenum {-}
 
@@ -297,7 +301,11 @@ Si abrimos el fichero ExploitCapcom.cpp, la idea aqui seria de modificar el scri
 Para esto necesitamos modificar la funccion **launchSell()** del ExploitCapcom.cpp
 
 En la web de [AppLockerByPassList](https://github.com/api0cradle/UltimateAppLockerByPassList), buscamos una routa windows interesante donde se puede trabajar
-sin problemas, en este caso seria la `C:\Windows\System32\spool\drivers\color`
+sin problemas, en este caso seria la 
+```bash
+ C:\Windows\System32\spool\drivers\color 
+```
+
 
 1. Modificamos el script
 
@@ -314,7 +322,11 @@ sin problemas, en este caso seria la `C:\Windows\System32\spool\drivers\color`
 
 #### Passamos los ficheros a la maquina victima {-}
 
-En la carpeta `compiledbinaries` tenemos nuestros 3 ficheros necesarios para el exploit.
+En la carpeta 
+```bash
+ compiledbinaries 
+```
+ tenemos nuestros 3 ficheros necesarios para el exploit.
 - Capcom.sys
 - ExploitCapcom.exe
 - LoadDriver.exe
@@ -366,4 +378,8 @@ C:\Windows\Temp\LoadDriver.exe System\CurrentControlSet\savishell C:\Windows\Tem
 C:\Windows\Temp\ExploitCapcom.exe
 ```
 
-La reverse shell nos a funccionado y con `whoami` vemos que ya somos nt authority\system y podemos ver la flag.
+La reverse shell nos a funccionado y con 
+```bash
+ whoami 
+```
+ vemos que ya somos nt authority\system y podemos ver la flag.

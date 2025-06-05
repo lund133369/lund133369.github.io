@@ -116,7 +116,11 @@ script /dev/null -c bash
 ^Z
 ```
 
-En este caso no nos va el tratamiento de la **TTY**. En este caso lo que hacemos es utilizar el `rlwrap nc -nlvp 443`
+En este caso no nos va el tratamiento de la **TTY**. En este caso lo que hacemos es utilizar el 
+```bash
+ rlwrap nc -nlvp 443 
+```
+
 
 ### Investigamos la maquina {-}
 
@@ -138,7 +142,15 @@ grep -r -E -i "username|pass|key"
 muchas cosas
 ```
 
-Como hay muchas cosas y es dificil de analizar usamos el comando `find` y vamos quitando con el comando `grep -v` las cosas que no 
+Como hay muchas cosas y es dificil de analizar usamos el comando 
+```bash
+ find 
+```
+ y vamos quitando con el comando 
+```bash
+ grep -v 
+```
+ las cosas que no 
 nos interresan poco a poco.
 
 ```bash
@@ -181,7 +193,11 @@ Encontramos el usuario 'brucetherealadmin' y su contraseña encryptada.
 
 ### John {-}
 
-1. copiamos el hash en un fichero llamado `hash`
+1. copiamos el hash en un fichero llamado 
+```bash
+ hash 
+```
+
 1. john --wordlist=/usr/share/wordlists/rockyout.txt hash
 
 Ya tenemos contraseña para el usuario *brucetherealadmin*

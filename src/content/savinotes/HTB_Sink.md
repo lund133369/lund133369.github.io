@@ -64,7 +64,15 @@ panel de inicio de session.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.225:3000`, El wappalizer no nos muestra nada. Si entramos con la url `http://10.10.10.225:5000` vemos el panel de inicio de
+Si entramos en la url 
+```bash
+ http://10.10.10.225:3000 
+```
+, El wappalizer no nos muestra nada. Si entramos con la url 
+```bash
+ http://10.10.10.225:5000 
+```
+ vemos el panel de inicio de
 session y el wappalizer tampoco no dice nada.
 
 El puerto 3000 nos muestra un GITEA, intentamos cosas como XSS, Regex y SQLi en el input del menu Explorar, pero no vemos nada. En usuarios vemos 3 usuarios:
@@ -73,10 +81,26 @@ El puerto 3000 nos muestra un GITEA, intentamos cosas como XSS, Regex y SQLi en 
 - marcus
 - root
 
-Si pinchamos en los links de los usuarios no vemos nada. Tambien vemos que no nos podemos registrar. Intentamos loggearnos como `david:david`, `marcus:marcus` y `root:root` pero nada.
+Si pinchamos en los links de los usuarios no vemos nada. Tambien vemos que no nos podemos registrar. Intentamos loggearnos como 
+```bash
+ david:david 
+```
+, 
+```bash
+ marcus:marcus 
+```
+ y 
+```bash
+ root:root 
+```
+ pero nada.
 
 En la pagina del puerto 5000, nos podemos registrar. Creamos un usuario y entramos en una web. miramos si podemos hacer cosas como htmlI, XXS, pero no vemos nada. Lo unico seria
-en la pagina `http://10.10.10.225:5000/notes` que podriamos Fuzzear para ver notas.
+en la pagina 
+```bash
+ http://10.10.10.225:5000/notes 
+```
+ que podriamos Fuzzear para ver notas.
 
 Lanzamos Burpsuite para ver como se transmitten las peticiones. Pero no vemos nada interesantes aqui.
 
@@ -95,10 +119,22 @@ curl -X GET -I http://10.10.10.225:5000/home
 curl -X GET -I http://10.10.10.225:5000/home -L
 ```
 
-Aqui vemos que estamos frente a un gunicorn que pasa `haproxy`. Miramos por google que es y si existen vulnerabilidades. Encontramos una vulnerabilidad
-liada a `haproxy` que es un **HTTP Request Smuggling**. Esta vulnerabilidad esta bien contemplada en la web de [portswigger](https://portswigger.net/web-security/request-smuggling).
+Aqui vemos que estamos frente a un gunicorn que pasa 
+```bash
+ haproxy 
+```
+. Miramos por google que es y si existen vulnerabilidades. Encontramos una vulnerabilidad
+liada a 
+```bash
+ haproxy 
+```
+ que es un **HTTP Request Smuggling**. Esta vulnerabilidad esta bien contemplada en la web de [portswigger](https://portswigger.net/web-security/request-smuggling).
 Esta vulnerabilidad basicamente permitte enviar 2 peticiones al mismo tiempo y permitteria burlar las seguridades con esta segunda peticion.
-En el caso de `haproxy` podemos ver esta vulnerabilidad en la pagina de [nathanvison](https://nathandavison.com/blog/haproxy-http-request-smuggling).
+En el caso de 
+```bash
+ haproxy 
+```
+ podemos ver esta vulnerabilidad en la pagina de [nathanvison](https://nathandavison.com/blog/haproxy-http-request-smuggling).
 
 Para explotar esta vulnerabilidad vamos a utilizar el Burpsuite.
 
@@ -125,7 +161,11 @@ msg=Adios
 
 ```
 
-> [ ! ] Notas: Es possible que tengamos que encodear en base64 el `[\x0b]` antes de ponerla en el burpsuite y tenemos que darle al Follow redirect en este caso.
+> [ ! ] Notas: Es possible que tengamos que encodear en base64 el 
+```bash
+ [\x0b] 
+```
+ antes de ponerla en el burpsuite y tenemos que darle al Follow redirect en este caso.
 
 Aqui podemos ver que hemos podido enviar 2 peticiones al mismo tiempo, una nos da el mensaje **None** y la segunda nos sale **Adios**, lo que significa que
 es vulnerable a **HTTP Request Smuggling**.
@@ -156,22 +196,62 @@ msg=a
 
 ```
 
-Si ponemos `Content-Length: 300` podemos ver una cookie de session que no es la misma que la nuestra.
-Cambiamos la cookie en el Firefox y vamos a `/notes` podemos ver notas differentes que contienen credenciales para nuevos **Hosts** que añadimos al `/etc/hosts`.
+Si ponemos 
+```bash
+ Content-Length: 300 
+```
+ podemos ver una cookie de session que no es la misma que la nuestra.
+Cambiamos la cookie en el Firefox y vamos a 
+```bash
+ /notes 
+```
+ podemos ver notas differentes que contienen credenciales para nuevos **Hosts** que añadimos al 
+```bash
+ /etc/hosts 
+```
+.
 
 Intentamos ir a las urls:
-    - `http://chef.sink.htb:3000`
-    - `http://chef.sink.htb:5000`
-    - `http://code.sink.htb:3000`
-    - `http://code.sink.htb:5000`
-    - `http://nagios.sink.htb:3000`
-    - `http://nagios.sink.htb:5000`
+    - 
+```bash
+ http://chef.sink.htb:3000 
+```
+
+    - 
+```bash
+ http://chef.sink.htb:5000 
+```
+
+    - 
+```bash
+ http://code.sink.htb:3000 
+```
+
+    - 
+```bash
+ http://code.sink.htb:5000 
+```
+
+    - 
+```bash
+ http://nagios.sink.htb:3000 
+```
+
+    - 
+```bash
+ http://nagios.sink.htb:5000 
+```
+
 
 pero no vemos ninguna differencia. Podria ser un puerto 80 interno. Intentamos connectarnos por **ssh** con las credentiales encontradas pero no podemos connectarnos.
 
 
 Una de las credenciales nos llama la atencion porque son credenciales del usuario **root** y recordamos haber visto un usuario root en el **GITEA**.
-Si vamos a la url `http://10.10.10.225:3000` y nos conectamos con las credenciales de **root**.
+Si vamos a la url 
+```bash
+ http://10.10.10.225:3000 
+```
+ y nos conectamos con las credenciales de **root**.
 
 
 
@@ -186,12 +266,32 @@ Si vamos a la url `http://10.10.10.225:3000` y nos conectamos con las credencial
 ### GITEA Git commits history {-}
 
 Loggeado como el usuario **root** nos permitte ver 4 repositorios. Aqui tenemos que analyzar los differentes repositorios que nos permitte encontrar
-nuevos puertos internos, un proyecto `elastic_search`, un repositorio `Log_Manager` que contiene informaciones sobre un **aws** y otras informaciones mas.
+nuevos puertos internos, un proyecto 
+```bash
+ elastic_search 
+```
+, un repositorio 
+```bash
+ Log_Manager 
+```
+ que contiene informaciones sobre un **aws** y otras informaciones mas.
 
 Uno de los proyecto es el **Key_Management** que es archivado, y que contiene commits hechos por el usuario marcus. Uno de estos commits contiene una 
-`Private key`.
 
-Copiamos la llave y le ponemos derechos **600**, nos podemos connectar por `ssh` como el usuario `marcus`.
+```bash
+ Private key 
+```
+.
+
+Copiamos la llave y le ponemos derechos **600**, nos podemos connectar por 
+```bash
+ ssh 
+```
+ como el usuario 
+```bash
+ marcus 
+```
+.
 
 ```bash
 chmod 600 id_rsa
@@ -220,9 +320,17 @@ buscamos para puertos abiertos
 netstat -nat
 ```
 
-aqui vamos a pasar por `/proc/net/tcp` y passar de **hex** a **decimal** con bash.
+aqui vamos a pasar por 
+```bash
+ /proc/net/tcp 
+```
+ y passar de **hex** a **decimal** con bash.
 
-1. Copiamos el `/proc/net/tcp` en un fichero data_hex
+1. Copiamos el 
+```bash
+ /proc/net/tcp 
+```
+ en un fichero data_hex
 
     ```bash
     cat /proc/net/tcp
@@ -256,7 +364,11 @@ ifconfig
 
 cat /home/bot/bot.py
 ```
-El `ps -faux` nos muestra un commando python a un fichero que no existe en esta maquina. Pensamos en un docker o algo parecido.
+El 
+```bash
+ ps -faux 
+```
+ nos muestra un commando python a un fichero que no existe en esta maquina. Pensamos en un docker o algo parecido.
 Aqui no vemos nada interessante. Vamos a crearnos un procmon en bash
 
 ```bash
@@ -284,7 +396,11 @@ Aqui tampoco vemos nada interessante. Miramos si tenemos binarios installados qu
 which aws
 ```
 
-Vemos que tenemos **aws** installado y en un commit del repository `Log_Manager` podemos ver credenciales con un secret contra un endpoint en el puerto 4566.
+Vemos que tenemos **aws** installado y en un commit del repository 
+```bash
+ Log_Manager 
+```
+ podemos ver credenciales con un secret contra un endpoint en el puerto 4566.
 
 ```bash
 netstat -nat | grep "4566"
@@ -317,7 +433,11 @@ aws --endpoint-url="http://127.0.0.1:4566" secrectsmanager list-secrets | grep "
 aws --endpoint-url="http://127.0.0.1:4566" secrectsmanager list-secrets | grep "ARN" | grep -v "RotationLambdaARN" | grep -oP '".*?"' | grep -v "ARN" | tr -d '"'
 ```
 
-Ahora que tenemos un listado de **ARN** podemos usar del commando `get-secret-value` para cada **ARN**.
+Ahora que tenemos un listado de **ARN** podemos usar del commando 
+```bash
+ get-secret-value 
+```
+ para cada **ARN**.
 
 ```bash
 #!/bin/bash
@@ -382,7 +502,11 @@ for algo in "${algorithms[@]}"; do
 done
 ```
 
-Lanzamos el script y vemos el resultado que es un plaintext en base64. Lo desencryptamos en un fichero, y con el commando `file` vemos que el fichero es un gzip.
+Lanzamos el script y vemos el resultado que es un plaintext en base64. Lo desencryptamos en un fichero, y con el commando 
+```bash
+ file 
+```
+ vemos que el fichero es un gzip.
 
 ```bash
 echo "..." | base64 -d > file

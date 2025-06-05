@@ -77,7 +77,11 @@ Nos podemos conectar pero no hay nada y no podemos subir nada.
 showmount -e 10.10.10.180
 ```
 
-Aqui vemos un `/site_backups`, lo montamos
+Aqui vemos un 
+```bash
+ /site_backups 
+```
+, lo montamos
 
 ```bash
 mkdir /mnt/nfs
@@ -96,7 +100,11 @@ No vemos nada interesante aqui.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.180`, El wappalizer no nos muestra nada.
+Si entramos en la url 
+```bash
+ http://10.10.10.180 
+```
+, El wappalizer no nos muestra nada.
 Hay una serie de "posts" que habla de umbraco. Con google miramos lo que es umbraco y vemos que es un CMS.
 Miramos si existe un exploit para umbraco.
 
@@ -106,7 +114,11 @@ searchsploit umbraco
 
 Vemos que hay un exploit en python pero tenemos que estar loggeado.
 
-Miramos por internet si hay un default path para el panel de administracion y vemos la routa `http://mysite/umbraco`. Si vamos a este directorio
+Miramos por internet si hay un default path para el panel de administracion y vemos la routa 
+```bash
+ http://mysite/umbraco 
+```
+. Si vamos a este directorio
 vemos el panel de autheticacion. Ahora tenemos que buscar el usuario y la contraseña.
 
 ## Vulnerability Assessment {-}
@@ -177,7 +189,11 @@ Nos ponemos en escucha por trazas icmp
 tcpdump -i tun0 icmp -n
 ```
 
-y lanzamos el exploit con `python umbraco_exploit.py` y vemos que tenemos capacidad de ejecucion de comandos.
+y lanzamos el exploit con 
+```bash
+ python umbraco_exploit.py 
+```
+ y vemos que tenemos capacidad de ejecucion de comandos.
 
 
 ## Vuln exploit & Gaining Access {-}

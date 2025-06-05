@@ -71,7 +71,11 @@ Con firefox navegamos en la web para ver lo que es.
 
 - Under construction
 - la web es una simple imagen
-- hablan de `.py`
+- hablan de 
+```bash
+ .py 
+```
+
 - vemos usuarios
 
 Como no hay nada interesante vamos a por WFUZZ
@@ -82,7 +86,15 @@ Como no hay nada interesante vamos a por WFUZZ
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.91:5000/FUZZ
 ```
 
-Encontramos una ruta `/feed` y `/upload`. Lo chequeamos en firefox. 
+Encontramos una ruta 
+```bash
+ /feed 
+```
+ y 
+```bash
+ /upload 
+```
+. Lo chequeamos en firefox. 
 
 #### Chequeamos la ruta upload {-}
 
@@ -128,9 +140,21 @@ vi test.xml
 ```
 
 Lo uploadeamos y ahora vemos que el Blogpost a sido processado, vemos los elementos **Author** **Subject** **Content** y que lo a guardado en
-`/home/roosa/deploy/src` y que la url para **later reference** es `/uploads/test.xml`
 
-Si miramos lo que hay en `http://10.10.10.91:5000/upload/test.xml` vemos el contenido de nuestro fichero XML
+```bash
+ /home/roosa/deploy/src 
+```
+ y que la url para **later reference** es 
+```bash
+ /uploads/test.xml 
+```
+
+
+Si miramos lo que hay en 
+```bash
+ http://10.10.10.91:5000/upload/test.xml 
+```
+ vemos el contenido de nuestro fichero XML
 
 
 
@@ -142,7 +166,11 @@ Si miramos lo que hay en `http://10.10.10.91:5000/upload/test.xml` vemos el cont
 Si la web nos reporta el contenido de un campo XML, los attackantes pueden approvechar de una *ENTITY* para remplazar el campo reportado
 por el contenido de un fichero interno de la maquina.
 
-En este caso, vemos que el campo **Author** esta reportado en la web y le indicamos que queremos ver el contenido del `/etc/passwd` en su lugar.
+En este caso, vemos que el campo **Author** esta reportado en la web y le indicamos que queremos ver el contenido del 
+```bash
+ /etc/passwd 
+```
+ en su lugar.
 
 ```xml
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -156,10 +184,22 @@ En este caso, vemos que el campo **Author** esta reportado en la web y le indica
 </elements>
 ```
 
-Uploadeamos el fichero y si vamos en `http://10.10.10.91:5000/upload/nombre-del-fichero.xml` vemos que podemos ver el contenido del `/etc/passwd` de la 
+Uploadeamos el fichero y si vamos en 
+```bash
+ http://10.10.10.91:5000/upload/nombre-del-fichero.xml 
+```
+ vemos que podemos ver el contenido del 
+```bash
+ /etc/passwd 
+```
+ de la 
 maquina.
 
-Como hemos visto que havia un usuario llamado **roosa**, intentamos ver si tiene un fichero `id_rsa`
+Como hemos visto que havia un usuario llamado **roosa**, intentamos ver si tiene un fichero 
+```bash
+ id_rsa 
+```
+
 
 ```xml
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -212,7 +252,11 @@ find \-type f 2>/dev/null
 find \-type f 2>/dev/null | grep -v ".local"
 ```
 
-Aqui no llama la atencion un directorio que contiene un `.git`. Sabiendo que repositorios **git** contienen un historico de tratamiento
+Aqui no llama la atencion un directorio que contiene un 
+```bash
+ .git 
+```
+. Sabiendo que repositorios **git** contienen un historico de tratamiento
 de ficheros nos dirigimos en este proyecto y miramos el historico de comits.
 
 ```bash

