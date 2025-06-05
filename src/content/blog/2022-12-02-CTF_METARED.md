@@ -3,6 +3,7 @@ title: CTF MetaRed 2022
 published: true
 pubDate: "2024-06-01"
 description: "CTF MetaRed 2022"
+heroImage: /assets/posts1/metared/metared22.png
 ---
 
 Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`.

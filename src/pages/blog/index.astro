@@ -49,6 +49,8 @@ console.log('posts:', typeof posts);
 			ul li img {
 				margin-bottom: 0.5rem;
 				border-radius: 12px;
+				max-height: 360px ;
+				 object-fit: cover; 
 			}
 			ul li a {
 				display: block;
@@ -84,6 +86,54 @@ console.log('posts:', typeof posts);
 					font-size: 1.563em;
 				}
 			}
+			
+  /* Código en bloque */
+  pre {
+    background: linear-gradient(135deg, #1f1f1f, #2c2c2c);
+    padding: 10px !important;
+    border-radius: 8px !important;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    box-shadow: 0 0 10px #000;
+    white-space: pre-wrap; /* Opcional: para envolver texto largo */
+  }
+
+  /* Código dentro de pre */
+  pre code {
+    display: block;
+    padding: 10px !important; /* El padding se lo damos al <pre> */
+    border-radius: 8px !important;
+    background: none; /* Evita doble fondo */
+    color: inherit;
+    font-family: "Fira Code", monospace;
+  }
+
+  /* Código inline */
+  code:not(pre code) {
+    background-color: #2a2a2a;
+    padding: 10px !important;
+    border-radius: 4px !important;
+    font-family: "Fira Code", monospace;
+    color: #f8f8f2;
+    font-size: 0.95em;
+  }
+
+  /* Listas */
+  ul,
+  ol {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Párrafos */
+  p {
+    margin: 1rem 0;
+  }
 		</style>
 	</head>
 	<body>
@@ -93,6 +143,7 @@ console.log('posts:', typeof posts);
 				<ul>
 					{
 						posts.map((post) => (
+							
 							<li>
 								<a href={`/blog/${post.id}/`}>
 									<img width={720} height={360} src={post.data.heroImage} alt="" />

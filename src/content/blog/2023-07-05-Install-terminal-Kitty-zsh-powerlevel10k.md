@@ -1,8 +1,9 @@
 ---
-title: Fast install terminal kitty-zsh-POWERLVL10k
+title: Fast install terminal kitty-zsh-polybar-rofi-bspwm
 description: "Fast install terminal kitty-zsh-POWERLVL10k"
 published: true
 pubDate: "2024-06-01"
+heroImage: /assets/posts1/entorno/zsh_kitty_polybar_rofi_bspwm.gif
 ---
 
 

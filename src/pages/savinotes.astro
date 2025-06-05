@@ -16,7 +16,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
     <style>
       main {
-        width: 960px;
+        width: 80vw;
       }
       ul {
         display: flex;
@@ -27,19 +27,21 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
         padding: 0;
       }
       ul li {
-        width: calc(50% - 1rem);
+        width: calc(32% - 1rem);
       }
       ul li * {
         text-decoration: none;
         transition: 0.2s ease;
       }
       ul li:first-child {
-        width: 100%;
+        width: 80%;
         margin-bottom: 1rem;
+        padding: auto;
+        margin: auto;
         text-align: center;
       }
       ul li:first-child img {
-        width: 100%;
+        width: 80%;
       }
       ul li:first-child .title {
         font-size: 2.369rem;
@@ -67,7 +69,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
       ul a:hover img {
         box-shadow: var(--box-shadow);
       }
-      @media (max-width: 720px) {
+      @media (max-width: 80vw) {
         ul {
           gap: 0.5em;
         }

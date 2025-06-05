@@ -3,6 +3,7 @@ title: Revershell cheet sheat
 description: "Revershell cheet sheat"
 published: true
 pubDate: "2024-06-01"
+heroImage: /assets/posts1/revershell/revershell.jpg
 ---
 
 - Primeramente debes tener ejecucion remota de comandos, 

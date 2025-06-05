@@ -3,6 +3,7 @@ title: HTB-Morsarchive
 description: "HTB Morsarchive"
 published: true
 pubDate: "2024-06-01"
+heroImage: /assets/posts1/htb/M0rsarchive/image.png
 ---
 
 Resolucion de challenges-Morsarchive

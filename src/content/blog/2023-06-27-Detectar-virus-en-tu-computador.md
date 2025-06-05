@@ -3,6 +3,7 @@ title: ¿Como detectar si tu computador tiene virus utilizando los 50 antivirus 
 published: true
 pubDate: "2024-06-01"
 description: "¿Como detectar si tu computador tiene virus utilizando los 50 antivirus mas populares del mundo? - VIRUS TOTAL"
+heroImage: /assets/posts1/virustotal/virustotal_portada.png
 ---
 					!!IMPORTANTE!!
 	El siguiente post esta enfocado para el publico en general y no tecnico 

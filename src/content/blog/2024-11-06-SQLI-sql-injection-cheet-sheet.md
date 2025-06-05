@@ -3,6 +3,7 @@ title: SQL INJECION - SQLI CHEAT SHEET
 description: "SQL INJECION - SQLI CHEAT SHEET"
 published: true
 pubDate: "2024-06-01"
+heroImage: /assets/posts1/sqli/sqli.png
 ---
 
 - SQL INJECTION
