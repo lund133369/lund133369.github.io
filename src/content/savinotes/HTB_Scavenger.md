@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Scavenger
 date: 2023/07/10
+slug: HTB_Scavenger
+heroImage: /assets/machines.jpg
 ---
 
 # Scavenger {-}

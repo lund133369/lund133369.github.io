@@ -2,7 +2,7 @@
 layout: ../layouts/SavinoteLayout.astro
 title: "HTB_Apt"
 date: 2023-07-10
-slug: htb_apt
+slug: HTB_Apt
 heroImage: /assets/machines.jpg
 ---
 

@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Cascade
 date: 2023/07/10
+slug: HTB_Cascade
+heroImage: /assets/machines.jpg
 ---
 
 # Cascade {-}

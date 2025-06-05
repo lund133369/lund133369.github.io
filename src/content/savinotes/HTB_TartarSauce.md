@@ -2,6 +2,8 @@
 layout: post
 title: HTB_TartarSauce
 date: 2023/07/10
+slug: HTB_TartarSauce
+heroImage: /assets/machines.jpg
 ---
 
 # Tartar Sauce {-}

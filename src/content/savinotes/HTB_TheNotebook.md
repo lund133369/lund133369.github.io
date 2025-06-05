@@ -2,6 +2,8 @@
 layout: post
 title: HTB_TheNotebook
 date: 2023/07/10
+slug: HTB_TheNotebook
+heroImage: /assets/machines.jpg
 ---
 
 # TheNotebook {-}

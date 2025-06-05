@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Silo
 date: 2023/07/10
+slug: HTB_Silo
+heroImage: /assets/machines.jpg
 ---
 
 # Silo {-}

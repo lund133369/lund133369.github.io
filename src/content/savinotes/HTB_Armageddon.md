@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Armageddon
 date: 2023/07/10
+slug: HTB_Armageddon
+heroImage: /assets/machines.jpg
 ---
 
 # Armageddon {-}

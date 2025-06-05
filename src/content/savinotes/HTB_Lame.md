@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Lame
 date: 2023/07/10
+slug: HTB_Lame
+heroImage: /assets/machines.jpg
 ---
 
 # Lame {-}

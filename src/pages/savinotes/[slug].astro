@@ -1,5 +1,6 @@
 ---
 // src/pages/savinotes/[slug].astro
+import { ClientRouter } from "astro:transitions";
 import SavinoteLayout from "../../layouts/SavinoteLayout.astro";
 import { getCollection, getEntry } from "astro:content";
 
@@ -18,23 +19,168 @@ const entry = await getEntry("savinotes", slug);
 if (!entry) {
   throw new Error(`Entrada no encontrada para el slug: ${slug}`);
 }
-
-console.log('Entry collection:', entry.collection);
-console.log('Entry data:', entry.data);
-console.log('Entry file:', entry.filePath);
-console.log('Entry id:', entry.id);
-console.log('Entry render:', entry.rendered);
-//console.log('Entry render html:', entry.rendered?.html);
-
-
-
-
-
+let note = entry.data;
+//console.log('NOMBRE DEL ARCHIVO:', entry.filePath);
+//console.log('NOMBRE DE LA COLECCION:', entry.collection);
+//console.log('VALOR DE LOS ENCABEZADOS:', entry.data);
+//console.log('VALOR DE ID:', entry.id);
+//console.log('VALOR DE RENDERED (HTML , METADATA):', entry.rendered);
+//console.log('RENDERED HTML:', entry.rendered?.html);
+//console.log('RENDERED METADATA:', entry.rendered?.metadata);
 ---
 
+<!-- Prism.js CSS (tema oscuro) -->
+<link href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+<style is:global>
+  /* Fuente moderna */
+  @import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Fira Code", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    min-height: 100vh;
+    margin: auto;
+    padding: auto;
+  }
+
+  main {
+    max-width: 900px;
+    width: 100%;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Titulares */
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: #ffcc00;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.3rem;
+  }
+
+  /* Enlaces */
+  a {
+    color: #4fc3f7;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Imágenes */
+  img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000;
+    margin: 1rem 0;
+  }
+
+  /* Tablas */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+  }
+
+  th,
+  td {
+    border: 1px solid #444;
+    padding: 0.8rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: #222;
+    color: #ffcc00;
+  }
+
+  td {
+    background-color: #1c1c1c;
+  }
+
+  /* Código en bloque */
+  pre {
+    background: linear-gradient(135deg, #1f1f1f, #2c2c2c);
+    padding: 10px !important;
+    border-radius: 8px !important;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    box-shadow: 0 0 10px #000;
+    white-space: pre-wrap; /* Opcional: para envolver texto largo */
+  }
+
+  /* Código dentro de pre */
+  pre code {
+    display: block;
+    padding: 10px !important; /* El padding se lo damos al <pre> */
+    border-radius: 8px !important;
+    background: none; /* Evita doble fondo */
+    color: inherit;
+    font-family: "Fira Code", monospace;
+  }
+
+  /* Código inline */
+  code:not(pre code) {
+    background-color: #2a2a2a;
+    padding: 10px !important;
+    border-radius: 4px !important;
+    font-family: "Fira Code", monospace;
+    color: #f8f8f2;
+    font-size: 0.95em;
+  }
+
+  /* Listas */
+  ul,
+  ol {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Párrafos */
+  p {
+    margin: 1rem 0;
+  }
+
+  /* Citas */
+  blockquote {
+    border-left: 4px solid #ffcc00;
+    padding-left: 1rem;
+    color: #ccc;
+    font-style: italic;
+    background-color: #1a1a1a;
+    margin: 1rem 0;
+  }
+
+  /* Líneas divisorias */
+  hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 2rem 0;
+  }
+</style>
+
 <SavinoteLayout title={entry.data.title}>
+  <ClientRouter />
   <article>
-    <h1>{entry.data.title}</h1>
+    <img transition:name={`img-${slug}`} width={720} height={360} src={note.heroImage ?? "/assets/machines.jpg"} alt="" />
+    <h1 >{entry.data.title}</h1>
     <time>{entry.data.date?.toDateString?.() ?? "Sin fecha"}</time>
     <div class="content" set:html={entry.rendered?.html} />
   </article>

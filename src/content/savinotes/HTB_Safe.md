@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Safe
 date: 2023/07/10
+slug: HTB_Safe
+heroImage: /assets/machines.jpg
 ---
 
 # Safe {-}

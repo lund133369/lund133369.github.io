@@ -106,12 +106,13 @@ img {
 	border-radius: 8px;
 }
 code {
-	padding: 2px 5px;
+	padding: 10px;
+	border-radius: 8px;
 	background-color: rgb(var(--gray-light));
 	border-radius: 2px;
 }
 pre {
-	padding: 1.5em;
+	padding: 10px;
 	border-radius: 8px;
 }
 pre > code {

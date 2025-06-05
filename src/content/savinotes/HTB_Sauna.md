@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Sauna
 date: 2023/07/10
+slug: HTB_Sauna
+heroImage: /assets/machines.jpg
 ---
 
 # Sauna {-}

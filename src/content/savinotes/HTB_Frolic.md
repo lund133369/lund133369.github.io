@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Frolic
 date: 2023/07/10
+slug: HTB_Frolic
+heroImage: /assets/machines.jpg
 ---
 
 # Frolic {-}

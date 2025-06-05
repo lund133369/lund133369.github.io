@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Tally
 date: 2023/07/10
+slug: HTB_Tally
+heroImage: /assets/machines.jpg
 ---
 
 # Tally {-}

@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Omni
 date: 2023/07/10
+slug: HTB_Omni
+heroImage: /assets/machines.jpg
 ---
 
 # Omni {-}

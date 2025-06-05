@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Reddish
 date: 2023/07/10
+slug: HTB_Reddish
+heroImage: /assets/machines.jpg
 ---
 
 # Reddish {-}

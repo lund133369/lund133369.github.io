@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Sink
 date: 2023/07/10
+slug: HTB_Sink
+heroImage: /assets/machines.jpg
 ---
 
 # Sink {-}

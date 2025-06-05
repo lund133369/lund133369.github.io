@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Bitlab
 date: 2023/07/10
+slug: HTB_Bitlab
+heroImage: /assets/machines.jpg
 ---
 
 # Bitlab {-}

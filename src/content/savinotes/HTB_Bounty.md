@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Bounty
 date: 2023/07/10
+slug: HTB_Bounty
+heroImage: /assets/machines.jpg
 ---
 
 # Bounty {-}

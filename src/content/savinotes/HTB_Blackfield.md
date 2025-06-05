@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Blackfield
 date: 2023/07/10
+slug: HTB_Blackfield
+heroImage: /assets/machines.jpg
 ---
 
 # Blackfield {-}

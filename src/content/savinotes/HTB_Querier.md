@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Querier
 date: 2023/07/10
+slug: HTB_Querier
+heroImage: /assets/machines.jpg
 ---
 
 # Querier {-}

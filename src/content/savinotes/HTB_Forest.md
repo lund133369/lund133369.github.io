@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Forest
 date: 2023/07/10
+slug: HTB_Forest
+heroImage: /assets/machines.jpg
 ---
 
 # Forest {-}

@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Schooled
 date: 2023/07/10
+slug: HTB_Schooled
+heroImage: /assets/machines.jpg
 ---
 
 # Schooled {-}

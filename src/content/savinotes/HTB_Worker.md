@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Worker
 date: 2023/07/10
+slug: HTB_Worker
+heroImage: /assets/machines.jpg
 ---
 
 # Worker {-}

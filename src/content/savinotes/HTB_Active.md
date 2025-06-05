@@ -2,7 +2,7 @@
 layout: ../layouts/SavinoteLayout.astro
 title: "HTB_Active"
 date: 2023-07-10
-slug: htb_active
+slug: HTB_Active
 heroImage: /assets/machines.jpg
 ---
 

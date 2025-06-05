@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Doctor
 date: 2023/07/10
+slug: HTB_Doctor
+heroImage: /assets/machines.jpg
 ---
 
 # Doctor {-}

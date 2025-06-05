@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Fuse
 date: 2023/07/10
+slug: HTB_Fuse
+heroImage: /assets/machines.jpg
 ---
 
 # Fuse {-}

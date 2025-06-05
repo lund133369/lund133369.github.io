@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import { getCollection } from "astro:content";
 
 const savinotes = await getCollection("savinotes");
@@ -85,19 +86,26 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   </head>
   <body>
     <Header />
+    <ClientRouter />
     <main>
       <section>
         <ul>
           {
             savinotes.map((note) => {
-              const slug = note.data.slug ?? note.slug ?? note.id.split("/").pop().replace(".md", "");
+              //console.log(note);
+              const slug = note.id;
               return (
                 <li>
                   <a href={`/savinotes/${slug}/`}>
-                    <img width={720} height={360} src={note.data.heroImage ?? "/assets/machines.jpg"} alt="" />
+                    <img 
+                      transition:name={`img-${slug}`}
+                      width={720} 
+                      height={360} 
+                      src={note.data.heroImage ?? "/assets/machines.jpg"} 
+                      alt="" 
+                      />
                     <h4 class="title">{note.data.title}</h4>
                     <p class="date">{note.data.date?.toLocaleDateString("es-ES")}</p>
-                  
                   </a>
                 </li>
               );
@@ -106,6 +114,5 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
         </ul>
       </section>
     </main>
-  
   </body>
 </html>

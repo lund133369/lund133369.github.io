@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Sense
 date: 2023/07/10
+slug: HTB_Sense
+heroImage: /assets/machines.jpg
 ---
 
 # Sense {-}

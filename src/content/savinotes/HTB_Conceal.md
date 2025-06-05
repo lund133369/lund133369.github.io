@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Conceal
 date: 2023/07/10
+slug: HTB_Conceal
+heroImage: /assets/machines.jpg
 ---
 
 # Conceal {-}

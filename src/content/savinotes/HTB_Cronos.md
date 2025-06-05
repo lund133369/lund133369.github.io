@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Cronos
 date: 2023/07/10
+slug: HTB_Cronos
+heroImage: /assets/machines.jpg
 ---
 
 # Cronos {-}

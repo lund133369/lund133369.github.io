@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Shocker
 date: 2023/07/10
+slug: HTB_Shocker
+heroImage: /assets/machines.jpg
 ---
 
 # Shocker {-}

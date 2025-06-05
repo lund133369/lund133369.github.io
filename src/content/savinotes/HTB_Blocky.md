@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Blocky
 date: 2023/07/10
+slug: HTB_Blocky
+heroImage: /assets/machines.jpg
 ---
 
 # Blocky {-}

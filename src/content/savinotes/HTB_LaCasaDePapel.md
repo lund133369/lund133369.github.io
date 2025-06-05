@@ -2,6 +2,8 @@
 layout: post
 title: HTB_LaCasaDePapel
 date: 2023/07/10
+slug: HTB_LaCasaDePapel
+heroImage: /assets/machines.jpg
 ---
 
 # La Casa de Papel {-}

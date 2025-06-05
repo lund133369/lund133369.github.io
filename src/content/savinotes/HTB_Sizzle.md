@@ -2,6 +2,8 @@
 layout: post
 title: HTB_Sizzle
 date: 2023/07/10
+slug: HTB_Sizzle
+heroImage: /assets/machines.jpg
 ---
 
 # Sizzle {-}
