@@ -3,16 +3,17 @@ title: HTB-Morsarchive
 description: "HTB Morsarchive"
 published: true
 pubDate: "2024-06-01"
+updatedDate: "2024-06-01"
 heroImage: /assets/posts1/htb/M0rsarchive/image.png
 ---
 
 Resolucion de challenges-Morsarchive
 
-*** Primeramente de dejo un zip el cual tiene todos los scritps y la contraseña es la flag.
+- Primeramente de dejo un zip el cual tiene todos los scritps y la contraseña es la flag.
 
-*** [Scripts.zip](/assets/posts2/scripts.zip).
+- [Scripts.zip](/assets/posts2/scripts.zip).
 
-*** Ahora para que te pueda funcionar mi script debes de tener una estructura de archivos como:
+- Ahora para que te pueda funcionar mi script debes de tener una estructura de archivos como:
 
 ![estructura.PNG](/assets/posts2/Estructura_carpeta.png)
 
@@ -30,9 +31,6 @@ No puedo mostrar la resolucion completa ya que es un challegens activo.
 
 ![bash.PNG](/assets/posts2/script_bash.png)
 
-## TENER EN CUENTA QUE ESTE SCRIPT TE LO DESCOMPRIME HASTA EL COMPRIMIDO 0 , LUEGO DE ELLO DE FORMA MANUAL TENDRAS QUE DESCOMPRIMIR
-## Y DIRIGIRTE A LA CARPETA LLAMADA FLAG DONDE LO GUARDES Y AHI SE ENCONTRARA UN ARCHIVO LLAMADA: HTB{***************}
+- TENER EN CUENTA QUE ESTE SCRIPT TE LO DESCOMPRIME HASTA EL COMPRIMIDO 0 , LUEGO DE ELLO DE FORMA MANUAL TENDRAS QUE DESCOMPRIMIRs Y DIRIGIRTE A LA CARPETA LLAMADA FLAG DONDE LO GUARDES Y AHI SE ENCONTRARA UN ARCHIVO LLAMADA: HTB{***************}
 
 ![congra.PNG](/assets/posts2/congra.png)
-
-<img src="https://www.hackthebox.com/achievement/challenge/816133/98" alt="imagenxd">
