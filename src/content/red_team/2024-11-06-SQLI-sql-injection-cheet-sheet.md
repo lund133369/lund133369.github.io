@@ -1,5 +1,5 @@
 ---
-title: SQL INJECION - SQLI CHEAT SHEET
+title: "SQL INJECION - SQLI CHEAT SHEET"
 description: "SQL INJECION - SQLI CHEAT SHEET"
 published: true
 pubDate: "2024-06-01"

@@ -4,7 +4,7 @@ import BlogPost from "../../layouts/BlogPost.astro";
 import { render } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await getCollection("red_team");
   return posts.map((post) => ({
     params: { slug: post.id },
     props: post,
@@ -17,9 +17,9 @@ const { Content } = await render(post);
 ---
 
 <style is:global>
-  img {
+  div img {
     cursor: pointer;
-    height: 55vh;
+    max-height: 55vh;
     object-fit: contain;
   }
 
