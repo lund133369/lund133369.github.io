@@ -1,6 +1,6 @@
 ---
-title: "buffer overflow 003"
-description: "buffer overflow 003"
+title: "buffer overflow 005"
+description: "buffer overflow 005"
 published: true
 pubDate: "2024-06-01"
 updatedDate: "2024-06-01"
