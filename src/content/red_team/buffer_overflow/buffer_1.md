@@ -4,7 +4,7 @@ description: "buffer overflow 001"
 published: true
 pubDate: "2024-06-01"
 updatedDate: "2024-06-01"
-heroImage: /assets/posts1/xterm_color/xterm_color.jpg
+heroImage: /assets/red_team/buffer_overflow/miniatura/miniatura_buffer_001.png
 ---
 
 ## EXAMPLE 1
@@ -43,7 +43,7 @@ revisamos las protecciones que cuenta para saber que se puede hacer
 
 EXPLICACION CHAT GPT :
 
-##### Resumen de Configuraciones de Seguridad
+### Resumen de Configuraciones de Seguridad
 
 1. **Canary Deshabilitado**:
     - **Descripción**: El mecanismo de **stack canaries** (canarios) es una protección que se utiliza para detectar desbordamientos de buffer en la pila. Si está deshabilitado, significa que no se está utilizando este mecanismo de protección.
