@@ -52,7 +52,7 @@ for (const post of posts) {
     </ul>
   </aside>
   <!-- Botón pegado al sidebar -->
-  <button id="toggleSidebar" class="toggle-btn">☰</button>
+  <button id="toggleSidebar" class="toggle-btn">☰ Categorias</button>
 </div>
 
 <script type="module">
@@ -61,7 +61,7 @@ for (const post of posts) {
 
   toggleBtn.addEventListener("click", () => {
     sidebarWrapper.classList.toggle("collapsed");
-    toggleBtn.textContent = sidebarWrapper.classList.contains("collapsed") ? "☰" : "←";
+    toggleBtn.textContent = sidebarWrapper.classList.contains("collapsed") ? "☰  Categorias" : "←";
   });
 
   // Buscador
@@ -108,8 +108,8 @@ for (const post of posts) {
 
 /* Botón pegado al sidebar */
 .toggle-btn {
-  width: 40px;
-  height: 10vh;
+  width: 5vw;
+  height: 4vh;
   margin-top: 10vh;
   background-color: #007bff;
   color: white;
