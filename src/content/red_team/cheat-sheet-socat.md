@@ -5,6 +5,7 @@ published: true
 pubDate: "2024-06-01"
 updatedDate: "2024-06-01"
 heroImage: /assets/posts1/xterm_color/xterm_color.jpg
+categoria: "Linux comand" 
 ---
 
 

@@ -45,6 +45,9 @@ const red_team = defineCollection({
     date: z.coerce.date().optional(),    // acepta 'date' también
     updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),
+    categoria: z.string(),
+    subcategoria: z.string().optional(), // opcional
+    subsubcategoria: z.array(z.string()).optional(), // opcional
   }),
 });
 

@@ -1,0 +1,217 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("red_team");
+
+const categorias = new Map();
+
+for (const post of posts) {
+  const cat = post.data.categoria;
+  const subcat = post.data.subcategoria ?? null;
+  const subsub = post.data.subsubcategoria ?? null;
+
+  if (!categorias.has(cat)) {
+    categorias.set(cat, new Map());
+  }
+
+  const subMap = categorias.get(cat);
+
+  if (subcat) {
+    if (!subMap.has(subcat)) {
+      subMap.set(subcat, new Set());
+    }
+
+    if (subsub) {
+      subMap.get(subcat).add(subsub);
+    }
+  }
+}
+---
+<!-- Contenedor que incluye el sidebar y el botón -->
+<div id="sidebarWrapper" class="sidebar-wrapper collapsed">
+  <aside id="sidebar" class="sidebar">
+    <input type="text" id="searchInput" placeholder="Buscar categoría..." class="search-box" />
+    <ul id="categoryList">
+      {Array.from(categorias.entries()).map(([cat, subMap]) => (
+        <li>
+          <summary>{cat}</summary>
+          <ul>
+            {Array.from(subMap.entries()).map(([subcat, subsubSet]) => (
+              <li>
+                <summary>{subcat}</summary>
+                <ul>
+                  {Array.from(subsubSet).map((subsub) => (
+                    <li><a href={`/red_team/${cat}/${subcat}/${subsub}`}>{subsub}</a></li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </aside>
+  <!-- Botón pegado al sidebar -->
+  <button id="toggleSidebar" class="toggle-btn">☰</button>
+</div>
+
+<script type="module">
+  const toggleBtn = document.getElementById("toggleSidebar");
+  const sidebarWrapper = document.getElementById("sidebarWrapper");
+
+  toggleBtn.addEventListener("click", () => {
+    sidebarWrapper.classList.toggle("collapsed");
+    toggleBtn.textContent = sidebarWrapper.classList.contains("collapsed") ? "☰" : "←";
+  });
+
+  // Buscador
+  const searchInput = document.getElementById("searchInput");
+  const categoryList = document.getElementById("categoryList");
+
+  searchInput.addEventListener("input", () => {
+    const filter = searchInput.value.toLowerCase();
+    const items = categoryList.querySelectorAll("li");
+
+    items.forEach((item) => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+</script>
+
+
+<style>
+ /* Wrapper del sidebar + botón */
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100vh;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* Cuando está colapsado, se esconde todo */
+.sidebar-wrapper.collapsed {
+  transform: translateX(-230px);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Botón pegado al sidebar */
+.toggle-btn {
+  width: 40px;
+  height: 10vh;
+  margin-top: 10vh;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: background 0.3s;
+}
+
+.toggle-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Buscador */
+.search-box {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Lista */
+.sidebar ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.sidebar summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+/* Estructura general de listas */
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Estilo para cada nivel de lista */
+.sidebar li {
+  margin: 0.2rem 0;
+  padding-left: 0.5rem;
+  border-left: 2px solid #ccc;
+}
+
+/* Estilo para niveles anidados (mejor indentación visual) */
+.sidebar li > ul {
+
+  border-left: 1px  #ccc;
+
+}
+
+/* Summary estilizado (categorías principales y secundarias) */
+.sidebar summary {
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  list-style: none;
+}
+
+.sidebar summary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Enlaces de subsubcategoría */
+.sidebar a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 0.5rem;
+}
+
+.sidebar a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Mejora del scroll si la lista es muy larga */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: #bbb #f5f5f5;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 4px;
+}
+
+</style>

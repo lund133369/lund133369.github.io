@@ -1,9 +1,11 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
+import Sidebar from './Sidebar.astro';
 ---
-
+<Sidebar />
 <header>
+
   <nav>
     <div class="internal-links">
       <HeaderLink href="/">Home</HeaderLink>
@@ -51,12 +53,13 @@ import { SITE_TITLE } from "../consts";
       <HeaderLink href="/testing">Testing</HeaderLink>
     </div>
   </nav>
+  
 </header>
 <style>
-	.internal-links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5em;
+  .internal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
   }
   header {
     margin: 0;
@@ -79,16 +82,15 @@ import { SITE_TITLE } from "../consts";
     justify-content: space-between;
   }
   nav a {
-	
     margin: 0.1em 0.5em;
     color: var(--black);
     border-bottom: 2px solid transparent;
     text-decoration: none;
   }
   a {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   nav a.active {
     text-decoration: none;
@@ -103,4 +105,5 @@ import { SITE_TITLE } from "../consts";
       display: none;
     }
   }
+
 </style>

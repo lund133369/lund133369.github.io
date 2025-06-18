@@ -5,6 +5,8 @@ published: true
 pubDate: "2024-06-01"
 updatedDate: "2024-06-01"
 heroImage: /assets/red_team/buffer_overflow/buffer_1/20241026033304.png
+categoria: "buffer overflow" 
+subcategoria: "TEORIA CHECKSEC" 
 ---
 ### Resumen de Configuraciones de Seguridad
 

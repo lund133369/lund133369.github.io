@@ -5,6 +5,8 @@ published: true
 pubDate: "2024-06-01"
 updatedDate: "2024-06-01"
 heroImage: /assets/red_team/buffer_overflow/miniatura/miniatura_buffer_005.png
+categoria: "buffer overflow" 
+subcategoria: "EXAMPLE 1" 
 ---
 
 ## EXAMPLE 1
